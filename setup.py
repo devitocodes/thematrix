@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 required = []
@@ -16,5 +16,5 @@ setup(name='thematrix',
       author="Devito Codes",
       author_email='g.gorman@imperial.ac.uk',
       license='MIT',
-      packages=['thematrix'],
+      packages=find_packages(),
       install_requires=required)
