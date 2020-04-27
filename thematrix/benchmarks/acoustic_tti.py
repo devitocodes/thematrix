@@ -8,7 +8,6 @@ class TTIAcoustic(object):
     params = ([(350, 350, 350)], [12], [{'rec': 66.417102, 'u': 30.707737, 'v': 30.707728}])
     param_names = ['shape', 'space_order', 'norms']
 
-    nbl = 10
     tn = 50
 
     repeat = 1
@@ -20,7 +19,7 @@ class TTIAcoustic(object):
     y0_blk0_size = 16
 
     def setup(self, shape, space_order, norms):
-        self.solver = tti_setup(shape=shape, space_order=space_order,
+        self.solver = tti_setup(shape=shape, space_order=space_order, tn=self.tn,
                                 opt=('advanced', {'openmp': True}))
 
     def time_forward(self, shape, space_order, norms):
