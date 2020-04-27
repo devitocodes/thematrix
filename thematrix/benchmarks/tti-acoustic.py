@@ -11,7 +11,7 @@ class TTIAcoustic(object):
     nbl = 10
     tn = 50
 
-    repeat = 3
+    repeat = 1
 
     timeout = 600.0
 

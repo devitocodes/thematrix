@@ -11,7 +11,7 @@ class IsotropicAcoustic(object):
     nbl = 10
     tn = 100
 
-    repeat = 3
+    repeat = 1
 
     timeout = 600.0
 
