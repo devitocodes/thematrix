@@ -1,7 +1,14 @@
 from setuptools import setup
 
+
+required = []
 with open('requirements.txt') as f:
-    required=f.read().splitlines()
+    for i in f.read().splitlines():
+        if i[0:3] == 'git':
+            name = i.split('/')[-1]
+            required.append('%s @ %s@master' % (name, i))
+        else:
+            required.append(i)
 
 setup(name='thematrix',
       description="Devito benchmark matrix",
