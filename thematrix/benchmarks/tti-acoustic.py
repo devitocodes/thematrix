@@ -1,4 +1,4 @@
-from examples.seismic.tti.tti_setup import tti_setup
+from examples.seismic.tti.tti_example import tti_setup
 
 from thematrix.benchmarks.common import check_norms
 
