@@ -19,11 +19,11 @@ class TTIAcoustic(object):
     x0_blk0_size = 16
     y0_blk0_size = 16
 
-    def setup(self, shape, space_order):
+    def setup(self, shape, space_order, norms):
         self.solver = tti_setup(shape=shape, space_order=space_order,
                                 opt=('advanced', {'openmp': True}))
 
-    def time_forward(self, shape, space_order):
+    def time_forward(self, shape, space_order, norms):
         rec, u, v, summary = self.solver.forward(x0_blk0_size=self.x0_blk0_size,
                                                  y0_blk0_size=self.y0_blk0_size)
 
