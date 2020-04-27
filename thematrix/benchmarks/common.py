@@ -1,7 +1,9 @@
 from devito import info, norm
 from devito.types.dense import DiscreteFunction
 
-def check_norms(*functions):
+def check_norms(functions, reference):
+    assert len(functions) == len(reference)
+
     for i in functions:
         if isinstance(i, DiscreteFunction):
             v = norm(i)

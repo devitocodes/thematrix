@@ -28,4 +28,4 @@ class TTIAcoustic(object):
                                                  y0_blk0_size=self.y0_blk0_size)
 
         # Compare output against reference norms
-        check_norms(rec, u, v)
+        check_norms([rec, u, v], norms)

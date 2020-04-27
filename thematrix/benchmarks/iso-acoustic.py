@@ -28,4 +28,4 @@ class IsotropicAcoustic(object):
                                               y0_blk0_size=self.y0_blk0_size)
 
         # Compare output against reference norms
-        check_norms(rec, u)
+        check_norms([rec, u], norms)
