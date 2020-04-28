@@ -1,0 +1,99 @@
+{
+    "acoustic_iso.IsotropicAcoustic.track_gpointss": {
+        "code": "class IsotropicAcoustic:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.globals['fdlike'].gpointss\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        solver = acoustic_setup(shape=shape, space_order=space_order, tn=self.tn,\n                                opt=('advanced', {'openmp': True}))\n        rec, u, self.summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                              y0_blk0_size=self.y0_blk0_size)\n    \n        # Compare output against reference norms\n        check_norms([rec, u], norms)",
+        "name": "acoustic_iso.IsotropicAcoustic.track_gpointss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(492, 492, 492)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 184.5264, 'u': 151.545837}"
+            ]
+        ],
+        "timeout": 600.0,
+        "type": "track",
+        "unit": "gpointss",
+        "version": "5fb482e6933f642048af9fa0aa8432efbc553976b7bf28cf6e12955d7bdbfbec"
+    },
+    "acoustic_iso.IsotropicAcoustic.track_runtime": {
+        "code": "class IsotropicAcoustic:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.globals['fdlike'].time\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        solver = acoustic_setup(shape=shape, space_order=space_order, tn=self.tn,\n                                opt=('advanced', {'openmp': True}))\n        rec, u, self.summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                              y0_blk0_size=self.y0_blk0_size)\n    \n        # Compare output against reference norms\n        check_norms([rec, u], norms)",
+        "name": "acoustic_iso.IsotropicAcoustic.track_runtime",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(492, 492, 492)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 184.5264, 'u': 151.545837}"
+            ]
+        ],
+        "timeout": 600.0,
+        "type": "track",
+        "unit": "runtime",
+        "version": "74206b6425ee930cd14b14ae4dae4d831aa47febfad99474a14358bbfae0b0d0"
+    },
+    "acoustic_tti.TTIAcoustic.track_gpointss": {
+        "code": "class TTIAcoustic:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.globals['fdlike'].gpointss\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        solver = tti_setup(shape=shape, space_order=space_order, tn=self.tn,\n                           opt=('advanced', {'openmp': True}))\n        rec, u, v, self.summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                                 y0_blk0_size=self.y0_blk0_size)\n    \n        # Compare output against reference norms\n        check_norms([rec, u, v], norms)",
+        "name": "acoustic_tti.TTIAcoustic.track_gpointss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(350, 350, 350)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 66.417102, 'u': 30.707737, 'v': 30.707728}"
+            ]
+        ],
+        "timeout": 600.0,
+        "type": "track",
+        "unit": "gpointss",
+        "version": "8281e482f1167b1f237e3fb9c533bfe2eb99d1638eab479dba731af943fc0750"
+    },
+    "acoustic_tti.TTIAcoustic.track_runtime": {
+        "code": "class TTIAcoustic:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.globals['fdlike'].time\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        solver = tti_setup(shape=shape, space_order=space_order, tn=self.tn,\n                           opt=('advanced', {'openmp': True}))\n        rec, u, v, self.summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                                 y0_blk0_size=self.y0_blk0_size)\n    \n        # Compare output against reference norms\n        check_norms([rec, u, v], norms)",
+        "name": "acoustic_tti.TTIAcoustic.track_runtime",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(350, 350, 350)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 66.417102, 'u': 30.707737, 'v': 30.707728}"
+            ]
+        ],
+        "timeout": 600.0,
+        "type": "track",
+        "unit": "runtime",
+        "version": "e4b44392023fdaa5b06fe59a9de2e70765c3a8cfddb51f9c260d55b21730341b"
+    },
+    "version": 2
+}
