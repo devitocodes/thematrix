@@ -33,3 +33,12 @@ General comments
 * GitHub project; open issues/backlog
 * Hackathon similar to what we did for GitHub actions?
 * Participants: send invite to all #development, Microsoft, NVidia, AMD, Intel. 
+
+## Outline of workflow
+* \<some-event-tbd\> triggers benchmark action.
+  * Matrix of jobs: (3D isotropic acoustic, tti, tti gradient) x (different architectures) x (different programming models)
+  * Each job:
+    * Runs benchmark using ASV; creates/updates directry under `thematrix/benchmarks`.
+    * Loop git pull/push until success:
+      * ASV publish.
+  
