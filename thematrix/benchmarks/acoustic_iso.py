@@ -33,6 +33,10 @@ class IsotropicAcoustic(object):
         return self.summary.globals['fdlike'].time
     track_runtime.unit = "runtime"
 
+    def track_gflopss(self, shape, space_order, norms):
+        return self.summary.globals['fdlike'].gflopss
+    track_gflopss.unit = "gflopss"
+
     def track_gpointss(self, shape, space_order, norms):
         return self.summary.globals['fdlike'].gpointss
     track_gpointss.unit = "gpointss"
