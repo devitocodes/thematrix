@@ -1,5 +1,31 @@
 # Devito benchmark matrix
 
+## Roadmap
+
+| Arch    | Brand  | Model |  JIT  | MPI      |  OMP     | MPI+OMP  | OMP5     | MPI+OMP5 |   ACC    | MPI+ACC  |
+|---------|--------|-------|-------|----------|----------| -------- | -------- | -------- | -------- | -------- |
+| 1x1-CPU | Intel  | Xeon  | icc20 | :hammer: | :hammer: | :hammer: | :x:      | :x:      | :hammer: | :hammer: |
+| 1xN-CPU | Intel  | Xeon  | icc20 | :hammer: | :hammer: | :hammer: | :x:      | :x:      | :hammer: | :hammer: |
+| NxN-CPU | Intel  | Xeon  | icc20 | :hammer: | :hammer: | :hammer: | :x:      | :x:      | :hammer: | :hammer: |
+| 1x1-CPU | Intel  | Xeon  | gcc10 | :hammer: | :hammer: | :hammer: | :x:      | :x:      | :hammer: | :hammer: |
+| 1xN-CPU | Intel  | Xeon  | gcc10 | :hammer: | :hammer: | :hammer: | :x:      | :x:      | :hammer: | :hammer: |
+| NxN-CPU | Intel  | Xeon  | gcc10 | :hammer: | :hammer: | :hammer: | :x:      | :x:      | :hammer: | :hammer: |
+| 1x1-CPU | AMD    | ????  | aocc  | :hammer: | :hammer: | :hammer: | :x:      | :x:      | :hammer: | :hammer: |
+| 1xN-CPU | AMD    | ????  | aocc  | :hammer: | :hammer: | :hammer: | :x:      | :x:      | :hammer: | :hammer: |
+| NxN-CPU | AMD    | ????  | aocc  | :hammer: | :hammer: | :hammer: | :x:      | :x:      | :hammer: | :hammer: |
+| 1x1-GPU | NVidia | V100  | pgi   | :x:      | :x:      | :x:      | :hammer: | :x:      | :hammer: | :x:      |
+| 1xN-GPU | NVidia | V100  | pgi   | :x:      | :x:      | :x:      | :hammer: | :hammer: | :hammer: | :hammer: |
+| NxN-GPU | NVidia | V100  | pgi   | :x:      | :x:      | :x:      | :x:      | :hammer: | :x:      | :hammer: |
+| 1x1-GPU | AMD    | ????  | aomp  | :x:      | :x:      | :x:      | :hammer: | :x:      | :x:      | :x:      |
+| 1xN-GPU | AMD    | ????  | aomp  | :x:      | :x:      | :x:      | :hammer: | :hammer: | :x:      | :x:      |
+| NxN-GPU | AMD    | ????  | aomp  | :x:      | :x:      | :x:      | :x:      | :hammer: | :x:      | :x:      |
+
+Legend:
+* :x: : not available / impossible
+* :hammer: : work in progress
+* :heavy_check_mark: done
+
+
 ## Rational:
 * Need to ensure benchmarking is done properly and in a reproducible manner for reporting/publishing purposes.
 * This is a starting point for performance optimisation and performance regression testing.
@@ -41,4 +67,3 @@ General comments
     * Runs benchmark using ASV; creates/updates directry under `thematrix/benchmarks`.
     * Loop git pull/push until success:
       * ASV publish.
-  
