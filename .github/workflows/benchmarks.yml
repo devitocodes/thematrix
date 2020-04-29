@@ -1,0 +1,64 @@
+name: thematrix-run
+
+on:
+  # Trigger the workflow on push to the master branch
+  # TODO: this will change oc
+  push:
+    branches:
+      - master
+
+jobs:
+  benchmarks:
+    name: ${{ matrix.name }}
+    runs-on: "${{ matrix.os }}"
+
+    env:
+      DEVITO_ARCH: "gcc-9"
+      DEVITO_LANGUAGE: "openmp"
+      DEVITO_BENCHMARKS: "1"
+      DEVITO_LOGGING: "PERF"
+      OMP_NUM_THREADS: "8"
+      PYTHON_VERSION: "${{ matrix.python-version }}"
+      CC: "gcc-9"
+      CXX: "g++-9"
+
+    strategy:
+      # Prevent all build to stop if a single one fails
+      fail-fast: false
+
+      matrix:
+        name: [
+           pytest-ubuntu-py38-gcc9-omp,
+        ]
+        include:
+        - name: pytest-ubuntu-py38-gcc9-omp
+          python-version: 3.8
+          os: ubuntu-18.04
+          arch: x86_64
+          cpu: Intel(R) Xeon(R) CPU E5-2620 v4 @ 2.10GHz  # TODO: This will change oc
+          num_cpu: 8
+          ram: 32GB
+          affinity: 0-7
+
+    steps:
+    - name: Checkout devito
+      uses: actions/checkout@v1
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -e .
+
+    - name: Setup asv
+      run: |
+        asv machine --config thematrix/asv.conf.json --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
+
+    - name: Run benchmarks
+      run: |
+          asv run -v --show-stderr --config thematrix/asv.conf.json --cpu-affinity matrix.include.affinity  # TODO: Actually this is machine-specific... so maybe we need different workflows? :O
+
+    - name: Publish results (html)
+      run: |
+          # TODO: This will need some tinkering?
+          asv publish --config thematrix/asv.conf.json
+          asv gh-pages --config thematrix/asv.conf.json --rewrite
