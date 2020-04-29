@@ -5,7 +5,7 @@ from devito import switchconfig, __version__ as devito_version
 from devito.operator.profiling import PerfEntry
 from examples.seismic.tti.tti_example import tti_setup
 
-from thematrix.benchmarks.common import check_norms
+from thematrix.common import check_norms
 
 
 class TTIAcoustic(object):
