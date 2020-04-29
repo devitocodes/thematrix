@@ -23,7 +23,7 @@
 Legend:
 * :x: : not available / impossible
 * :hammer: : work in progress
-* :heavy_check_mark: done
+* :heavy_check_mark: : done
 
 
 ## Rational:
