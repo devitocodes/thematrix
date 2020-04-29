@@ -1,6 +1,30 @@
 {
+    "acoustic_iso.IsotropicAcoustic.track_gflopss": {
+        "code": "class IsotropicAcoustic:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        filename = 'acoustic_iso_shape%s_so%d_devito%s.asv' % (str(shape).replace(\" \", \"\"),\n                                                               space_order,\n                                                               devito_version.split('.')[1])\n        filename = os.path.join(gettempdir(), filename)\n    \n        try:\n            with open(filename, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            solver = acoustic_setup(shape=shape, space_order=space_order, tn=self.tn,\n                                    opt=('advanced', {'openmp': True}))\n            rec, u, summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                             y0_blk0_size=self.y0_blk0_size)\n            self.summary = summary.globals['fdlike']\n    \n            # Compare output against reference norms\n            check_norms([rec, u], norms)\n    \n            # Custom caching -- ASV's setup_cache won't work\n            with open(filename, 'w') as f:\n                f.write(str(self.summary))",
+        "name": "acoustic_iso.IsotropicAcoustic.track_gflopss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(492, 492, 492)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 184.5264, 'u': 151.545837}"
+            ]
+        ],
+        "timeout": 600.0,
+        "type": "track",
+        "unit": "gflopss",
+        "version": "c4989ac82b9ed10459b8671e38f064f5c42a12a7bf9c1635e7a2b22fc923ea92"
+    },
     "acoustic_iso.IsotropicAcoustic.track_gpointss": {
-        "code": "class IsotropicAcoustic:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.globals['fdlike'].gpointss\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        solver = acoustic_setup(shape=shape, space_order=space_order, tn=self.tn,\n                                opt=('advanced', {'openmp': True}))\n        rec, u, self.summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                              y0_blk0_size=self.y0_blk0_size)\n    \n        # Compare output against reference norms\n        check_norms([rec, u], norms)",
+        "code": "class IsotropicAcoustic:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.gpointss\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        filename = 'acoustic_iso_shape%s_so%d_devito%s.asv' % (str(shape).replace(\" \", \"\"),\n                                                               space_order,\n                                                               devito_version.split('.')[1])\n        filename = os.path.join(gettempdir(), filename)\n    \n        try:\n            with open(filename, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            solver = acoustic_setup(shape=shape, space_order=space_order, tn=self.tn,\n                                    opt=('advanced', {'openmp': True}))\n            rec, u, summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                             y0_blk0_size=self.y0_blk0_size)\n            self.summary = summary.globals['fdlike']\n    \n            # Compare output against reference norms\n            check_norms([rec, u], norms)\n    \n            # Custom caching -- ASV's setup_cache won't work\n            with open(filename, 'w') as f:\n                f.write(str(self.summary))",
         "name": "acoustic_iso.IsotropicAcoustic.track_gpointss",
         "param_names": [
             "shape",
@@ -21,10 +45,10 @@
         "timeout": 600.0,
         "type": "track",
         "unit": "gpointss",
-        "version": "5fb482e6933f642048af9fa0aa8432efbc553976b7bf28cf6e12955d7bdbfbec"
+        "version": "e329df71517009874dc794734c395040c38f11767cfb966131d4568dc8e9cc8b"
     },
     "acoustic_iso.IsotropicAcoustic.track_runtime": {
-        "code": "class IsotropicAcoustic:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.globals['fdlike'].time\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        solver = acoustic_setup(shape=shape, space_order=space_order, tn=self.tn,\n                                opt=('advanced', {'openmp': True}))\n        rec, u, self.summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                              y0_blk0_size=self.y0_blk0_size)\n    \n        # Compare output against reference norms\n        check_norms([rec, u], norms)",
+        "code": "class IsotropicAcoustic:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.time\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        filename = 'acoustic_iso_shape%s_so%d_devito%s.asv' % (str(shape).replace(\" \", \"\"),\n                                                               space_order,\n                                                               devito_version.split('.')[1])\n        filename = os.path.join(gettempdir(), filename)\n    \n        try:\n            with open(filename, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            solver = acoustic_setup(shape=shape, space_order=space_order, tn=self.tn,\n                                    opt=('advanced', {'openmp': True}))\n            rec, u, summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                             y0_blk0_size=self.y0_blk0_size)\n            self.summary = summary.globals['fdlike']\n    \n            # Compare output against reference norms\n            check_norms([rec, u], norms)\n    \n            # Custom caching -- ASV's setup_cache won't work\n            with open(filename, 'w') as f:\n                f.write(str(self.summary))",
         "name": "acoustic_iso.IsotropicAcoustic.track_runtime",
         "param_names": [
             "shape",
@@ -45,10 +69,34 @@
         "timeout": 600.0,
         "type": "track",
         "unit": "runtime",
-        "version": "74206b6425ee930cd14b14ae4dae4d831aa47febfad99474a14358bbfae0b0d0"
+        "version": "45980e3544e74706f26b90bb9745935512329190612f7f892bb17024186cd8f3"
+    },
+    "acoustic_tti.TTIAcoustic.track_gflopss": {
+        "code": "class TTIAcoustic:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        filename = 'acoustic_tti_shape%s_so%d_devito%s.asv' % (str(shape).replace(\" \", \"\"),\n                                                               space_order,\n                                                               devito_version.split('.')[1])\n        filename = os.path.join(gettempdir(), filename)\n    \n        try:\n            with open(filename, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            solver = tti_setup(shape=shape, space_order=space_order, tn=self.tn,\n                               opt=('advanced', {'openmp': True}))\n            rec, u, v, summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                                y0_blk0_size=self.y0_blk0_size)\n            self.summary = summary.globals['fdlike']\n    \n            # Compare output against reference norms\n            check_norms([rec, u, v], norms)\n    \n            # Custom caching -- ASV's setup_cache won't work\n            with open(filename, 'w') as f:\n                f.write(str(self.summary))",
+        "name": "acoustic_tti.TTIAcoustic.track_gflopss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(350, 350, 350)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 66.417102, 'u': 30.707737, 'v': 30.707728}"
+            ]
+        ],
+        "timeout": 600.0,
+        "type": "track",
+        "unit": "gflopss",
+        "version": "bb4a083d2f5d1c04fcec348c0be0f2745468c1a0f55003ea56dab6751d2b1de4"
     },
     "acoustic_tti.TTIAcoustic.track_gpointss": {
-        "code": "class TTIAcoustic:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.globals['fdlike'].gpointss\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        solver = tti_setup(shape=shape, space_order=space_order, tn=self.tn,\n                           opt=('advanced', {'openmp': True}))\n        rec, u, v, self.summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                                 y0_blk0_size=self.y0_blk0_size)\n    \n        # Compare output against reference norms\n        check_norms([rec, u, v], norms)",
+        "code": "class TTIAcoustic:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.gpointss\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        filename = 'acoustic_tti_shape%s_so%d_devito%s.asv' % (str(shape).replace(\" \", \"\"),\n                                                               space_order,\n                                                               devito_version.split('.')[1])\n        filename = os.path.join(gettempdir(), filename)\n    \n        try:\n            with open(filename, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            solver = tti_setup(shape=shape, space_order=space_order, tn=self.tn,\n                               opt=('advanced', {'openmp': True}))\n            rec, u, v, summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                                y0_blk0_size=self.y0_blk0_size)\n            self.summary = summary.globals['fdlike']\n    \n            # Compare output against reference norms\n            check_norms([rec, u, v], norms)\n    \n            # Custom caching -- ASV's setup_cache won't work\n            with open(filename, 'w') as f:\n                f.write(str(self.summary))",
         "name": "acoustic_tti.TTIAcoustic.track_gpointss",
         "param_names": [
             "shape",
@@ -69,10 +117,10 @@
         "timeout": 600.0,
         "type": "track",
         "unit": "gpointss",
-        "version": "8281e482f1167b1f237e3fb9c533bfe2eb99d1638eab479dba731af943fc0750"
+        "version": "dd8717beb854114f474a66845b3776a72ee7ea77991b38447edc5ad8a7ffeb9a"
     },
     "acoustic_tti.TTIAcoustic.track_runtime": {
-        "code": "class TTIAcoustic:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.globals['fdlike'].time\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        solver = tti_setup(shape=shape, space_order=space_order, tn=self.tn,\n                           opt=('advanced', {'openmp': True}))\n        rec, u, v, self.summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                                 y0_blk0_size=self.y0_blk0_size)\n    \n        # Compare output against reference norms\n        check_norms([rec, u, v], norms)",
+        "code": "class TTIAcoustic:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.time\n\n    @switchconfig(profiling='advanced')\n    def setup(self, shape, space_order, norms):\n        filename = 'acoustic_tti_shape%s_so%d_devito%s.asv' % (str(shape).replace(\" \", \"\"),\n                                                               space_order,\n                                                               devito_version.split('.')[1])\n        filename = os.path.join(gettempdir(), filename)\n    \n        try:\n            with open(filename, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            solver = tti_setup(shape=shape, space_order=space_order, tn=self.tn,\n                               opt=('advanced', {'openmp': True}))\n            rec, u, v, summary = solver.forward(x0_blk0_size=self.x0_blk0_size,\n                                                y0_blk0_size=self.y0_blk0_size)\n            self.summary = summary.globals['fdlike']\n    \n            # Compare output against reference norms\n            check_norms([rec, u, v], norms)\n    \n            # Custom caching -- ASV's setup_cache won't work\n            with open(filename, 'w') as f:\n                f.write(str(self.summary))",
         "name": "acoustic_tti.TTIAcoustic.track_runtime",
         "param_names": [
             "shape",
@@ -93,7 +141,7 @@
         "timeout": 600.0,
         "type": "track",
         "unit": "runtime",
-        "version": "e4b44392023fdaa5b06fe59a9de2e70765c3a8cfddb51f9c260d55b21730341b"
+        "version": "edc8de24bde02e8485b8e21c33b44f01b516f19223e8704f79c7d3b71a0ef56d"
     },
     "version": 2
 }
