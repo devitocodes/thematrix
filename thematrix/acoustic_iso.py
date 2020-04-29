@@ -4,6 +4,7 @@ from tempfile import gettempdir
 from devito import switchconfig, __version__ as devito_version
 from devito.operator.profiling import PerfEntry
 from examples.seismic.acoustic.acoustic_example import acoustic_setup
+from benchmarks.user.benchmark import run
 
 from thematrix.common import check_norms
 
