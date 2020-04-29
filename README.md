@@ -1,5 +1,7 @@
 # Devito benchmark matrix
 
+The benchmark results are available [here](https://www.devitoproject.org/thematrix/)
+
 ## Roadmap
 
 | Arch    | Brand  | Model |  JIT  | MPI      |  OMP     | MPI+OMP  | OMP5     | MPI+OMP5 |   ACC    | MPI+ACC  |
