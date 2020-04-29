@@ -6,14 +6,15 @@ from thematrix.benchmarks.common import check_norms
 
 class TTIAcoustic(object):
 
+    # Problem setup
     params = ([(350, 350, 350)], [12], [{'rec': 66.417102, 'u': 30.707737, 'v': 30.707728}])
     param_names = ['shape', 'space_order', 'norms']
-
     tn = 50
 
+    # ASV parameters
     repeat = 1
-
     timeout = 600.0
+    processes = 1
 
     # Default shape for loop blocking
     x0_blk0_size = 16

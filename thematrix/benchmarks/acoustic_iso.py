@@ -6,14 +6,15 @@ from thematrix.benchmarks.common import check_norms
 
 class IsotropicAcoustic(object):
 
+    # Problem setup
     params = ([(492, 492, 492)], [12], [{'rec': 184.526400, 'u': 151.545837}])
     param_names = ['shape', 'space_order', 'norms']
-
     tn = 100
 
+    # ASV parameters
     repeat = 1
-
     timeout = 600.0
+    processes = 1
 
     # Default shape for loop blocking
     x0_blk0_size = 16
