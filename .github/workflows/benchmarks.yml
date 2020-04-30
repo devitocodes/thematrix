@@ -18,6 +18,7 @@ jobs:
       DEVITO_BENCHMARKS: "1"
       DEVITO_LOGGING: "PERF"
       OMP_NUM_THREADS: "8"
+      MPI_NUM_PROCS: "${{ matrix.num_procs }}"
       PYTHON_VERSION: "${{ matrix.python-version }}"
       CC: "gcc-9"
       CXX: "g++-9"
@@ -39,6 +40,7 @@ jobs:
           num_cpu: 8
           ram: 32GB
           affinity: 0-7
+          num_procs: 1
 
     steps:
     - name: Checkout devito
