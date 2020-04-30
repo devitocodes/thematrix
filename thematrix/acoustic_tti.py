@@ -1,12 +1,7 @@
-import os
-from tempfile import gettempdir
-
-from devito import switchconfig, __version__ as devito_version
 from devito.operator.profiling import PerfEntry
 from examples.seismic.tti.tti_example import tti_setup
-from benchmarks.user.benchmark import run
 
-from thematrix.common import check_norms, make_unique_filename
+from thematrix.common import check_norms, make_unique_filename, run_benchmark
 
 
 class TTIAcoustic(object):
@@ -21,30 +16,14 @@ class TTIAcoustic(object):
     timeout = 600.0
     processes = 1
 
-    # Default shape for loop blocking
-    x0_blk0_size = 16
-    y0_blk0_size = 16
-
-    @switchconfig(profiling='advanced')
     def setup(self, shape, space_order, norms):
-        filename = make_unique_filename('acoustic-tti', shape, space_order)
-
+        fn_perf, fn_norms = make_unique_filename('acoustic-tti', shape, space_order)
         try:
-            with open(filename, 'r') as f:
+            with open(fn_perf, 'r') as f:
                 self.summary = eval(f.read())
         except FileNotFoundError:
-            solver = tti_setup(shape=shape, space_order=space_order, tn=self.tn,
-                               opt=('advanced', {'openmp': True}))
-            rec, u, v, summary = solver.forward(x0_blk0_size=self.x0_blk0_size,
-                                                y0_blk0_size=self.y0_blk0_size)
-            self.summary = summary.globals['fdlike']
-
-            # Compare output against reference norms
-            check_norms([rec, u, v], norms)
-
-            # Custom caching -- ASV's setup_cache won't work
-            with open(filename, 'w') as f:
-                f.write(str(self.summary))
+            run_benchmark('tti', shape, space_order, self.tn, fn_perf, fn_norms)
+            check_norms(fn_norms, norms)
 
     def track_runtime(self, shape, space_order, norms):
         return self.summary.time
