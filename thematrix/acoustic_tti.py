@@ -6,7 +6,7 @@ from devito.operator.profiling import PerfEntry
 from examples.seismic.tti.tti_example import tti_setup
 from benchmarks.user.benchmark import run
 
-from thematrix.common import check_norms
+from thematrix.common import check_norms, make_unique_filename
 
 
 class TTIAcoustic(object):
@@ -27,10 +27,7 @@ class TTIAcoustic(object):
 
     @switchconfig(profiling='advanced')
     def setup(self, shape, space_order, norms):
-        filename = 'acoustic_tti_shape%s_so%d_devito%s.asv' % (str(shape).replace(" ", ""),
-                                                               space_order,
-                                                               devito_version.split('.')[1])
-        filename = os.path.join(gettempdir(), filename)
+        filename = make_unique_filename('acoustic-tti', shape, space_order)
 
         try:
             with open(filename, 'r') as f:

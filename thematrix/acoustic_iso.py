@@ -1,12 +1,11 @@
 import os
-from tempfile import gettempdir
 
-from devito import switchconfig, __version__ as devito_version
+from devito import switchconfig
 from devito.operator.profiling import PerfEntry
 from examples.seismic.acoustic.acoustic_example import acoustic_setup
 from benchmarks.user.benchmark import run
 
-from thematrix.common import check_norms
+from thematrix.common import check_norms, make_unique_filename
 
 
 class IsotropicAcoustic(object):
@@ -27,10 +26,7 @@ class IsotropicAcoustic(object):
 
     @switchconfig(profiling='advanced')
     def setup(self, shape, space_order, norms):
-        filename = 'acoustic_iso_shape%s_so%d_devito%s.asv' % (str(shape).replace(" ", ""),
-                                                               space_order,
-                                                               devito_version.split('.')[1])
-        filename = os.path.join(gettempdir(), filename)
+        filename = make_unique_filename('acoustic-iso', shape, space_order)
 
         try:
             with open(filename, 'r') as f:
