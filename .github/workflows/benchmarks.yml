@@ -48,7 +48,7 @@ jobs:
         include:
         - name: nonHPC-IntelXeon8168-1x1-omp
           os: ubuntu18.04
-          tags: [linux, self-hosted, matrix, cpu]
+          tags: [Linux, self-hosted, matrix, cpu]
           arch: x86_64
           cpu: Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz
           num_cpu: 16
