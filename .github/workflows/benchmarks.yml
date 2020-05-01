@@ -1,5 +1,8 @@
 name: thematrix-run
 
+env:
+  OUTPUT_PATH: ${{ github.workspace }}
+
 on:
   # Trigger the workflow on push to the master branch
   # TODO: this will change oc
@@ -10,37 +13,62 @@ on:
 jobs:
   benchmarks:
     name: ${{ matrix.name }}
-    runs-on: "${{ matrix.os }}"
+    runs-on: "${{ matrix.tags }}"
 
     env:
-      DEVITO_ARCH: "gcc-9"
-      DEVITO_LANGUAGE: "openmp"
-      DEVITO_BENCHMARKS: "1"
-      DEVITO_LOGGING: "PERF"
-      OMP_NUM_THREADS: "8"
-      MPI_NUM_PROCS: "${{ matrix.num_procs }}"
-      PYTHON_VERSION: "${{ matrix.python-version }}"
+      # TODO: not sure why we need this?
       CC: "gcc-9"
       CXX: "g++-9"
+
+      # Devito setup
+      DEVITO_BENCHMARKS: "1"
+      DEVITO_LOGGING: "PERF"
+      DEVITO_ARCH: "${{ matrix.jit }}"
+      DEVITO_LANGUAGE: "${{ matrix.language }}"
+
+      # OpenMP setup
+      OMP_NUM_THREADS: "${{ matrix.num_threads }}"
+      # Note: we don't need any other env vars, e.g. for pinning, as these are
+      # already set on the individual runners
+
+      # MPI setup
+      MPI_NUM_PROCS: "${{ matrix.num_procs }}"
 
     strategy:
       # Prevent all build to stop if a single one fails
       fail-fast: false
 
       matrix:
+        # Name format:
+        # {azure-resource-type}-{architecture}-{#nodes}x{#sockets/gpus}-{mode}
         name: [
-           pytest-ubuntu-py38-gcc9-omp,
+           nonHPC-IntelXeon8168-1x1-omp,
+           nonHPC-IntelXeon8168-1x2-mpiomp-nonHPC,
         ]
         include:
-        - name: pytest-ubuntu-py38-gcc9-omp
-          python-version: 3.8
-          os: ubuntu-18.04
+        - name: nonHPC-IntelXeon8168-1x1-omp
+          os: ubuntu18.04
+          tags: [linux, self-hosted, matrix, cpu]
           arch: x86_64
-          cpu: Intel(R) Xeon(R) CPU E5-2620 v4 @ 2.10GHz  # TODO: This will change oc
-          num_cpu: 8
-          ram: 32GB
-          affinity: 0-7
+          cpu: Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz
+          num_cpu: 16
+          ram: 64GB
           num_procs: 1
+          num_threads: 16
+          jit: gcc-9
+          language: openmp
+
+        - name: nonHPC-IntelXeon8168-1x2-omp
+          os: ubuntu18.04
+          tags: [Linux, self-hosted, matrix, cpu]
+          arch: x86_64
+          cpu: Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz
+          num_cpu: 32
+          ram: 128GB
+          num_procs: 2
+          num_threads: 16
+          jit: gcc-9
+          language: openmp
 
     steps:
     - name: Checkout devito
@@ -57,7 +85,7 @@ jobs:
 
     - name: Run benchmarks
       run: |
-          asv run -v --show-stderr --config thematrix/asv.conf.json --cpu-affinity matrix.include.affinity  # TODO: Actually this is machine-specific... so maybe we need different workflows? :O
+          asv run -v --show-stderr --config thematrix/asv.conf.json
 
     - name: Publish results (html)
       run: |
