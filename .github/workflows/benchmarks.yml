@@ -83,11 +83,11 @@ jobs:
 
     - name: Setup asv
       run: |
-        asv machine --config thematrix/asv.conf.json --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
+        asv machine --config thematrix/asv.conf.json --machine matrix.include.name --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
 
     - name: Run benchmarks
       run: |
-          asv run -v --show-stderr --config thematrix/asv.conf.json
+          asv run --config thematrix/asv.conf.json --machine matrix.include.name -v --show-stderr
 
     - name: Publish results (html)
       run: |
