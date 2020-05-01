@@ -46,8 +46,8 @@ jobs:
            nonHPC-IntelXeon8168-1x2-mpiomp-nonHPC,
         ]
         tags: [
-           [self-hosted, Linux, cpu],
-           [self-hosted, Linux, cpu],
+           self-hosted,
+           self-hosted,
         ]
         include:
         - name: nonHPC-IntelXeon8168-1x1-omp
