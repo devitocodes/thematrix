@@ -3,94 +3,157 @@ name: thematrix-run
 env:
   OUTPUT_PATH: ${{ github.workspace }}
 
-on:
-  # Trigger the workflow on push to the master branch
-  # TODO: this will change oc
-  push:
-    branches:
-      - master
+#on:
+  ## Trigger the workflow on push to the master branch
+  ## TODO: this will change oc
+  #push:
+    #branches:
+      #- master
+on: push
 
 jobs:
-  benchmarks:
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.include.os }}
 
-    env:
-      # TODO: not sure why we need this?
-      CC: "gcc-9"
-      CXX: "g++-9"
+  # Set Matrix of self-hosted runners
+  set-runners:
 
-      # Devito setup
-      DEVITO_BENCHMARKS: "1"
-      DEVITO_LOGGING: "PERF"
-      DEVITO_ARCH: "${{ matrix.jit }}"
-      DEVITO_LANGUAGE: "${{ matrix.language }}"
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
 
-      # OpenMP setup
-      OMP_NUM_THREADS: "${{ matrix.num_threads }}"
-      # Note: we don't need any other env vars, e.g. for pinning, as these are
-      # already set on the individual runners
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v1
+    - id: set-matrix
+      run: |
+        echo "::set-output name=matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/scripts/runners.json)"
 
-      # MPI setup
-      MPI_NUM_PROCS: "${{ matrix.num_procs }}"
+  # Boot the self-hosted runners and start runner apps
+  start-runners:
+    name: start-runner
+    needs: set-runners
+    runs-on: ubuntu-latest
 
     strategy:
       # Prevent all build to stop if a single one fails
       fail-fast: false
 
-      matrix:
-        # Name format:
-        # {azure-resource-type}-{architecture}-{#nodes}x{#sockets/gpus}-{mode}
-        name: [
-           nonHPC-IntelXeon8168-1x1-omp,
-           nonHPC-IntelXeon8168-1x2-mpiomp-nonHPC,
-        ]
-        os: [
-           self-hosted,
-           self-hosted,
-        ]
-        include:
-        - name: nonHPC-IntelXeon8168-1x1-omp
-          os: self-hosted
-          arch: x86_64
-          cpu: Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz
-          num_cpu: 16
-          ram: 64GB
-          num_procs: 1
-          num_threads: 16
-          jit: gcc-9
-          language: openmp
-
-        - name: nonHPC-IntelXeon8168-1x2-omp
-          os: self-hosted
-          arch: x86_64
-          cpu: Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz
-          num_cpu: 32
-          ram: 128GB
-          num_procs: 2
-          num_threads: 16
-          jit: gcc-9
-          language: openmp
+      matrix: ${{ fromJson(needs.set-runners.outputs.matrix) }}
 
     steps:
-    - name: Checkout TheMatrix
+
+    - name: checkout repo
       uses: actions/checkout@v1
 
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip
-        pip install -e .
+    - name: start VM
+      env:
+        SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
+        SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
+        TENANT_ID: ${{ secrets.SERVICE_PRINCIPAL_TENANTID }}
+        SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      run: >
+        pwsh -command "& '${{ env.OUTPUT_PATH }}\.github\azure\startVM.ps1'"
+        -servicePrincipal $SP_APPID
+        -servicePrincipalSecret $SP_SECRET
+        -servicePrincipalTenantId $TENANT_ID
+        -azureSubscriptionName $SUB_ID
+        -resourceGroupName $RESOURCE_GROUP
+        -vmName ${{ matrix.runner }}
 
-    - name: Setup asv
-      run: |
-        asv machine --config thematrix/asv.conf.json --machine matrix.include.name --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
+    - name: set host
+      run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP -n ${{ matrix.runner }} --query publicIps -o tsv)
+      id: host
 
-    - name: Run benchmarks
-      run: |
-          asv run --config thematrix/asv.conf.json --machine matrix.include.name -v --show-stderr
+    - name: start-runner-ap
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd actions-runner
+          nohup ./run.sh &
+        host: ${{ steps.host.outputs.action_host }}
+        user: ${{ secrets.CI_GPU_VM_ADMIN_LOGIN }}
+        pass: ${{ secrets.CI_GPU_VM_ADMIN_PASSWORD }}
+        args: -tt
 
-    - name: Publish results (html)
-      run: |
-          # TODO: This will need some tinkering?
-          asv publish --config thematrix/asv.conf.json
-          asv gh-pages --config thematrix/asv.conf.json --rewrite
+  #TODO: Edit matrix below so it's populated from
+  #benchmarks:
+    #needs: ...
+    #name: ${{ matrix.name }}
+    #runs-on: "${{ matrix.tags }}"
+
+    #env:
+      ## TODO: not sure why we need this?
+      #CC: "gcc-9"
+      #CXX: "g++-9"
+
+      ## Devito setup
+      #DEVITO_BENCHMARKS: "1"
+      #DEVITO_LOGGING: "PERF"
+      #DEVITO_ARCH: "${{ matrix.jit }}"
+      #DEVITO_LANGUAGE: "${{ matrix.language }}"
+
+      ## OpenMP setup
+      #OMP_NUM_THREADS: "${{ matrix.num_threads }}"
+      ## Note: we don't need any other env vars, e.g. for pinning, as these are
+      ## already set on the individual runners
+
+      ## MPI setup
+      #MPI_NUM_PROCS: "${{ matrix.num_procs }}"
+
+    #strategy:
+      ## Prevent all build to stop if a single one fails
+      #fail-fast: false
+
+      #matrix:
+        ## Name format:
+        ## {azure-resource-type}-{architecture}-{#nodes}x{#sockets/gpus}-{mode}
+        #name: [
+           #nonHPC-IntelXeon8168-1x1-omp,
+           #nonHPC-IntelXeon8168-1x2-mpiomp-nonHPC,
+        #]
+        #include:
+        #- name: nonHPC-IntelXeon8168-1x1-omp
+          #os: ubuntu18.04
+          #tags: [linux, self-hosted, matrix, cpu]
+          #arch: x86_64
+          #cpu: Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz
+          #num_cpu: 16
+          #ram: 64GB
+          #num_procs: 1
+          #num_threads: 16
+          #jit: gcc-9
+          #language: openmp
+
+        #- name: nonHPC-IntelXeon8168-1x2-omp
+          #os: ubuntu18.04
+          #tags: [Linux, self-hosted, matrix, cpu]
+          #arch: x86_64
+          #cpu: Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz
+          #num_cpu: 32
+          #ram: 128GB
+          #num_procs: 2
+          #num_threads: 16
+          #jit: gcc-9
+          #language: openmp
+
+    #steps:
+    #- name: Checkout devito
+      #uses: actions/checkout@v1
+
+    #- name: Install dependencies
+      #run: |
+        #pip install --upgrade pip
+        #pip install -e .
+
+    #- name: Setup asv
+      #run: |
+        #asv machine --config thematrix/asv.conf.json --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
+
+    #- name: Run benchmarks
+      #run: |
+          #asv run -v --show-stderr --config thematrix/asv.conf.json
+
+    #- name: Publish results (html)
+      #run: |
+          ## TODO: This will need some tinkering?
+          #asv publish --config thematrix/asv.conf.json
+          #asv gh-pages --config thematrix/asv.conf.json --rewrite
