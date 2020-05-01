@@ -73,7 +73,7 @@ jobs:
           language: openmp
 
     steps:
-    - name: Checkout devito
+    - name: Checkout TheMatrix
       uses: actions/checkout@v1
 
     - name: Install dependencies
