@@ -1,3 +1,7 @@
+# Example usage
+#
+#    python make-asv-machine.py matrix-runner-cpu-00 nonHPC-IntelXeon8168-1x1-omp
+
 import json
 import sys
 
