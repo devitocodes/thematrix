@@ -24,6 +24,8 @@ class IsotropicAcoustic(object):
         except FileNotFoundError:
             run_benchmark('acoustic', shape, space_order, self.tn, fn_perf, fn_norms)
             check_norms(fn_norms, norms)
+            with open(fn_perf, 'r') as f:
+                self.summary = eval(f.read())
 
     def track_runtime(self, shape, space_order, norms):
         return self.summary.time

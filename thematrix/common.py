@@ -19,7 +19,7 @@ def check_norms(fn_norms, reference):
     assert isinstance(reference, dict)
     assert set(norms) == set(reference)
 
-    for k, v in norms:
+    for k, v in norms.items():
         norm = float(v)
         info("norm(%s) = %f (expected = %f, delta = %f)"
              % (k, norm, reference[k], abs(norm - reference[k])))
