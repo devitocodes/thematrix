@@ -13,7 +13,7 @@ on:
 jobs:
   benchmarks:
     name: ${{ matrix.name }}
-    runs-on: ${{ matrix.include.tags }}
+    runs-on: ${{ matrix.include.os }}
 
     env:
       # TODO: not sure why we need this?
@@ -45,7 +45,7 @@ jobs:
            nonHPC-IntelXeon8168-1x1-omp,
            nonHPC-IntelXeon8168-1x2-mpiomp-nonHPC,
         ]
-        tags: [
+        os: [
            self-hosted,
            self-hosted,
         ]
