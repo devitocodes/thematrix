@@ -3,7 +3,7 @@
   "runners":{
     "matrix-runner-cpu-00":{
       "os": "ubuntu18.04",
-      "tags": "[linux, self-hosted, matrix, cpu]",
+      "tags": ["self-hosted", "matrix-runner-cpu-00"],
       "arch": "x86_64",
       "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
       "jobs":{
@@ -27,7 +27,7 @@
     },
     "matrix-runner-cpu-01":{
       "os": "ubuntu18.04",
-      "tags": "[linux, self-hosted, matrix, cpu]",
+      "tags": ["self-hosted", "matrix-runner-cpu-01"],
       "arch": "x86_64",
       "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
       "jobs":{

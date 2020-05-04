@@ -2,6 +2,7 @@ name: thematrix-run
 
 env:
   OUTPUT_PATH: ${{ github.workspace }}
+  RESOURCE_GROUP: thematrix
 
 #on:
   ## Trigger the workflow on push to the master branch
@@ -18,18 +19,24 @@ jobs:
 
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      runners-matrix: ${{ steps.set-runners-matrix.outputs.runners-matrix }}
+      jobs-matrix: ${{ steps.set-jobs-matrix.outputs.jobs-matrix }}
 
     steps:
+
     - name: checkout repo
       uses: actions/checkout@v1
-    - id: set-matrix
+
+    - id: set-runners-matrix
       run: |
-        echo "::set-output name=matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/scripts/runners.json)"
+        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/scripts/runners.json)"
+
+    - id: set-jobs-matrix
+      run: |
+        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/scripts/jobs.json)"
 
   # Boot the self-hosted runners and start runner apps
   start-runners:
-    name: start-runner
     needs: set-runners
     runs-on: ubuntu-latest
 
@@ -37,7 +44,7 @@ jobs:
       # Prevent all build to stop if a single one fails
       fail-fast: false
 
-      matrix: ${{ fromJson(needs.set-runners.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
 
     steps:
 
@@ -63,97 +70,92 @@ jobs:
       run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP -n ${{ matrix.runner }} --query publicIps -o tsv)
       id: host
 
-    - name: start-runner-ap
+    - name: start actions runner app
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cd actions-runner
-          nohup ./run.sh &
+          #!/bin/bash
+          nohup actions-runner/run.sh >/dev/null 2>&1 &
         host: ${{ steps.host.outputs.action_host }}
-        user: ${{ secrets.CI_GPU_VM_ADMIN_LOGIN }}
-        pass: ${{ secrets.CI_GPU_VM_ADMIN_PASSWORD }}
-        args: -tt
+        user: ${{ secrets.ADMIN_LOGIN }}
+        pass: ${{ secrets.ADMIN_PASSWORD }}
+        args: "-tt"
 
-  #TODO: Edit matrix below so it's populated from
-  #benchmarks:
-    #needs: ...
-    #name: ${{ matrix.name }}
-    #runs-on: "${{ matrix.tags }}"
+  benchmarks:
+    name: ${{ matrix.name }}
+    needs: [set-runners, start-runners]
+    runs-on: ${{ matrix.tags }}
 
-    #env:
-      ## TODO: not sure why we need this?
-      #CC: "gcc-9"
-      #CXX: "g++-9"
+    strategy:
+      # Prevent all build to stop if a single one fails
+      fail-fast: false
 
-      ## Devito setup
-      #DEVITO_BENCHMARKS: "1"
-      #DEVITO_LOGGING: "PERF"
-      #DEVITO_ARCH: "${{ matrix.jit }}"
-      #DEVITO_LANGUAGE: "${{ matrix.language }}"
+      matrix: ${{ fromJson(needs.set-runners.outputs.jobs-matrix) }}
 
-      ## OpenMP setup
-      #OMP_NUM_THREADS: "${{ matrix.num_threads }}"
-      ## Note: we don't need any other env vars, e.g. for pinning, as these are
-      ## already set on the individual runners
+    env:
 
-      ## MPI setup
-      #MPI_NUM_PROCS: "${{ matrix.num_procs }}"
+      # Devito setup
+      DEVITO_BENCHMARKS: "1"
+      DEVITO_LOGGING: "PERF"
+      DEVITO_ARCH: "${{ matrix.jit }}"
+      DEVITO_LANGUAGE: "${{ matrix.language }}"
 
-    #strategy:
-      ## Prevent all build to stop if a single one fails
-      #fail-fast: false
+      # OpenMP setup
+      OMP_NUM_THREADS: "${{ matrix.num_threads }}"
+      # Note: we don't need any other env vars, e.g. for pinning, as these are
+      # already set on the individual runners
 
-      #matrix:
-        ## Name format:
-        ## {azure-resource-type}-{architecture}-{#nodes}x{#sockets/gpus}-{mode}
-        #name: [
-           #nonHPC-IntelXeon8168-1x1-omp,
-           #nonHPC-IntelXeon8168-1x2-mpiomp-nonHPC,
-        #]
-        #include:
-        #- name: nonHPC-IntelXeon8168-1x1-omp
-          #os: ubuntu18.04
-          #tags: [linux, self-hosted, matrix, cpu]
-          #arch: x86_64
-          #cpu: Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz
-          #num_cpu: 16
-          #ram: 64GB
-          #num_procs: 1
-          #num_threads: 16
-          #jit: gcc-9
-          #language: openmp
+      # MPI setup
+      MPI_NUM_PROCS: "${{ matrix.num_procs }}"
 
-        #- name: nonHPC-IntelXeon8168-1x2-omp
-          #os: ubuntu18.04
-          #tags: [Linux, self-hosted, matrix, cpu]
-          #arch: x86_64
-          #cpu: Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz
-          #num_cpu: 32
-          #ram: 128GB
-          #num_procs: 2
-          #num_threads: 16
-          #jit: gcc-9
-          #language: openmp
+    steps:
+    - name: Checkout TheMatrix
+      uses: actions/checkout@v1
 
-    #steps:
-    #- name: Checkout devito
-      #uses: actions/checkout@v1
-
-    #- name: Install dependencies
-      #run: |
-        #pip install --upgrade pip
-        #pip install -e .
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -e .
 
     #- name: Setup asv
       #run: |
-        #asv machine --config thematrix/asv.conf.json --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
-
+        #asv machine --config thematrix/asv.conf.json --machine matrix.include.name --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
     #- name: Run benchmarks
       #run: |
-          #asv run -v --show-stderr --config thematrix/asv.conf.json
-
+          #asv run --config thematrix/asv.conf.json --machine matrix.include.name -v --show-stderr
     #- name: Publish results (html)
       #run: |
           ## TODO: This will need some tinkering?
           #asv publish --config thematrix/asv.conf.json
           #asv gh-pages --config thematrix/asv.conf.json --rewrite
+
+  # Stop the runners
+  stop-runners:
+    name: stop-runners
+    needs: [set-runners, benchmarks]
+    runs-on: ubuntu-latest
+
+    strategy:
+      # Prevent all build to stop if a single one fails
+      fail-fast: false
+
+      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
+
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v1
+
+    - name: stop VM
+      env:
+        SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
+        SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
+        TENANT_ID: ${{ secrets.SERVICE_PRINCIPAL_TENANTID }}
+        SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      run: >
+        pwsh -command "& '${{ env.OUTPUT_PATH }}\.github\azure\stopVM.ps1'"
+        -servicePrincipal $SP_APPID
+        -servicePrincipalSecret $SP_SECRET
+        -servicePrincipalTenantId $TENANT_ID
+        -azureSubscriptionName $SUB_ID
+        -resourceGroupName $RESOURCE_GROUP
+        -vmName ${{ matrix.runner }}
