@@ -1,0 +1,53 @@
+{
+  "name": "theMatrixConfig",
+  "runners":{
+    "matrix-runner-cpu-00":{
+      "os": "ubuntu18.04",
+      "tags": ["self-hosted", "matrix-runner-cpu-00"],
+      "arch": "x86_64",
+      "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
+      "jobs":{
+        "nonHPC-IntelXeon8168-1x1-omp": {
+          "num_cpu": "16",
+          "ram": "64GB",
+          "num_procs": "1",
+          "num_threads": "16",
+          "jit": "gcc-9",
+          "language": "openmp"
+        },
+        "nonHPC-IntelXeon8168-1x2-omp": {
+          "num_cpu": "32",
+          "ram": "128GB",
+          "num_procs": "2",
+          "num_threads": "16",
+          "jit": "gcc-9",
+          "language": "openmp"
+        }
+      }
+    },
+    "matrix-runner-cpu-01":{
+      "os": "ubuntu18.04",
+      "tags": ["self-hosted", "matrix-runner-cpu-01"],
+      "arch": "x86_64",
+      "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
+      "jobs":{
+        "nonHPC-IntelXeon8168-1x1-omp": {
+          "num_cpu": "16",
+          "ram": "64GB",
+          "num_procs": "1",
+          "num_threads": "16",
+          "jit": "gcc-9",
+          "language": "openmp"
+        },
+        "nonHPC-IntelXeon8168-1x2-omp": {
+          "num_cpu": "32",
+          "ram": "128GB",
+          "num_procs": "2",
+          "num_threads": "16",
+          "jit": "gcc-9",
+          "language": "openmp"
+        }
+      }
+    }
+  }
+}
