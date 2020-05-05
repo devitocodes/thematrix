@@ -4,13 +4,12 @@ env:
   OUTPUT_PATH: ${{ github.workspace }}
   RESOURCE_GROUP: thematrix
 
-#on:
-  ## Trigger the workflow on push to the master branch
-  ## TODO: this will change oc
-  #push:
-    #branches:
-      #- master
-on: push
+on:
+  # Trigger the workflow on push to the master branch
+  # TODO: this will change oc
+  push:
+    branches:
+      - master
 
 jobs:
 
@@ -87,8 +86,6 @@ jobs:
     runs-on: ${{ matrix.tags }}
 
     strategy:
-      # Prevent all build to stop if a single one fails
-      fail-fast: false
 
       matrix: ${{ fromJson(needs.set-runners.outputs.jobs-matrix) }}
 
@@ -117,17 +114,17 @@ jobs:
         pip install --upgrade pip
         pip install -e .
 
-    #- name: Setup asv
-      #run: |
-        #asv machine --config thematrix/asv.conf.json --machine matrix.include.name --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
-    #- name: Run benchmarks
-      #run: |
-          #asv run --config thematrix/asv.conf.json --machine matrix.include.name -v --show-stderr
-    #- name: Publish results (html)
-      #run: |
-          ## TODO: This will need some tinkering?
-          #asv publish --config thematrix/asv.conf.json
-          #asv gh-pages --config thematrix/asv.conf.json --rewrite
+    - name: Setup asv
+      run: |
+        asv machine --config thematrix/asv.conf.json --machine matrix.include.name --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
+    - name: Run benchmarks
+      run: |
+          asv run --config thematrix/asv.conf.json --machine matrix.include.name -v --show-stderr
+    - name: Publish results (html)
+      run: |
+          # TODO: This will need some tinkering?
+          asv publish --config thematrix/asv.conf.json
+          asv gh-pages --config thematrix/asv.conf.json --rewrite
 
   # Stop the runners
   stop-runners:
