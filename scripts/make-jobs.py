@@ -25,6 +25,8 @@ for i in runners:
         num_threads = jdat[j]['num_threads']
         jit = jdat[j]['jit']
         language = jdat[j]['language']
+        omp_places = jdat[j]['omp_places']
+        omp_proc_bind = jdat[j]['omp_proc_bind']
         # Build dict
         job_dict = {}
         job_dict['name'] = name
@@ -38,6 +40,8 @@ for i in runners:
         job_dict['num_threads'] = num_threads
         job_dict['jit'] = jit
         job_dict['language'] = language
+        job_dict['omp_places'] = omp_places
+        job_dict['omp_proc_bind'] = omp_proc_bind
         jobs_list.append(job_dict)
 
 output = {"include": jobs_list}

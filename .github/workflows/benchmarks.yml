@@ -99,8 +99,8 @@ jobs:
 
       # OpenMP setup
       OMP_NUM_THREADS: "${{ matrix.num_threads }}"
-      # Note: we don't need any other env vars, e.g. for pinning, as these are
-      # already set on the individual runners
+      OMP_PLACES: "${{ matrix.omp_places }}"
+      OMP_PROC_BIND: "${{ matrix.omp_proc_bind }}"
 
       # MPI setup
       MPI_NUM_PROCS: "${{ matrix.num_procs }}"
