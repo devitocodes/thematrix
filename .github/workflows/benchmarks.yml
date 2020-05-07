@@ -26,13 +26,18 @@ jobs:
     - name: checkout repo
       uses: actions/checkout@v1
 
+    - name: Generate runners.json and jobs.json from thematrix.json
+      run: |
+        # This will populate thematrix/generated
+        python scripts/make-jobs-runners.py
+
     - id: set-runners-matrix
       run: |
-        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/scripts/runners.json)"
+        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/runners.json)"
 
     - id: set-jobs-matrix
       run: |
-        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/scripts/jobs.json)"
+        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/jobs.json)"
 
   # Boot the self-hosted runners and start runner apps
   start-runners:
@@ -114,12 +119,14 @@ jobs:
         pip install --upgrade pip
         pip install -e .
 
-    - name: Setup asv
+    - name: Create ASV machine file
       run: |
         asv machine --config thematrix/asv.conf.json --machine matrix.include.name --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
+
     - name: Run benchmarks
       run: |
           asv run --config thematrix/asv.conf.json --machine matrix.include.name -v --show-stderr
+
     - name: Publish results (html)
       run: |
           # TODO: This will need some tinkering?
