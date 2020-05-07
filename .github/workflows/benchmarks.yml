@@ -127,9 +127,21 @@ jobs:
       run: |
           asv run --config thematrix/asv.conf.json --machine matrix.include.name -v --show-stderr
 
+    - name: Commit results
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add results/
+        git status
+        git commit -m "Push results from runner"
+
+    - name: Push results
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Publish results (html)
       run: |
-          # TODO: This will need some tinkering?
           asv publish --config thematrix/asv.conf.json
           asv gh-pages --config thematrix/asv.conf.json --rewrite
 
