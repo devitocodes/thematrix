@@ -102,6 +102,7 @@ jobs:
       DEVITO_LOGGING: "PERF"
       DEVITO_ARCH: "${{ matrix.jit }}"
       DEVITO_LANGUAGE: "${{ matrix.language }}"
+      DEVITO_PLATFORM: "${{ matrix.platform }}"
 
       # OpenMP setup
       OMP_NUM_THREADS: "${{ matrix.num_threads }}"
@@ -122,7 +123,6 @@ jobs:
 
     - name: Create ASV machine file
       run: |
-        echo $PATH
         asv machine --config thematrix/asv.conf.json --machine matrix.include.name --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
 
     - name: Run benchmarks

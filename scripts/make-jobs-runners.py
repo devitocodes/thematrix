@@ -28,6 +28,7 @@ for i in runners:
     jdat = rdata[i]['jobs']
     for j in jobs:
         name = j
+        platform = jdat[j]['platform']
         num_cpu = jdat[j]['num_cpu']
         ram = jdat[j]['ram']
         num_procs = jdat[j]['num_procs']
@@ -43,6 +44,7 @@ for i in runners:
         job_dict['os'] = _os
         job_dict['arch'] = arch
         job_dict['cpu'] = cpu
+        job_dict['platform'] = platform
         job_dict['num_cpu'] = num_cpu
         job_dict['ram'] = ram
         job_dict['num_procs'] = num_procs
