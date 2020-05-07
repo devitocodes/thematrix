@@ -1,9 +1,9 @@
 {
   "name": "theMatrixConfig",
   "runners":{
-    "matrix-runner-cpu-00":{
+    "cpu00-Standard-F64s-v2":{
       "os": "ubuntu18.04",
-      "tags": ["self-hosted", "matrix-runner-cpu-00"],
+      "tags": ["self-hosted", "cpu00"],
       "arch": "x86_64",
       "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
       "jobs":{
@@ -29,9 +29,9 @@
         }
       }
     },
-    "matrix-runner-cpu-01":{
+    "cpu01-Standard-F64s-v2":{
       "os": "ubuntu18.04",
-      "tags": ["self-hosted", "matrix-runner-cpu-01"],
+      "tags": ["self-hosted", "cpu01"],
       "arch": "x86_64",
       "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
       "jobs":{
