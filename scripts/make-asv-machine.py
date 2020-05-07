@@ -1,3 +1,5 @@
+"""Create ``~/.asv-machine.json`` for a given ``<runner, job>``."""
+
 # Example usage
 #
 #    python make-asv-machine.py matrix-runner-cpu-00 nonHPC-IntelXeon8168-1x1-omp
@@ -15,7 +17,9 @@ if len(sys.argv) != 3:
 runner = sys.argv[1]
 jobname = sys.argv[2]
 
-with open('../thematrix/thematrix.json', 'r') as f:
+root_path = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+
+with open(os.path.join(root_path, 'thematrix', 'thematrix.json'), 'r') as f:
     data = json.load(f)
 
 arch = data['runners'][runner]['arch']
@@ -36,7 +40,6 @@ output = {
     }
 }
 
+# Store in HOME because that's where ASV looks for this file
 with open('~/.asv-machine.json', 'w') as f:
     json.dump(output, f, indent=4)
-
-
