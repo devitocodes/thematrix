@@ -1,4 +1,6 @@
 *.pyc
 *.swp
 
+generated/*
+
 thematrix.egg-info/*
