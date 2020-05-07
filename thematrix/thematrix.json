@@ -8,7 +8,7 @@
       "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
       "jobs":{
         "nonHPC-IntelXeon8168-1x1-omp": {
-          "platform": "unset",
+          "platform": "cpu64",
           "num_cpu": "16",
           "ram": "64GB",
           "num_procs": "1",
@@ -19,7 +19,7 @@
           "omp_proc_bind": "close"
         },
         "nonHPC-IntelXeon8168-1x2-omp": {
-          "platform": "unset",
+          "platform": "cpu64",
           "num_cpu": "32",
           "ram": "128GB",
           "num_procs": "2",
@@ -38,7 +38,7 @@
       "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
       "jobs":{
         "nonHPC-IntelXeon8168-1x1-omp": {
-          "platform": "unset",
+          "platform": "cpu64",
           "num_cpu": "16",
           "ram": "64GB",
           "num_procs": "1",
@@ -49,7 +49,7 @@
           "omp_proc_bind": "close"
         },
         "nonHPC-IntelXeon8168-1x2-omp": {
-          "platform": "unset",
+          "platform": "cpu64",
           "num_cpu": "32",
           "ram": "128GB",
           "num_procs": "2",
