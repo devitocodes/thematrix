@@ -4,12 +4,7 @@ env:
   OUTPUT_PATH: ${{ github.workspace }}
   RESOURCE_GROUP: thematrix
 
-#on:
-  ## Trigger the workflow on push to the master branch
-  ## TODO: this will change oc
-  #push:
-    #branches:
-      #- master
+# TODO: this will change oc. See issue #9.
 on: push
 
 jobs:
@@ -30,7 +25,9 @@ jobs:
     - name: Generate runners.json and jobs.json from thematrix.json
       run: |
         # This will populate thematrix/generated
-        python scripts/make-jobs-runners.py
+        python3 scripts/make-jobs-runners.py
+
+    # TODO: Add step to check if any machine.json files created. Commit them if so.
 
     - id: set-runners-matrix
       run: |
@@ -92,7 +89,6 @@ jobs:
     runs-on: ${{ matrix.tags }}
 
     strategy:
-
       matrix: ${{ fromJson(needs.set-runners.outputs.jobs-matrix) }}
 
     env:
@@ -121,59 +117,61 @@ jobs:
         pip install --upgrade pip
         pip install -e .
 
-    - name: Create ASV machine file
-      run: |
-        asv machine --config thematrix/asv.conf.json --machine matrix.include.name --os matrix.include.os --arch matrix.include.arch --cpu matrix.include.cpu --num_cpu matrix.include.num_cpu --ram matrix.include.ram
+    # Should be able to remove this step:
+    #- name: Create ASV machine file
+      #run: |
+        #asv machine --config thematrix/asv.conf.json --machine ${{ matrix.runner}}/${{ matrix.name}} --os ${{ matrix.os }} --arch ${{ matrix.arch }} --cpu "${{ matrix.cpu }}" --num_cpu ${{ matrix.num_cpu }} --ram ${{ matrix.ram }}
 
     - name: Run benchmarks
       run: |
-          asv run --config thematrix/asv.conf.json --machine matrix.include.name -v --show-stderr
+          asv run --config thematrix/asv.conf.json --machine ${{ matrix.runner}}/${{ matrix.name}} -v --show-stderr
 
-    - name: Commit results
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add results/
-        git status
-        git commit -m "Push results from runner"
+    # TODO: Persist result as artefact here
 
-    - name: Push results
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+    #- name: Commit results
+      #run: |
+        #git config --local user.email "action@github.com"
+        #git config --local user.name "GitHub Action"
+        #git add results/
+        #git status
+        #git commit -m "Push results from runner"
 
-  publish-results:
-    needs: benchmarks
-    runs-on: ubuntu-latest
+    #- name: Push results
+      #uses: ad-m/github-push-action@master
+      #with:
+        #github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    steps:
-    - name: Checkout TheMatrix
-      uses: actions/checkout@v1
+  #publish-results:
+    #needs: benchmarks
+    #runs-on: ubuntu-latest
 
-    - name: Install dependencies
-      run: |
-        pip install asv
+    #steps:
+    #- name: Checkout TheMatrix
+      #uses: actions/checkout@v1
 
-    - name: Publish results (html)
-      run: |
-          asv publish --config thematrix/asv.conf.json
-          asv gh-pages --config thematrix/asv.conf.json --rewrite
+    #- name: Install dependencies
+      #run: |
+        #pip install asv
 
-  # Stop the runners
+    #- name: Publish results (html)
+      #run: |
+          #asv publish --config thematrix/asv.conf.json
+          #asv gh-pages --config thematrix/asv.conf.json --rewrite
+
+  # Publish the results and stop the runners
   stop-runners:
     name: stop-runners
     needs: [set-runners, benchmarks]
     runs-on: ubuntu-latest
 
     strategy:
-      # Prevent all build to stop if a single one fails
-      fail-fast: false
-
       matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
 
     steps:
     - name: checkout repo
       uses: actions/checkout@v1
+
+      # TODO: Add step here to gather artefacts, combine and push results.
 
     - name: stop VM
       env:
