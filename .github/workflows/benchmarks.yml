@@ -129,35 +129,35 @@ jobs:
       run: |
           asv run --config thematrix/asv.conf.json --machine matrix.include.name -v --show-stderr
 
-    #- name: Commit results
-      #run: |
-        #git config --local user.email "action@github.com"
-        #git config --local user.name "GitHub Action"
-        #git add results/
-        #git status
-        #git commit -m "Push results from runner"
+    - name: Commit results
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add results/
+        git status
+        git commit -m "Push results from runner"
 
-    #- name: Push results
-      #uses: ad-m/github-push-action@master
-      #with:
-        #github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Push results
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  #publish-results:
-    #needs: benchmarks
-    #runs-on: ubuntu-latest
+  publish-results:
+    needs: benchmarks
+    runs-on: ubuntu-latest
 
-    #steps:
-    #- name: Checkout TheMatrix
-      #uses: actions/checkout@v1
+    steps:
+    - name: Checkout TheMatrix
+      uses: actions/checkout@v1
 
-    #- name: Install dependencies
-      #run: |
-        #pip install asv
+    - name: Install dependencies
+      run: |
+        pip install asv
 
-    #- name: Publish results (html)
-      #run: |
-          #asv publish --config thematrix/asv.conf.json
-          #asv gh-pages --config thematrix/asv.conf.json --rewrite
+    - name: Publish results (html)
+      run: |
+          asv publish --config thematrix/asv.conf.json
+          asv gh-pages --config thematrix/asv.conf.json --rewrite
 
   # Stop the runners
   stop-runners:
