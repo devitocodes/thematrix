@@ -1,0 +1,9 @@
+{
+    "arch": "matrix.include.arch",
+    "cpu": "matrix.include.cpu",
+    "machine": "matrix.include.name",
+    "num_cpu": "matrix.include.num_cpu",
+    "os": "matrix.include.os",
+    "ram": "matrix.include.ram",
+    "version": 1
+}
