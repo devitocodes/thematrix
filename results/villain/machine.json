@@ -1,9 +1,0 @@
-{
-    "arch": "x86_64",
-    "cpu": "Intel(R) Xeon(R) CPU FAKE",
-    "machine": "villain",
-    "num_cpu": "32",
-    "os": "Linux 4.4.0-134-generic",
-    "ram": "65840376",
-    "version": 1
-}
