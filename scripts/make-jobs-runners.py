@@ -6,7 +6,9 @@ import os
 root_path = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 
 # Where the generated .json files will be stored
-os.makedirs(os.path.join(root_path, 'generated'), exist_ok=True)
+generated_path = os.path.join(root_path, 'generated')
+if not os.path.exists(generated_path):
+    os.makedirs(generated_path)
 
 with open(os.path.join(root_path, 'thematrix', 'thematrix.json'), 'r') as f:
     data = json.load(f)
