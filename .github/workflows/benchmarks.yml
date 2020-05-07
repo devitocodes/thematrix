@@ -140,6 +140,18 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
+  publish-results:
+    needs: benchmarks
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout TheMatrix
+      uses: actions/checkout@v1
+
+    - name: Install dependencies
+      run: |
+        pip install asv
+
     - name: Publish results (html)
       run: |
           asv publish --config thematrix/asv.conf.json
