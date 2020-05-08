@@ -1,0 +1,9 @@
+{
+    "arch": "kepler",
+    "cpu": "NVidia 4 x GK210 (2 x Tesla K80)",
+    "machine": "nonHPC-NVidia4xGK210-1x4-mpi-acc",
+    "num_cpu": "1",
+    "os": "ubuntu18.04",
+    "ram": "48GB",
+    "version": 1
+}
