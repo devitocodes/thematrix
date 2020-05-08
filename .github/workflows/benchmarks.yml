@@ -27,7 +27,24 @@ jobs:
         # This will populate thematrix/generated
         python3 scripts/make-jobs-runners.py
 
-    # TODO: Add step to check if any machine.json files created. Commit them if so.
+    - name: Commit any new configurations
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        if [[ `git status --porcelain` ]]; then
+            echo ::set-output name=new_configurations::true
+            git add results/*
+            git commit -m "Add new benchmark configurations"
+        else
+            echo ::set-output name=new_configurations::false
+        fi
+      id: new-configs
+
+    - name: Push new configurations
+      uses: ad-m/github-push-action@master
+      if: steps.new-configs.outputs.new_configurations == true
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - id: set-runners-matrix
       run: |
