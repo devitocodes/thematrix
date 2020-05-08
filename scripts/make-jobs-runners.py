@@ -69,12 +69,6 @@ for i in output['include']:
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     if not os.path.isfile(filename):
         os.mknod(filename)
-    #with open(filename, 'w') as f:
-        #json.dump(machine, f, indent=4)
-    #directory = os.path.join(root_path, 'results', i['runner'], i['name'])
-    #if not os.path.exists(directory):
-        #os.makedirs(directory)
-        #os.mknod
 
 #################################################
 # TODO: Delete this when all is working

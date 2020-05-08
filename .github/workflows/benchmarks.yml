@@ -40,15 +40,6 @@ jobs:
         fi
       id: new-configs
 
-    - name: Testing
-      run: |
-        echo ${{ steps.new-configs.outputs.new_configurations }}
-        if [ ${{ steps.new-configs.outputs.new_configurations }} = true ]; then
-          echo "True"
-        else
-          echo "False"
-        fi
-
     - name: Push new configurations
       uses: ad-m/github-push-action@master
       if: steps.new-configs.outputs.new_configurations == true
