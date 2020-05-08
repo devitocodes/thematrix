@@ -90,25 +90,6 @@
           "omp_proc_bind": ""
         }
       }
-    },
-    "gpu01-Standard-NC24Promo":{
-      "os": "ubuntu18.04",
-      "tags": ["self-hosted", "gpu01"],
-      "arch": "kepler",
-      "cpu": "NVidia 4 x GK210 (2 x Tesla K80)",
-      "jobs":{
-        "nonHPC-NVidia4xGK210-1x4-mpi-acc": {
-          "platform": "nvidiaX",
-          "num_cpu": "1",
-          "ram": "48GB",
-          "num_procs": "1",
-          "num_threads": "",
-          "jit": "pgi",
-          "language": "openacc",
-          "omp_places": "",
-          "omp_proc_bind": ""
-        }
-      }
     }
   }
 }
