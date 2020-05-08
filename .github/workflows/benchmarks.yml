@@ -118,9 +118,9 @@ jobs:
         pip install -e .
 
     # Should be able to remove this step:
-    #- name: Create ASV machine file
-      #run: |
-        #asv machine --config thematrix/asv.conf.json --machine ${{ matrix.runner}}/${{ matrix.name}} --os ${{ matrix.os }} --arch ${{ matrix.arch }} --cpu "${{ matrix.cpu }}" --num_cpu ${{ matrix.num_cpu }} --ram ${{ matrix.ram }}
+    - name: Create ASV machine file
+      run: |
+        asv machine --config thematrix/asv.conf.json --machine ${{ matrix.runner}}/${{ matrix.name}} --os ${{ matrix.os }} --arch ${{ matrix.arch }} --cpu "${{ matrix.cpu }}" --num_cpu ${{ matrix.num_cpu }} --ram ${{ matrix.ram }}
 
     - name: Run benchmarks
       run: |
