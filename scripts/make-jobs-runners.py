@@ -65,20 +65,32 @@ with open(os.path.join(root_path, 'generated', 'jobs.json'), 'w') as f:
 # Generate results directory structure with machine files
 
 for i in output['include']:
-    machine = {}
-    machine['arch'] = i['arch']
-    machine['cpu'] = i['cpu']
-    machine['machine'] = i['name']
-    machine['num_cpu'] = i['num_cpu']
-    machine['os'] = i['os']
-    machine['ram'] = i['ram']
-    machine['version'] = 1
-    filename = os.path.join(root_path, 'results', i['runner'], i['name'], 'machine.json')
+    filename = os.path.join(root_path, 'results', i['runner'], i['name'], '.gitkeep')
     os.makedirs(os.path.dirname(filename), exist_ok=True)
-    with open(filename, 'w') as f:
-        json.dump(machine, f, indent=4)
+    if not os.path.isfile(filename):
+        os.mknod(filename)
+    #with open(filename, 'w') as f:
+        #json.dump(machine, f, indent=4)
+    #directory = os.path.join(root_path, 'results', i['runner'], i['name'])
+    #if not os.path.exists(directory):
+        #os.makedirs(directory)
+        #os.mknod
 
+#################################################
 # TODO: Delete this when all is working
+    #machine = {}
+    #machine['arch'] = i['arch']
+    #machine['cpu'] = i['cpu']
+    #machine['machine'] = i['name']
+    #machine['num_cpu'] = i['num_cpu']
+    #machine['os'] = i['os']
+    #machine['ram'] = i['ram']
+    #machine['version'] = 1
+    #filename = os.path.join(root_path, 'results', i['runner'], i['name'], 'machine.json')
+    #os.makedirs(os.path.dirname(filename), exist_ok=True)
+    #with open(filename, 'w') as f:
+        #json.dump(machine, f, indent=4)
+
 # Sample that worked:
 #{
 #    "arch": "matrix.include.arch",
@@ -89,6 +101,7 @@ for i in output['include']:
 #    "ram": "matrix.include.ram",
 #    "version": 1
 #}
+#################################################
 
 # Generate runners.json
 
