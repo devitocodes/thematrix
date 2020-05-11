@@ -4,8 +4,9 @@ env:
   OUTPUT_PATH: ${{ github.workspace }}
   RESOURCE_GROUP: thematrix
 
-# TODO: this will change oc. See issue #9.
-on: push
+on:
+  repository_dispatch:
+    types: [run_thematrix]
 
 jobs:
 
