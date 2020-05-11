@@ -1,3 +1,4 @@
+hideHelp: true
 buttons:
   - title: Run TheMatrix
     action: "run_thematrix"
