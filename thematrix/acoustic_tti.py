@@ -1,7 +1,7 @@
 from devito.operator.profiling import PerfEntry
 from examples.seismic.tti.tti_example import tti_setup
 
-from thematrix.common import check_norms, make_unique_filename, run_benchmark
+from thematrix.common import check_norms, run_prepare, run_benchmark
 
 
 class TTIAcoustic(object):
@@ -17,7 +17,7 @@ class TTIAcoustic(object):
     processes = 1
 
     def setup(self, shape, space_order, norms):
-        fn_perf, fn_norms = make_unique_filename('acoustic-tti', shape, space_order)
+        fn_perf, fn_norms = run_prepare('acoustic-tti', shape, space_order)
         try:
             with open(fn_perf, 'r') as f:
                 self.summary = eval(f.read())

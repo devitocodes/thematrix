@@ -115,8 +115,9 @@ jobs:
       DEVITO_BENCHMARKS: "1"
       DEVITO_LOGGING: "PERF"
       DEVITO_ARCH: "${{ matrix.jit }}"
-      DEVITO_LANGUAGE: "${{ matrix.language }}"
       DEVITO_PLATFORM: "${{ matrix.platform }}"
+      DEVITO_LANGUAGE: "${{ matrix.language }}"
+      DEVITO_MPI: "${{ matrix.mpi }}"
 
       # OpenMP setup
       OMP_NUM_THREADS: "${{ matrix.num_threads }}"

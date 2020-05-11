@@ -1,7 +1,7 @@
 from devito.operator.profiling import PerfEntry
 from examples.seismic.acoustic.acoustic_example import acoustic_setup
 
-from thematrix.common import check_norms, make_unique_filename, run_benchmark
+from thematrix.common import check_norms, run_prepare, run_benchmark
 
 
 class IsotropicAcoustic(object):
@@ -17,7 +17,7 @@ class IsotropicAcoustic(object):
     processes = 1
 
     def setup(self, shape, space_order, norms):
-        fn_perf, fn_norms = make_unique_filename('acoustic-iso', shape, space_order)
+        fn_perf, fn_norms = run_prepare('acoustic-iso', shape, space_order)
         try:
             with open(fn_perf, 'r') as f:
                 self.summary = eval(f.read())

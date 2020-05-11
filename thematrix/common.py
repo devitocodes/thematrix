@@ -5,10 +5,11 @@ from subprocess import check_call
 from tempfile import gettempdir
 
 from devito import configuration, info, __version__ as devito_version
+from devito.compiler import sniff_mpi_distro
 from devito.types.dense import DiscreteFunction
 from benchmarks.user import benchmark
 
-__all__ = ['check_norms', 'make_unique_filename', 'run_benchmark']
+__all__ = ['check_norms', 'run_prepare', 'run_benchmark']
 
 
 def check_norms(fn_norms, reference):
@@ -25,7 +26,7 @@ def check_norms(fn_norms, reference):
              % (k, norm, reference[k], abs(norm - reference[k])))
 
 
-def make_unique_filename(problem, shape, space_order):
+def run_prepare(problem, shape, space_order):
     # Analyze setup for shared-memory execution (CPU vs GPU, OpenMP vs OpenACC vs ...)
     if 'DEVITO_PLATFORM' not in os.environ:
         raise RuntimeError("DEVITO_PLATFORM must be set to run TheMatrix")
@@ -42,7 +43,16 @@ def make_unique_filename(problem, shape, space_order):
         assert language == "C"
         raise RuntimeError("Cannot run TheMatrix with DEVITO_LANGUAGE=C")
 
-    if platform not in ['amdX', 'nvidiaX']:
+    if platform in ['amdX', 'nvidiaX']:
+        for i in ['OMP_NUM_THREADS', 'OMP_PLACES', 'OMP_PROC_BIND']:
+            try:
+                v = os.environ.pop(i, None)
+                if v:
+                    raise RuntimeError("%s cannot be set to `%s` with DEVITO_PLATFORM=%s"
+                                       % (i, v, platform))
+            except KeyError:
+                pass
+    else:
         if language == "omp" and "OMP_NUM_THREADS" not in os.environ:
             raise RuntimeError("OMP_NUM_THREADS must be set to run TheMatrix with "
                                "DEVITO_LANGUAGE=openmp on a CPU")
@@ -82,10 +92,25 @@ def make_unique_filename(problem, shape, space_order):
 
 def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms):
     pyversion = sys.executable
+    mpicmd = "mpirun"
 
-    program = benchmark.__file__
+    command = []
 
-    command = [pyversion, program, 'run', '-P', problem]
+    # Is it with MPI?
+    assert 'MPI_NUM_PROCS' in os.environ
+    nprocs = int(os.environ['MPI_NUM_PROCS'])
+    if nprocs > 1:
+        assert 'DEVITO_MPI' in os.environ
+        mpi_distro = sniff_mpi_distro(mpicmd)
+        if mpi_distro == "OpenMPI":
+            command.extend(['mpirun', '-n', str(nprocs), '--map-by', 'socket'])
+        elif mpi_distro == "MPICH":
+            # TODO
+            raise NotImplementedError("Still missing process binding with MPICH")
+        else:
+            raise RuntimeError("Unknown MPI distribution")
+
+    command.extend([pyversion, benchmark.__file__, 'run', '-P', problem])
     command.extend(['-d'] + [str(i) for i in shape])
     command.extend(['-so', str(space_order)])
     command.extend(['--tn', str(tn)])
