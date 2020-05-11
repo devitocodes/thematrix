@@ -103,7 +103,7 @@ def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms):
         assert 'DEVITO_MPI' in os.environ
         mpi_distro = sniff_mpi_distro(mpicmd)
         if mpi_distro == "OpenMPI":
-            command.extend(['mpirun', '-n', str(nprocs), '--map-by', 'socket'])
+            command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
         elif mpi_distro == "MPICH":
             command.extend(['mpirun', '-n', str(nprocs), '-bind-to', 'socket'])
         else:
