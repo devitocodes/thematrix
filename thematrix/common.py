@@ -105,7 +105,7 @@ def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms):
         if mpi_distro == "OpenMPI":
             command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
         elif mpi_distro == "MPICH":
-            command.extend(['mpirun', '-n', str(nprocs), '-bind-to', 'socket'])
+            command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
         else:
             raise RuntimeError("Unknown MPI distribution")
 
