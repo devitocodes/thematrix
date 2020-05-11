@@ -38,6 +38,7 @@ for i in runners:
         language = jdat[j]['language']
         omp_places = jdat[j]['omp_places']
         omp_proc_bind = jdat[j]['omp_proc_bind']
+        mpi = jdat[j]['mpi']
         # Build dict
         job_dict = {}
         job_dict['runner'] = runner
@@ -55,6 +56,7 @@ for i in runners:
         job_dict['language'] = language
         job_dict['omp_places'] = omp_places
         job_dict['omp_proc_bind'] = omp_proc_bind
+        job_dict['mpi'] = mpi
         jobs_list.append(job_dict)
 
 output = {"include": jobs_list}
