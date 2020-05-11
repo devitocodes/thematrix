@@ -4,8 +4,10 @@
 [![asv](http://img.shields.io/badge/benchmarked%20by-asv-blue.svg?style=flat)](https://devitocodes.github.io/devito-performance)
 [![Slack Status](https://img.shields.io/badge/chat-on%20slack-%2336C5F0)](https://opesci-slackin.now.sh)
 
-Perfomance achieved by Devito on production-grade wave propagators over CPUs,
-GPUs, and clusters thereof -- neat, open, reproducible.
+Perfomance of production-grade wave propagators implemented with Devito -- on CPUs,
+GPUs, and clusters thereof.
+
+Neat, open, and reproducible.
 
 ## Results
 
@@ -51,7 +53,3 @@ Legend:
 * GFLOPS
 * GPOINTS
 * Runtime
-
-## Reproducibility
-
-...
