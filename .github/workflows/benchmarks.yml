@@ -169,7 +169,12 @@ jobs:
     - name: checkout repo
       uses: actions/checkout@v1
 
-    # Gather results
+    # Download results
+    - uses: actions/download-artifact@v2
+
+    - name: check we got everything
+      run: |
+        echo $(git status)
 
     #- name: Commit results
       #run: |
