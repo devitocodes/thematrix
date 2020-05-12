@@ -143,41 +143,50 @@ jobs:
 
     - name: Run benchmarks
       run: |
-          asv run --strict --config thematrix/asv.conf.json --machine ${{ matrix.runner }}/${{ matrix.name }} -v --show-stderr
+        asv run --strict --config thematrix/asv.conf.json --machine ${{ matrix.runner }}/${{ matrix.name }} -v --show-stderr
 
-    # TODO: Persist result as artefact here
+    - name: Fetch results
+      run: |
+        echo ::set-output name=results_file::$(git status --porcelain | sed s/^...// | sed '/machine.json/d;/thematrix/d')
+      id: fetch-results
 
-    #- name: Commit results
-      #run: |
-        #git config --local user.email "action@github.com"
-        #git config --local user.name "GitHub Action"
-        #git add results/
-        #git status
-        #git commit -m "Push results from runner"
+    - name: Upload result
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ matrix.job_number }}
+        path: ${{ steps.fetch-results.outputs.results_file }}
 
-    #- name: Push results
-      #uses: ad-m/github-push-action@master
-      #with:
-        #github_token: ${{ secrets.GITHUB_TOKEN }}
+  publish-results:
+    needs: benchmarks
+    runs-on: ubuntu-latest
 
-  #publish-results:
-    #needs: benchmarks
-    #runs-on: ubuntu-latest
+    steps:
 
-    #steps:
-    #- name: Checkout TheMatrix
-      #uses: actions/checkout@v1
+    - name: checkout repo
+      uses: actions/checkout@v1
 
-    #- name: Install dependencies
-      #run: |
-        #pip install asv
+    # Download and publish results
+    - uses: actions/download-artifact@v2
 
-    #- name: Publish results (html)
-      #run: |
-          #asv publish --config thematrix/asv.conf.json
-          #asv gh-pages --config thematrix/asv.conf.json --rewrite
+    - name: Commit results
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add results/*
+        git status
+        git commit -m "Push results from runner"
 
-  # Publish the results and stop the runners
+    - name: Push results
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish results (html)
+      run: |
+          asv publish --config thematrix/asv.conf.json
+          asv gh-pages --config thematrix/asv.conf.json --rewrite
+
+  # Deallocate the runners
   stop-runners:
     name: stop-runners
     needs: [set-runners, benchmarks]
@@ -189,8 +198,6 @@ jobs:
     steps:
     - name: checkout repo
       uses: actions/checkout@v1
-
-      # TODO: Add step here to gather artefacts, combine and push results.
 
     - name: stop VM
       env:

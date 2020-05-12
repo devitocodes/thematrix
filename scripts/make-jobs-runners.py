@@ -19,6 +19,7 @@ runners = data['runners'].keys()
 rdata = data['runners']
 
 jobs_list = []
+job_number = 0
 for i in runners:
     runner = i
     _os = rdata[i]['os']
@@ -57,7 +58,9 @@ for i in runners:
         job_dict['omp_places'] = omp_places
         job_dict['omp_proc_bind'] = omp_proc_bind
         job_dict['mpi'] = mpi
+        job_dict['job_number'] = job_number
         jobs_list.append(job_dict)
+        job_number += 1
 
 output = {"include": jobs_list}
 
@@ -71,33 +74,6 @@ for i in output['include']:
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     if not os.path.isfile(filename):
         os.mknod(filename)
-
-#################################################
-# TODO: Delete this when all is working
-    #machine = {}
-    #machine['arch'] = i['arch']
-    #machine['cpu'] = i['cpu']
-    #machine['machine'] = i['name']
-    #machine['num_cpu'] = i['num_cpu']
-    #machine['os'] = i['os']
-    #machine['ram'] = i['ram']
-    #machine['version'] = 1
-    #filename = os.path.join(root_path, 'results', i['runner'], i['name'], 'machine.json')
-    #os.makedirs(os.path.dirname(filename), exist_ok=True)
-    #with open(filename, 'w') as f:
-        #json.dump(machine, f, indent=4)
-
-# Sample that worked:
-#{
-#    "arch": "matrix.include.arch",
-#    "cpu": "matrix.include.cpu",
-#    "machine": "matrix.include.name",
-#    "num_cpu": "matrix.include.num_cpu",
-#    "os": "matrix.include.os",
-#    "ram": "matrix.include.ram",
-#    "version": 1
-#}
-#################################################
 
 # Generate runners.json
 
