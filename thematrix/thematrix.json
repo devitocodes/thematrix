@@ -65,7 +65,7 @@
         }
       }
     },
-    "gpu00-Standard-NC6Promo":{
+    "gpu00-Standard-NC6-Promo":{
       "os": "ubuntu18.04",
       "tags": ["self-hosted", "gpu00"],
       "arch": "kepler",
@@ -97,7 +97,7 @@
         }
       }
     },
-    "gpu01-Standard-NC24Promo":{
+    "gpu01-Standard-NC24-Promo":{
       "os": "ubuntu18.04",
       "tags": ["self-hosted", "gpu01"],
       "arch": "kepler",
