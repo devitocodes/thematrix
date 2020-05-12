@@ -4,9 +4,7 @@ env:
   OUTPUT_PATH: ${{ github.workspace }}
   RESOURCE_GROUP: thematrix
 
-on:
-  repository_dispatch:
-    types: [run_thematrix]
+on: push
 
 jobs:
 
@@ -153,7 +151,7 @@ jobs:
     - name: Upload result
       uses: actions/upload-artifact@v1
       with:
-        name: ${{ matrix.job_number }}
+        name: ${{ steps.fetch-results.outputs.results_file }}
         path: ${{ steps.fetch-results.outputs.results_file }}
 
   publish-results:
