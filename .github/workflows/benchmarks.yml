@@ -151,7 +151,7 @@ jobs:
     - name: Upload result
       uses: actions/upload-artifact@v1
       with:
-        name: ${{ steps.fetch-results.outputs.results_file }}
+        name: ${{ matrix.job_number }}
         path: ${{ steps.fetch-results.outputs.results_file }}
 
   publish-results:
@@ -165,6 +165,8 @@ jobs:
 
     # Download and publish results
     - uses: actions/download-artifact@v2
+      with:
+        path: results
 
     - name: Commit results
       run: |
