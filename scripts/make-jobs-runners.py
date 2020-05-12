@@ -19,6 +19,7 @@ runners = data['runners'].keys()
 rdata = data['runners']
 
 jobs_list = []
+job_number = 0
 for i in runners:
     runner = i
     _os = rdata[i]['os']
@@ -57,7 +58,9 @@ for i in runners:
         job_dict['omp_places'] = omp_places
         job_dict['omp_proc_bind'] = omp_proc_bind
         job_dict['mpi'] = mpi
+        job_dict['job_number'] = job_number
         jobs_list.append(job_dict)
+        job_number += 1
 
 output = {"include": jobs_list}
 

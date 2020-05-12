@@ -4,9 +4,9 @@ env:
   OUTPUT_PATH: ${{ github.workspace }}
   RESOURCE_GROUP: thematrix
 
-on:
-  repository_dispatch:
-    types: [run_thematrix]
+on: push
+  #repository_dispatch:
+    #types: [run_thematrix]
 
 jobs:
 
@@ -143,9 +143,33 @@ jobs:
 
     - name: Run benchmarks
       run: |
-          asv run --strict --config thematrix/asv.conf.json --machine ${{ matrix.runner }}/${{ matrix.name }} -v --show-stderr
+        asv run --strict --config thematrix/asv.conf.json --machine ${{ matrix.runner }}/${{ matrix.name }} -v --show-stderr
 
-    # TODO: Persist result as artefact here
+    - name: Fetch results
+      run: |
+        echo ::set-output name=results_file::$(git status --porcelain | sed s/^...// | sed '/machine.json/d;/thematrix/d')
+      id: fetch-results
+
+    - name: Upload result
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ matrix.job_number }}
+        path: ${{ steps.fetch-results.outputs.results_file }}
+
+  # Publish the results and deallocate the runners
+  publish-and-deallocate:
+    name: stop-runners
+    needs: [set-runners, benchmarks]
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
+
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v1
+
+    # Gather results
 
     #- name: Commit results
       #run: |
@@ -160,37 +184,14 @@ jobs:
       #with:
         #github_token: ${{ secrets.GITHUB_TOKEN }}
 
-  #publish-results:
+    #publish-results:
     #needs: benchmarks
     #runs-on: ubuntu-latest
-
-    #steps:
-    #- name: Checkout TheMatrix
-      #uses: actions/checkout@v1
-
-    #- name: Install dependencies
-      #run: |
-        #pip install asv
 
     #- name: Publish results (html)
       #run: |
           #asv publish --config thematrix/asv.conf.json
           #asv gh-pages --config thematrix/asv.conf.json --rewrite
-
-  # Publish the results and stop the runners
-  stop-runners:
-    name: stop-runners
-    needs: [set-runners, benchmarks]
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
-
-    steps:
-    - name: checkout repo
-      uses: actions/checkout@v1
-
-      # TODO: Add step here to gather artefacts, combine and push results.
 
     - name: stop VM
       env:
