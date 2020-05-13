@@ -1,0 +1,9 @@
+{
+    "arch": "x86_64",
+    "cpu": "Intel Xeon\u00ae Platinum 8168 (SkyLake) @ 2.7GHz",
+    "machine": "cpu01-Standard-F64s-v2/nonHPC-IntelXeon8168-1x2-omp",
+    "num_cpu": "32",
+    "os": "ubuntu18.04",
+    "ram": "128GB",
+    "version": 1
+}
