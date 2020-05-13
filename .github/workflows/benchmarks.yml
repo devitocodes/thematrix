@@ -183,8 +183,10 @@ jobs:
 
     - name: Publish results (html)
       run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         asv publish --config thematrix/asv.conf.json
-        asv gh-pages --config thematrix/asv.conf.json --rewrite
+        asv gh-pages --verbose --config thematrix/asv.conf.json --rewrite
 
   # Deallocate the runners
   stop-runners:
