@@ -156,7 +156,7 @@ jobs:
 
   publish-results:
     needs: benchmarks
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, MatMul]
 
     steps:
 
@@ -183,8 +183,6 @@ jobs:
 
     - name: Publish results (html)
       run: |
-        sudo apt-get install python3-setuptools
-        pip3 install asv
         asv publish --config thematrix/asv.conf.json
         asv gh-pages --config thematrix/asv.conf.json --rewrite
 
