@@ -75,7 +75,6 @@ for i in output['include']:
     machine['os'] = i['os']
     machine['ram'] = i['ram']
     machine['version'] = 1
-    job_number = str(i['job_number'])
     filename = os.path.join(root_path, 'results', i['runner']+'_'+i['name'], 'machine.json')
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, 'w') as f:
