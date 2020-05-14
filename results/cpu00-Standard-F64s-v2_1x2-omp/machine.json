@@ -1,0 +1,9 @@
+{
+    "arch": "x86_64",
+    "cpu": "nonHPC-IntelXeon8168",
+    "machine": "cpu00-Standard-F64s-v2_1x2-omp",
+    "num_cpu": "32",
+    "os": "ubuntu18.04",
+    "ram": "128GB",
+    "version": 1
+}
