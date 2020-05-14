@@ -146,7 +146,7 @@ jobs:
 
     - name: Fetch results
       run: |
-        echo ::set-output name=results_file::$(git status --porcelain | sed s/^...// | sed '/machine.json/d;/thematrix/d')
+        echo ::set-output name=results_file::$(git status --porcelain | sed s/^...// | sed '/benchmarks.json/d;/machine.json/d;/thematrix/d')
       id: fetch-results
 
     - name: Upload result
