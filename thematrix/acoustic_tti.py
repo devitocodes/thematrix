@@ -13,7 +13,7 @@ class TTIAcoustic(object):
 
     # ASV parameters
     repeat = 1
-    timeout = 600.0
+    timeout = 900.0
     processes = 1
 
     def setup(self, shape, space_order, norms):
