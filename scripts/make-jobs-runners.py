@@ -70,14 +70,6 @@ with open(os.path.join(root_path, 'generated', 'jobs.json'), 'w') as f:
 # Generate results directory structure with machine files
 
 for i in output['include']:
-    filename = os.path.join(root_path, 'results', i['runner'], i['name'], '.gitkeep')
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    if not os.path.isfile(filename):
-        os.mknod(filename)
-
-# Generate 'fake' machine files
-
-for i in output['include']:
     machine = {}
     machine['arch'] = i['arch']
     machine['cpu'] = i['cpu']
@@ -87,11 +79,34 @@ for i in output['include']:
     machine['ram'] = i['ram']
     machine['version'] = 1
     job_number = str(i['job_number'])
-    #from IPython import embed; embed()
-    filename = os.path.join(root_path, 'results', job_number, 'machine.json')
+    filename = os.path.join(root_path, 'results', i['runner'], i['name'], 'machine.json')
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, 'w') as f:
         json.dump(machine, f, indent=4)
+
+#for i in output['include']:
+    #filename = os.path.join(root_path, 'results', i['runner'], i['name'], '.gitkeep')
+    #os.makedirs(os.path.dirname(filename), exist_ok=True)
+    #if not os.path.isfile(filename):
+        #os.mknod(filename)
+
+# Generate 'fake' machine files
+
+#for i in output['include']:
+    #machine = {}
+    #machine['arch'] = i['arch']
+    #machine['cpu'] = i['cpu']
+    #machine['machine'] = i['runner']+'/'+i['name']
+    #machine['num_cpu'] = i['num_cpu']
+    #machine['os'] = i['os']
+    #machine['ram'] = i['ram']
+    #machine['version'] = 1
+    #job_number = str(i['job_number'])
+    ##from IPython import embed; embed()
+    #filename = os.path.join(root_path, 'results', job_number, 'machine.json')
+    #os.makedirs(os.path.dirname(filename), exist_ok=True)
+    #with open(filename, 'w') as f:
+        #json.dump(machine, f, indent=4)
 
 # Generate runners.json
 
