@@ -183,10 +183,15 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Publish results (html)
+    - name: Publish results (json -> html)
       run: |
         asv publish --config thematrix/asv.conf.json
-        asv gh-pages --config thematrix/asv.conf.json --rewrite
+
+    - name: Deploy results to (html -> thematrix/gh-pages)
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./thematrix/.asv/html
 
   # Deallocate the runners
   stop-runners:
