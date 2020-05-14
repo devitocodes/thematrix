@@ -5,9 +5,9 @@
       "os": "ubuntu18.04",
       "tags": ["self-hosted", "cpu00"],
       "arch": "x86_64",
-      "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
+      "cpu": "nonHPC-IntelXeon8168",
       "jobs":{
-        "nonHPC-IntelXeon8168-1x1-omp": {
+        "1x1-omp": {
           "platform": "cpu64",
           "num_cpu": "16",
           "ram": "64GB",
@@ -19,7 +19,7 @@
           "omp_places": "cores",
           "omp_proc_bind": "close"
         },
-        "nonHPC-IntelXeon8168-1x2-omp": {
+        "1x2-omp": {
           "platform": "cpu64",
           "num_cpu": "32",
           "ram": "128GB",
@@ -37,9 +37,9 @@
       "os": "ubuntu18.04",
       "tags": ["self-hosted", "cpu01"],
       "arch": "x86_64",
-      "cpu": "Intel Xeon® Platinum 8168 (SkyLake) @ 2.7GHz",
+      "cpu": "nonHPC-IntelXeon8168",
       "jobs":{
-        "nonHPC-IntelXeon8168-1x1-omp": {
+        "1x1-omp": {
           "platform": "cpu64",
           "num_cpu": "16",
           "ram": "64GB",
@@ -51,7 +51,7 @@
           "omp_places": "cores",
           "omp_proc_bind": "close"
         },
-        "nonHPC-IntelXeon8168-1x2-omp": {
+        "1x2-omp": {
           "platform": "cpu64",
           "num_cpu": "32",
           "ram": "128GB",
