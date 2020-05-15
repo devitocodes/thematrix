@@ -10,8 +10,9 @@ def install_custom_package(package, arguments=None, prefix=None):
     """
     args = []
     args.extend(prefix or [])
-    args.extend([sys.executable, "-m", "pip", "install", package])
+    args.extend([sys.executable, "-m", "pip", "install"])
     args.extend(arguments or [])
+    args.append(package)
 
     subprocess.check_call(args)
 
@@ -25,7 +26,6 @@ with open('requirements.txt') as f:
         else:
             required.append(i)
 
-
 # mpi4py needs to be install with custom commands on certain systems
 assert 'mpi4py' in required
 jit = os.environ.get('DEVITO_ARCH')
@@ -37,7 +37,6 @@ if jit in ['pgi', 'pgcc']:
               'CC=pgcc', 'CFLAGS=-noswitcherror']
     arguments = ['--no-cache-dir']
     install_custom_package('mpi4py', arguments, prefix)
-
 
 setup(name='thematrix',
       description="Devito benchmark matrix",
