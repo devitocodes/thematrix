@@ -27,16 +27,17 @@ with open('requirements.txt') as f:
             required.append(i)
 
 # mpi4py needs to be install with custom commands on certain systems
-assert 'mpi4py' in required
-jit = os.environ.get('DEVITO_ARCH')
-if jit in ['pgi', 'pgcc']:
-    required.remove('mpi4py')
+if DEVITO_MPI == 0 then required.remove('mpi4py')
+if 'mpi4py' in required:
+    jit = os.environ.get('DEVITO_ARCH')
+    if jit in ['pgi', 'pgcc']:
+        required.remove('mpi4py')
 
-    # TODO: use `which mpicc` to get the path to `mpicc` dynamically
-    prefix = ['env', 'MPICC=/opt/pgi/linux86-64/19.10/mpi/openmpi-3.1.3/bin/mpicc',
-              'CC=pgcc', 'CFLAGS=-noswitcherror']
-    arguments = ['--no-cache-dir']
-    install_custom_package('mpi4py', arguments, prefix)
+        # TODO: use `which mpicc` to get the path to `mpicc` dynamically
+        prefix = ['env', 'MPICC=/opt/pgi/linux86-64/19.10/mpi/openmpi-3.1.3/bin/mpicc',
+                  'CC=pgcc', 'CFLAGS=-noswitcherror']
+        arguments = ['--no-cache-dir']
+        install_custom_package('mpi4py', arguments, prefix)
 
 setup(name='thematrix',
       description="Devito benchmark matrix",
