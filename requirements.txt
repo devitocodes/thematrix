@@ -1,4 +1,4 @@
-git+https://github.com/devitocodes/devito
+git+https://github.com/devitocodes/devito@smooth_lang_fix
 asv
 virtualenv==16.7.9
 mpi4py
