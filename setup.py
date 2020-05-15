@@ -27,7 +27,8 @@ with open('requirements.txt') as f:
             required.append(i)
 
 # mpi4py needs to be install with custom commands on certain systems
-if DEVITO_MPI == 0 then required.remove('mpi4py')
+mpi = os.environ.get('DEVITO_MPI')
+if mpi == 0 then required.remove('mpi4py')
 if 'mpi4py' in required:
     jit = os.environ.get('DEVITO_ARCH')
     if jit in ['pgi', 'pgcc']:
