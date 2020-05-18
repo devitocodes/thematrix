@@ -1,0 +1,9 @@
+{
+    "arch": "x86_64",
+    "cpu": "HPC-IntelXeonE5-2667",
+    "machine": "cpu03-Standard-H16_1x1-omp",
+    "num_cpu": "16",
+    "os": "ubuntu18.04",
+    "ram": "112GB",
+    "version": 1
+}
