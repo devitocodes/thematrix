@@ -65,6 +65,26 @@
         }
       }
     },
+    "cpu03-Standard-H16":{
+      "os": "ubuntu18.04",
+      "tags": ["self-hosted", "cpu03"],
+      "arch": "x86_64",
+      "cpu": "HPC-IntelXeonE5-2667",
+      "jobs":{
+        "1x1-omp": {
+          "platform": "cpu64",
+          "num_cpu": "16",
+          "ram": "112GB",
+          "num_procs": "1",
+          "num_threads": "16",
+          "jit": "gcc-9",
+          "language": "openmp",
+          "mpi": "0",
+          "omp_places": "cores",
+          "omp_proc_bind": "close"
+        }
+      }
+    },
     "gpu00-Standard-NC6-Promo":{
       "os": "ubuntu18.04",
       "tags": ["self-hosted", "gpu00"],
