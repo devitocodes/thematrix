@@ -1,0 +1,9 @@
+{
+    "arch": "kepler",
+    "cpu": "nonHPC-NVidiaGK210",
+    "machine": "gpu00-Standard-NC6-Promo_1x1-acc",
+    "num_cpu": "1",
+    "os": "ubuntu18.04",
+    "ram": "12GB",
+    "version": 1
+}
