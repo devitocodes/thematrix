@@ -19,41 +19,41 @@ Neat, open, and reproducible.
 
 ## The matrix
 
-| Machine ID                | Mode |  JIT   | MPI      |  OMP               | MPI+OMP              |          OMP5        | MPI+OMP5 |         ACC          |       MPI+ACC        |
-|---------------------------|------|--------|----------|--------------------|----------------------|----------------------|----------|----------------------|----------------------|
-| AZ-VM Intel Xeon 8168     | 1x1  | gcc7   | :hammer: | :heavy_check_mark: | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-VM Intel Xeon 8168     | 1x2  | gcc7   | :hammer: | :x:                | ::heavy_check_mark:: | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-VM Intel Xeon 8168     | NxM  | gcc7   | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-VM Intel Xeon 8168     | 1x1  | gcc10  | :hammer: | :hammer:           | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-VM Intel Xeon 8168     | 1xM  | gcc10  | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-VM Intel Xeon 8168     | NxM  | gcc10  | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-VM Intel Xeon 8168     | 1x1  | icc20  | :hammer: | :hammer:           | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-VM Intel Xeon 8168     | 1xM  | icc20  | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-VM Intel Xeon 8168     | NxM  | icc20  | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-HPC Intel Xeon E5-2667 | 1x1  | gcc7   | :hammer: | :heavy_check_mark: | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-HPC Intel Xeon E5-2667 | 1x2  | gcc7   | :hammer: | :x:                | ::heavy_check_mark:: | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-HPC Intel Xeon E5-2667 | NxM  | gcc7   | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-HPC Intel Xeon E5-2667 | 1x1  | gcc10  | :hammer: | :hammer:           | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-HPC Intel Xeon E5-2667 | 1xM  | gcc10  | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-HPC Intel Xeon E5-2667 | NxM  | gcc10  | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-HPC Intel Xeon E5-2667 | 1x1  | icc20  | :hammer: | :hammer:           | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-HPC Intel Xeon E5-2667 | 1xM  | icc20  | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-HPC Intel Xeon E5-2667 | NxM  | icc20  | :hammer: | :x:                | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| ????   AMD    ????        | 1x1  | aocc   | :hammer: | :hammer:           | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| ????   AMD    ????        | 1xM  | aocc   | :hammer: | :hammer:           | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| ????   AMD    ????        | NxM  | aocc   | :hammer: | :hammer:           | :hammer:             | :x:                  | :x:      | :hammer:             | :hammer:             |
-| AZ-VM NVidia K80          | 1x1  | clang9 | :x:      | :x:                | :x:                  | ::heavy_check_mark:: | :x:      | :hammer:             | :x:                  |
-| AZ-VM NVidia K80          | 1x2  | clang9 | :x:      | :x:                | :x:                  | :hammer:             | :hammer: | :hammer:             | :hammer:             |
-| AZ-VM NVidia K80          | NxM  | clang9 | :x:      | :x:                | :x:                  | :x:                  | :hammer: | :x:                  | :hammer:             |
-| AZ-VM NVidia K80          | 1x1  | pgi19  | :x:      | :x:                | :x:                  | :hammer:             | :x:      | ::heavy_check_mark:: | :x:                  |
-| AZ-VM NVidia K80          | 1x2  | pgi19  | :x:      | :x:                | :x:                  | :hammer:             | :hammer: | :hammer:             | ::heavy_check_mark:: |
-| AZ-VM NVidia K80          | NxM  | pgi19  | :x:      | :x:                | :x:                  | :x:                  | :hammer: | :x:                  | :hammer:             |
-| ????   NVidia V100        | 1x1  | pgi    | :x:      | :x:                | :x:                  | :hammer:             | :x:      | :hammer:             | :x:                  |
-| ????   NVidia V100        | 1xM  | pgi    | :x:      | :x:                | :x:                  | :hammer:             | :hammer: | :hammer:             | :hammer:             |
-| ????   NVidia V100        | NxM  | pgi    | :x:      | :x:                | :x:                  | :x:                  | :hammer: | :x:                  | :hammer:             |
-| ????   AMD    ????        | 1x1  | aomp   | :x:      | :x:                | :x:                  | :hammer:             | :x:      | :x:                  | :x:                  |
-| ????   AMD    ????        | 1xM  | aomp   | :x:      | :x:                | :x:                  | :hammer:             | :hammer: | :x:                  | :x:                  |
-| ????   AMD    ????        | NxM  | aomp   | :x:      | :x:                | :x:                  | :x:                  | :hammer: | :x:                  | :x:                  |
+| Machine ID                | Mode |  JIT   |    MPI   |         OMP        |      MPI+OMP       |        OMP5        | MPI+OMP5 |         ACC        |      MPI+ACC       |
+|---------------------------|------|--------|----------|--------------------|--------------------|--------------------|----------|--------------------|--------------------|
+| AZ-VM Intel Xeon 8168     | 1x1  | gcc7   | :hammer: | :heavy_check_mark: | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-VM Intel Xeon 8168     | 1x2  | gcc7   | :hammer: | :x:                | :heavy_check_mark: | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-VM Intel Xeon 8168     | NxM  | gcc7   | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-VM Intel Xeon 8168     | 1x1  | gcc10  | :hammer: | :hammer:           | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-VM Intel Xeon 8168     | 1xM  | gcc10  | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-VM Intel Xeon 8168     | NxM  | gcc10  | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-VM Intel Xeon 8168     | 1x1  | icc20  | :hammer: | :hammer:           | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-VM Intel Xeon 8168     | 1xM  | icc20  | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-VM Intel Xeon 8168     | NxM  | icc20  | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-HPC Intel Xeon E5-2667 | 1x1  | gcc7   | :hammer: | :heavy_check_mark: | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-HPC Intel Xeon E5-2667 | 1x2  | gcc7   | :hammer: | :x:                | :heavy_check_mark: | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-HPC Intel Xeon E5-2667 | NxM  | gcc7   | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-HPC Intel Xeon E5-2667 | 1x1  | gcc10  | :hammer: | :hammer:           | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-HPC Intel Xeon E5-2667 | 1xM  | gcc10  | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-HPC Intel Xeon E5-2667 | NxM  | gcc10  | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-HPC Intel Xeon E5-2667 | 1x1  | icc20  | :hammer: | :hammer:           | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-HPC Intel Xeon E5-2667 | 1xM  | icc20  | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-HPC Intel Xeon E5-2667 | NxM  | icc20  | :hammer: | :x:                | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| ????   AMD    ????        | 1x1  | aocc   | :hammer: | :hammer:           | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| ????   AMD    ????        | 1xM  | aocc   | :hammer: | :hammer:           | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| ????   AMD    ????        | NxM  | aocc   | :hammer: | :hammer:           | :hammer:           | :x:                | :x:      | :hammer:           | :hammer:           |
+| AZ-VM NVidia K80          | 1x1  | clang9 | :x:      | :x:                | :x:                | :heavy_check_mark: | :x:      | :hammer:           | :x:                |
+| AZ-VM NVidia K80          | 1x2  | clang9 | :x:      | :x:                | :x:                | :hammer:           | :hammer: | :hammer:           | :hammer:           |
+| AZ-VM NVidia K80          | NxM  | clang9 | :x:      | :x:                | :x:                | :x:                | :hammer: | :x:                | :hammer:           |
+| AZ-VM NVidia K80          | 1x1  | pgi19  | :x:      | :x:                | :x:                | :hammer:           | :x:      | :heavy_check_mark: | :x:                |
+| AZ-VM NVidia K80          | 1x2  | pgi19  | :x:      | :x:                | :x:                | :hammer:           | :hammer: | :hammer:           | :heavy_check_mark: |
+| AZ-VM NVidia K80          | NxM  | pgi19  | :x:      | :x:                | :x:                | :x:                | :hammer: | :x:                | :hammer:           |
+| ????   NVidia V100        | 1x1  | pgi    | :x:      | :x:                | :x:                | :hammer:           | :x:      | :hammer:           | :x:                |
+| ????   NVidia V100        | 1xM  | pgi    | :x:      | :x:                | :x:                | :hammer:           | :hammer: | :hammer:           | :hammer:           |
+| ????   NVidia V100        | NxM  | pgi    | :x:      | :x:                | :x:                | :x:                | :hammer: | :x:                | :hammer:           |
+| ????   AMD    ????        | 1x1  | aomp   | :x:      | :x:                | :x:                | :hammer:           | :x:      | :x:                | :x:                |
+| ????   AMD    ????        | 1xM  | aomp   | :x:      | :x:                | :x:                | :hammer:           | :hammer: | :x:                | :x:                |
+| ????   AMD    ????        | NxM  | aomp   | :x:      | :x:                | :x:                | :x:                | :hammer: | :x:                | :x:                |
 
 Legend:
 * AZ-VM : Azure Virtual Machine
