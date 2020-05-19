@@ -195,6 +195,7 @@ jobs:
   # Deallocate the runners
   stop-runners:
     name: stop-runners
+    if: ${{ always() }}
     needs: [set-runners, benchmarks]
     runs-on: ubuntu-latest
 
