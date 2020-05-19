@@ -43,7 +43,7 @@ jobs:
 
     - name: Push new configurations
       uses: ad-m/github-push-action@master
-      if: steps.new-configs.outputs.new_configurations == true
+      if: ${{ steps.new-configs.outputs.new_configurations }} == true
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
