@@ -197,6 +197,7 @@ jobs:
     - name: Publish results (json -> html)
       run: |
         asv publish --config thematrix/asv.conf.json
+        python scripts/results2readme.py
 
     - name: Deploy results to (html -> thematrix/gh-pages)
       uses: peaceiris/actions-gh-pages@v3
