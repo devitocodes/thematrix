@@ -7,7 +7,7 @@ from thematrix.common import check_norms, run_prepare, run_benchmark
 class Elastic(object):
 
     # Problem setup
-    params = ([(350, 350, 350)], [12], [{'rec1': 6.6363115, 'rec2': 0.71874803}])
+    params = ([(100, 100, 100)], [12], [{'rec1': 6.6363115, 'rec2': 0.71874803}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 

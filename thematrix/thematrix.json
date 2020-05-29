@@ -65,6 +65,26 @@
         }
       }
     },
+    "cpu02-Standard-HC44rs":{
+      "os": "ubuntu18.04",
+      "tags": ["self-hosted", "cpu02"],
+      "arch": "x86_64",
+      "cpu": "HPC-Xeon-Platinum-8168",
+      "jobs":{
+        "1x2-omp": {
+          "platform": "cpu64",
+          "num_cpu": "22",
+          "ram": "352GB",
+          "num_procs": "2",
+          "num_threads": "22",
+          "jit": "gcc-9",
+          "language": "openmp",
+          "mpi": "basic",
+          "omp_places": "cores",
+          "omp_proc_bind": "close"
+        }
+      }
+    },
     "cpu03-Standard-H16":{
       "os": "ubuntu18.04",
       "tags": ["self-hosted", "cpu03"],
