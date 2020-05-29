@@ -171,6 +171,7 @@ jobs:
 
     - name: Commit results
       run: |
+        asv update --config thematrix/asv.conf.json
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add results/*
