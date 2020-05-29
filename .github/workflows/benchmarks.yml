@@ -28,24 +28,24 @@ jobs:
         # This will populate thematrix/generated
         python3 scripts/make-jobs-runners.py
 
-    - name: Commit any new configurations
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        if [[ `git status --porcelain` ]]; then
-            echo ::set-output name=new_configurations::true
-            git add results/*
-            git commit -m "Add new benchmark configurations"
-        else
-            echo ::set-output name=new_configurations::false
-        fi
-      id: new-configs
+    #- name: Commit any new configurations
+      #run: |
+        #git config --local user.email "action@github.com"
+        #git config --local user.name "GitHub Action"
+        #if [[ `git status --porcelain` ]]; then
+            #echo ::set-output name=new_configurations::true
+            #git add results/*
+            #git commit -m "Add new benchmark configurations"
+        #else
+            #echo ::set-output name=new_configurations::false
+        #fi
+      #id: new-configs
 
-    - name: Push new configurations
-      uses: ad-m/github-push-action@master
-      if: ${{ steps.new-configs.outputs.new_configurations }} == true
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+    #- name: Push new configurations
+      #uses: ad-m/github-push-action@master
+      #if: ${{ steps.new-configs.outputs.new_configurations }} == true
+      #with:
+        #github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - id: set-runners-matrix
       run: |
@@ -169,28 +169,28 @@ jobs:
       with:
         path: results
 
-    - name: Commit results
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add results/*
-        git status
-        git commit -m "Push results from runner"
+    #- name: Commit results
+      #run: |
+        #git config --local user.email "action@github.com"
+        #git config --local user.name "GitHub Action"
+        #git add results/*
+        #git status
+        #git commit -m "Push results from runner"
 
-    - name: Push results
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+    #- name: Push results
+      #uses: ad-m/github-push-action@master
+      #with:
+        #github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Publish results (json -> html)
-      run: |
-        asv publish --config thematrix/asv.conf.json
+    #- name: Publish results (json -> html)
+      #run: |
+        #asv publish --config thematrix/asv.conf.json
 
-    - name: Deploy results to (html -> thematrix/gh-pages)
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./thematrix/.asv/html
+    #- name: Deploy results to (html -> thematrix/gh-pages)
+      #uses: peaceiris/actions-gh-pages@v3
+      #with:
+        #github_token: ${{ secrets.GITHUB_TOKEN }}
+        #publish_dir: ./thematrix/.asv/html
 
   # Deallocate the runners
   stop-runners:
