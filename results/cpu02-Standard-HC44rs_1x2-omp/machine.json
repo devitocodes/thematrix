@@ -1,0 +1,9 @@
+{
+    "arch": "x86_64",
+    "cpu": "HPC-Xeon-Platinum-8168",
+    "machine": "cpu02-Standard-HC44rs_1x2-omp",
+    "num_cpu": "22",
+    "os": "ubuntu18.04",
+    "ram": "352GB",
+    "version": 1
+}
