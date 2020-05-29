@@ -18,7 +18,7 @@
                 "{'rec': 184.5264, 'u': 151.545837}"
             ]
         ],
-        "timeout": 600.0,
+        "timeout": 900.0,
         "type": "track",
         "unit": "gflopss",
         "version": "b97b7e3f4f513a747f39a683053582bde400979ae94bb88a1bf71cec002c2161"
@@ -42,7 +42,7 @@
                 "{'rec': 184.5264, 'u': 151.545837}"
             ]
         ],
-        "timeout": 600.0,
+        "timeout": 900.0,
         "type": "track",
         "unit": "gpointss",
         "version": "7fb09dc8c489b286f83fc73c7061e028402e1c5ee158eaf5739902d116601349"
@@ -66,7 +66,7 @@
                 "{'rec': 184.5264, 'u': 151.545837}"
             ]
         ],
-        "timeout": 600.0,
+        "timeout": 900.0,
         "type": "track",
         "unit": "runtime",
         "version": "bb0487caf1d5288f0375ff607eb5695d29789a93150e4d432ab5bdf3c7a7ad32"
@@ -90,7 +90,7 @@
                 "{'rec': 66.417102, 'u': 30.707737, 'v': 30.707728}"
             ]
         ],
-        "timeout": 600.0,
+        "timeout": 900.0,
         "type": "track",
         "unit": "gflopss",
         "version": "2b6cf21e4116957804cc49b3c0eca1c0ac186d888abe48e38e39b4724f146048"
@@ -114,7 +114,7 @@
                 "{'rec': 66.417102, 'u': 30.707737, 'v': 30.707728}"
             ]
         ],
-        "timeout": 600.0,
+        "timeout": 900.0,
         "type": "track",
         "unit": "gpointss",
         "version": "0bad97a1e6a849fe3f1fd46f1aa8e7ea2355461de41e9b5488fd02afd2861c5f"
@@ -138,10 +138,154 @@
                 "{'rec': 66.417102, 'u': 30.707737, 'v': 30.707728}"
             ]
         ],
-        "timeout": 600.0,
+        "timeout": 900.0,
         "type": "track",
         "unit": "runtime",
         "version": "a7c1811854408030a2606a60de16c762ecc3b99f8a94c65f3c3f1202051f0fbf"
     },
-    "version": 2
+    "elastic.Elastic.track_gflopss": {
+        "code": "class Elastic:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('elastic', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('elastic', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "elastic.Elastic.track_gflopss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(100, 100, 100)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec1': 6.6363115, 'rec2': 0.71874803}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gflopss",
+        "version": "32bad2db806c7f2ddc1f1e03667d1c4529bb174d1213bb49f2520b48c86b95d2"
+    },
+    "elastic.Elastic.track_gpointss": {
+        "code": "class Elastic:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.gpointss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('elastic', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('elastic', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "elastic.Elastic.track_gpointss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(100, 100, 100)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec1': 6.6363115, 'rec2': 0.71874803}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gpointss",
+        "version": "abc075e4313d8530763d84aeb417ae7a1429e8515c0e353464bf1bbe0abdf5c4"
+    },
+    "elastic.Elastic.track_runtime": {
+        "code": "class Elastic:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.time\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('elastic', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('elastic', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "elastic.Elastic.track_runtime",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(100, 100, 100)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec1': 6.6363115, 'rec2': 0.71874803}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "runtime",
+        "version": "65971090de7c0690088a612ef9283750a43632b086e93b8a1c138f6c0bb2cdfe"
+    },
+    "version": 2,
+    "viscoelastic.Viscoelastic.track_gflopss": {
+        "code": "class Viscoelastic:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('viscoelastic', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('viscoelastic', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "viscoelastic.Viscoelastic.track_gflopss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(100, 100, 100)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec1': 4.261846, 'rec2': 0.36984697}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gflopss",
+        "version": "b26cc7af404fac11063cbfba56b0c6b101ba832f0d9fc56647f687d607da5dba"
+    },
+    "viscoelastic.Viscoelastic.track_gpointss": {
+        "code": "class Viscoelastic:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.gpointss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('viscoelastic', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('viscoelastic', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "viscoelastic.Viscoelastic.track_gpointss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(100, 100, 100)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec1': 4.261846, 'rec2': 0.36984697}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gpointss",
+        "version": "802ec0afbeb1a6f751f303d55103d31452fd36275447e529baeb6e31f5383d7b"
+    },
+    "viscoelastic.Viscoelastic.track_runtime": {
+        "code": "class Viscoelastic:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.time\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('viscoelastic', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('viscoelastic', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "viscoelastic.Viscoelastic.track_runtime",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(100, 100, 100)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec1': 4.261846, 'rec2': 0.36984697}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "runtime",
+        "version": "7d9915b53fccb4fc1a181a1830849e3d9d2125cc7f4a594d9bda84b1391840ee"
+    }
 }
