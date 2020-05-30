@@ -114,10 +114,7 @@ def get_thematrix():
         for key in lut:
             if key in label:
                 link = ahref(lut[key], label[6:])
-                os = df["os"][label]
-                arch = df["arch"][label]
-                new_label = r"%s<br>%s<br>%s" % (link, os, arch)
-                df = df.rename(index={label: new_label})
+                df = df.rename(index={label: link})
                 break
 
     df = df.loc[~df.index.duplicated(keep='first')]
@@ -141,8 +138,21 @@ def get_benchmarks():
                  'param_names', 'params', 'unit'):
         del df[crud]
 
-    links = []
+    asv_lut = {"IsotropicAcoustic": "Isotropic acoustic (3D)",
+               "track_gflopss": "GFLOPS (3D)",
+               "track_gpointss": "FD-GPts/s (3D)",
+               "track_runtime": "Runtime",
+               "TTIAcoustic": "Acoustic TTI (3D)",
+               "Elastic": "Elastic (3D)",
+               "Viscoelastic": "Viscoelastic (3D)"}
+    data = {"track_gflopss": [],
+            "track_gpointss": [],
+            "track_runtime": []}
+    indices = {"track_gflopss": [],
+               "track_gpointss": [],
+               "track_runtime": []}
     for label in df.index.values:
+        tokens = label.split(".")
         link = """
 <a href="%s">
   <figure>
@@ -150,8 +160,13 @@ def get_benchmarks():
     alt="Airspeed velocity"</img>
   </figure>
 </a>""" % ("%s#%s" % (matrix_url, label))
-        links.append(link.replace('\n', ""))
-    df["Airspeed velocity"] = pd.Series(links, index=df.index.values)
+        data[tokens[2]].append(link.replace('\n', ""))
+        indices[tokens[2]].append(asv_lut[tokens[1]])
+    df = pd.DataFrame(data)
+
+    df.index = indices["track_gflopss"]
+
+    df = df.rename(columns=asv_lut)
 
     return df.to_html(escape=False)
 
