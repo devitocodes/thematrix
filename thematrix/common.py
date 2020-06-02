@@ -90,7 +90,7 @@ def run_prepare(problem, shape, space_order):
     return fn_perf, fn_norms
 
 
-def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms):
+def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms, op='forward'):
     pyversion = sys.executable
     mpicmd = "mpirun"
 
@@ -115,6 +115,8 @@ def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms):
     command.extend(['--tn', str(tn)])
     command.extend(['--dump-summary', fn_perf])
     command.extend(['--dump-norms', fn_norms])
+    command.extend(['--operator', op])
     command.extend(['--autotune', 'off'])  # TODO: Drop me
+
 
     check_call(command)
