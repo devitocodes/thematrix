@@ -173,6 +173,11 @@ jobs:
     - name: checkout repo
       uses: actions/checkout@v2
 
+    - name: Install dependencies
+      run: |
+        pip3 install --upgrade pip
+        pip3 install -e .
+
     # Download and publish results
     - uses: actions/download-artifact@v2
       with:
