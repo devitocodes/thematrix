@@ -7,7 +7,7 @@ from thematrix.common import check_norms, run_prepare, run_benchmark
 class IsotropicSSAForward(object):
 
     # Problem setup
-    params = ([(151, 151, 151)], [12], [{'rec': 184.526400, 'u': 151.545837}])
+    params = ([(151, 151, 151)], [12], [{'rec': 320.353302, 'u': 996366784.000000}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 
@@ -43,7 +43,7 @@ class IsotropicSSAForward(object):
 class IsotropicSSAAdjoint(object):
 
     # Problem setup
-    params = ([(151, 151, 151)], [12], [{'srca': 184.526400, 'v': 151.545837}])
+    params = ([(151, 151, 151)], [12], [{'srca': 390.499268, 'v': 157210525696.000000}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 

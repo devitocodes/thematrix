@@ -7,7 +7,7 @@ from thematrix.common import check_norms, run_prepare, run_benchmark
 class TTIAcousticForward(object):
 
     # Problem setup
-    params = ([(350, 350, 350)], [12], [{'rec': 66.417102, 'u': 30.707737, 'v': 30.707728}])
+    params = ([(350, 350, 350)], [12], [{'rec': 17.805016, 'u': 29.331156, 'v': 29.331171}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 50
 

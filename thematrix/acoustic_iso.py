@@ -7,7 +7,7 @@ from thematrix.common import check_norms, run_prepare, run_benchmark
 class IsotropicAcousticForward(object):
 
     # Problem setup
-    params = ([(492, 492, 492)], [12], [{'rec': 184.526400, 'u': 151.545837}])
+    params = ([(492, 492, 492)], [12], [{'rec': 109.070557, 'u': 151.545837}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 
@@ -43,7 +43,7 @@ class IsotropicAcousticForward(object):
 class IsotropicAcousticAdjoint(object):
 
     # Problem setup
-    params = ([(492, 492, 492)], [12], [{'srca': 184.526400, 'v': 151.545837}])
+    params = ([(492, 492, 492)], [12], [{'srca': 646.188904, 'v': 347421.62500}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 
@@ -79,9 +79,9 @@ class IsotropicAcousticAdjoint(object):
 class IsotropicAcousticJacobian(object):
 
     # Problem setup
-    params = ([(492, 492, 492)], [12], [{'rec': 184.526400, 'u': 151.545837, 'U': 151.545837}])
+    params = ([(152, 152, 152)], [12], [{'rec': 1.6435679, 'u': 161.32542, 'U': 184.92563}])
     param_names = ['shape', 'space_order', 'norms']
-    tn = 100
+    tn = 1000
 
     # ASV parameters
     repeat = 1
@@ -115,7 +115,7 @@ class IsotropicAcousticJacobian(object):
 class IsotropicAcousticJacobianAdjoint(object):
 
     # Problem setup
-    params = ([(151, 151, 151)], [12], [{'grad': 184.526400}])
+    params = ([(151, 151, 151)], [12], [{'grad': 2468.533936}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 

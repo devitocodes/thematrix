@@ -7,7 +7,7 @@ from thematrix.common import check_norms, run_prepare, run_benchmark
 class Viscoelastic(object):
 
     # Problem setup
-    params = ([(100, 100, 100)], [12], [{'rec1': 4.261846, 'rec2': 0.36984697}])
+    params = ([(100, 100, 100)], [12], [{'rec1': 3.314084, 'rec2': 0.049992}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 
