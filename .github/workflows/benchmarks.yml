@@ -103,6 +103,7 @@ jobs:
 
   benchmarks:
     name: ${{ matrix.name }}
+    if: ${{ always() }}
     needs: [set-runners, start-runners]
     runs-on: ${{ matrix.tags }}
 
