@@ -26,7 +26,7 @@ alt="x" width=20ch</img>
 def wrap_html_path(filename):
     branch = Repository('.').head.shorthand+"/"
     github_preview = "https://htmlpreview.github.io/?"
-    github_url = "https://raw.githubusercontent.com/devitocodes/thematrix/"
+    github_url = "https://github.com/devitocodes/thematrix/blob/"
 
     return github_preview + github_url + branch + filename
 
@@ -153,6 +153,10 @@ def get_benchmarks():
                "track_runtime": []}
     for label in df.index.values:
         tokens = label.split(".")
+        try:
+            index = asv_lut[tokens[1]]
+        except KeyError:
+            index = tokens[1]
         link = """
 <a href="%s">
   <figure>
@@ -161,7 +165,7 @@ def get_benchmarks():
   </figure>
 </a>""" % ("%s#%s" % (matrix_url, label))
         data[tokens[2]].append(link.replace('\n', ""))
-        indices[tokens[2]].append(asv_lut[tokens[1]])
+        indices[tokens[2]].append(index)
     df = pd.DataFrame(data)
 
     df.index = indices["track_gflopss"]

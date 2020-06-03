@@ -27,12 +27,12 @@ Matrix benchmark parameters include:
 If there is something missing that you would like to see in the matrix then please then let us know...particularly if you can contribute development effort, hardware or funding!
 
 ## The matrix of platforms tested
-The table below provides a summary of the various platforms and configurations included in TheMatrix suite. Click on the links in the table for explanations and [click here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/devitocodes/thematrix/generate_readme/thematrix/thematrix.html) for further details.
+The table below provides a summary of the various platforms and configurations included in TheMatrix suite. Click on the links in the table for explanations and [click here](https://htmlpreview.github.io/?https://github.com/devitocodes/thematrix/blob/master/thematrix/thematrix.html) for further details.
 
 <table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>Runtime specification</th>      <th>Hardware</th>    </tr>  </thead>  <tbody>    <tr>      <th><a href="https://docs.microsoft.com/en-us/azure/virtual-machines/fsv2-series">Standard-F64s-v2</a></th>      <td><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th>Compiler</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#DEVITO_MPI">MPI mode</a>,<br>number of ranks</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#devito_language">Execution model</a></th>    </tr>  </thead>  <tbody>    <tr>      <td>gcc-9</td>      <td></td>      <td>openmp</td>    </tr>    <tr>      <td>gcc-9</td>      <td>basic, 2</td>      <td>openmp</td>    </tr>  </tbody></table></td>      <td>x86_64</td>    </tr>    <tr>      <th><a href="https://docs.microsoft.com/en-us/azure/virtual-machines/h-series">Standard-HC44rs</a></th>      <td><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th>Compiler</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#DEVITO_MPI">MPI mode</a>,<br>number of ranks</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#devito_language">Execution model</a></th>    </tr>  </thead>  <tbody>    <tr>      <td>gcc-9</td>      <td>basic, 2</td>      <td>openmp</td>    </tr>  </tbody></table></td>      <td>x86_64</td>    </tr>    <tr>      <th><a href="https://docs.microsoft.com/en-us/azure/virtual-machines/h-series">Standard-H16</a></th>      <td><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th>Compiler</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#DEVITO_MPI">MPI mode</a>,<br>number of ranks</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#devito_language">Execution model</a></th>    </tr>  </thead>  <tbody>    <tr>      <td>gcc-9</td>      <td></td>      <td>openmp</td>    </tr>  </tbody></table></td>      <td>x86_64</td>    </tr>    <tr>      <th><a href="https://docs.microsoft.com/en-us/azure/virtual-machines/nc-series">Standard-NC6-Promo</a></th>      <td><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th>Compiler</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#DEVITO_MPI">MPI mode</a>,<br>number of ranks</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#devito_language">Execution model</a></th>    </tr>  </thead>  <tbody>    <tr>      <td>clang</td>      <td></td>      <td>openmp</td>    </tr>    <tr>      <td>pgi</td>      <td></td>      <td>openacc</td>    </tr>  </tbody></table></td>      <td>kepler</td>    </tr>    <tr>      <th><a href="https://docs.microsoft.com/en-us/azure/virtual-machines/nc-series">Standard-NC24-Promo</a></th>      <td><table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th>Compiler</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#DEVITO_MPI">MPI mode</a>,<br>number of ranks</th>      <th><a href="https://github.com/devitocodes/devito/wiki/FAQ#devito_language">Execution model</a></th>    </tr>  </thead>  <tbody>    <tr>      <td>pgi</td>      <td>basic, 4</td>      <td>openacc</td>    </tr>  </tbody></table></td>      <td>kepler</td>    </tr>  </tbody></table>
 
 ## Profiling results
-This table provides a summary of the numerical models benchmarked - [click here for verbosity](https://htmlpreview.github.io/?https://raw.githubusercontent.com/devitocodes/thematrix/generate_readme/results/benchmarks.html). Click on the links in the table for profiling results.
+This table provides a summary of the numerical models benchmarked - [click here for verbosity](https://htmlpreview.github.io/?https://github.com/devitocodes/thematrix/blob/master/results/benchmarks.html). Click on the links in the table for profiling results.
 
 <table border="1" class="dataframe">
   <thead>
@@ -45,16 +45,22 @@ This table provides a summary of the numerical models benchmarked - [click here 
   </thead>
   <tbody>
     <tr>
-      <th>Isotropic acoustic (3D)</th>
-      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso.IsotropicAcoustic.track_gflopss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
-      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso.IsotropicAcoustic.track_gpointss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
-      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso.IsotropicAcoustic.track_runtime">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <th>IsotropicAcousticForward</th>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso.IsotropicAcousticForward.track_gflopss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso.IsotropicAcousticForward.track_gpointss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso.IsotropicAcousticForward.track_runtime">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
     </tr>
     <tr>
-      <th>Acoustic TTI (3D)</th>
-      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_tti.TTIAcoustic.track_gflopss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
-      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_tti.TTIAcoustic.track_gpointss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
-      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_tti.TTIAcoustic.track_runtime">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <th>IsotropicAcousticJacobianAdjoint</th>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso.IsotropicAcousticJacobianAdjoint.track_gflopss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso.IsotropicAcousticJacobianAdjoint.track_gpointss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso.IsotropicAcousticJacobianAdjoint.track_runtime">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+    </tr>
+    <tr>
+      <th>TTIAcousticForward</th>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_tti.TTIAcousticForward.track_gflopss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_tti.TTIAcousticForward.track_gpointss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_tti.TTIAcousticForward.track_runtime">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
     </tr>
     <tr>
       <th>Elastic (3D)</th>
