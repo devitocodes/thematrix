@@ -1,0 +1,9 @@
+{
+    "arch": "x86_64",
+    "cpu": "AMD-EPYC-7551",
+    "machine": "cpu04-Standard-HB60rs_1x2-omp",
+    "num_cpu": "30",
+    "os": "ubuntu18.04",
+    "ram": "240GB",
+    "version": 1
+}
