@@ -189,6 +189,7 @@ jobs:
         mv results/results/benchmarks.json results
         rm -r results/results
         asv update --config thematrix/asv.conf.json
+        python scripts/results2readme.py
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add results/*
