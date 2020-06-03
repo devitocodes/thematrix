@@ -105,6 +105,26 @@
         }
       }
     },
+    "cpu04-Standard-HB60rs":{
+      "os": "ubuntu18.04",
+      "tags": ["self-hosted", "cpu04"],
+      "arch": "x86_64",
+      "cpu": "AMD-EPYC-7551",
+      "jobs":{
+        "1x2-omp": {
+          "platform": "cpu64",
+          "num_cpu": "30",
+          "ram": "240GB",
+          "num_procs": "2",
+          "num_threads": "30",
+          "jit": "gcc-9",
+          "language": "openmp",
+          "mpi": "basic",
+          "omp_places": "cores",
+          "omp_proc_bind": "close"
+        }
+      }
+    },
     "gpu00-Standard-NC6-Promo":{
       "os": "ubuntu18.04",
       "tags": ["self-hosted", "gpu00"],
