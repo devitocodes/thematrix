@@ -7,7 +7,7 @@ from thematrix.common import check_norms, run_prepare, run_benchmark
 class IsotropicAcousticForward(object):
 
     # Problem setup
-    params = ([(492, 492, 492)], [12], [{'rec': 109.070557, 'u': 151.545837}])
+    params = ([(492, 492, 492)], [12], [{'rec': 109.070557, 'u': 144.055939}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 
@@ -79,9 +79,9 @@ class IsotropicAcousticAdjoint(object):
 class IsotropicAcousticJacobian(object):
 
     # Problem setup
-    params = ([(152, 152, 152)], [12], [{'rec': 1.6435679, 'u': 161.32542, 'U': 184.92563}])
+    params = ([(152, 152, 152)], [12], [{'rec': 4.952170, 'u': 144.055573, 'U': 4.879143}])
     param_names = ['shape', 'space_order', 'norms']
-    tn = 1000
+    tn = 100
 
     # ASV parameters
     repeat = 1
