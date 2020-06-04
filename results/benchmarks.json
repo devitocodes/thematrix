@@ -1,4 +1,76 @@
 {
+    "acoustic_iso.IsotropicAcousticAdjoint.track_gflopss": {
+        "code": "class IsotropicAcousticAdjoint:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-isoa', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic', shape, space_order, self.tn, fn_perf, fn_norms, op=\"adjoint\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_iso.IsotropicAcousticAdjoint.track_gflopss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(492, 492, 492)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'srca': 646.188904, 'v': 347421.625}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gflopss",
+        "version": "2c610a66e68000e109d95f18d06152a680f3e398ecb24d8085e22ef8f9896b9c"
+    },
+    "acoustic_iso.IsotropicAcousticAdjoint.track_gpointss": {
+        "code": "class IsotropicAcousticAdjoint:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.gpointss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-isoa', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic', shape, space_order, self.tn, fn_perf, fn_norms, op=\"adjoint\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_iso.IsotropicAcousticAdjoint.track_gpointss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(492, 492, 492)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'srca': 646.188904, 'v': 347421.625}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gpointss",
+        "version": "2d51f23730168df0187d23e3b5680da3b498f9abb7741f73cc93dae2b285d26c"
+    },
+    "acoustic_iso.IsotropicAcousticAdjoint.track_runtime": {
+        "code": "class IsotropicAcousticAdjoint:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.time\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-isoa', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic', shape, space_order, self.tn, fn_perf, fn_norms, op=\"adjoint\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_iso.IsotropicAcousticAdjoint.track_runtime",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(492, 492, 492)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'srca': 646.188904, 'v': 347421.625}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "runtime",
+        "version": "8268eae86d25abc6b7d3957c69996a593cac8b48ca451164cc07f976f733e840"
+    },
     "acoustic_iso.IsotropicAcousticForward.track_gflopss": {
         "code": "class IsotropicAcousticForward:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-isof', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
         "name": "acoustic_iso.IsotropicAcousticForward.track_gflopss",
@@ -15,7 +87,7 @@
                 "12"
             ],
             [
-                "{'rec': 109.070557, 'u': 151.545837}"
+                "{'rec': 109.070557, 'u': 144.055939}"
             ]
         ],
         "timeout": 900.0,
@@ -39,7 +111,7 @@
                 "12"
             ],
             [
-                "{'rec': 109.070557, 'u': 151.545837}"
+                "{'rec': 109.070557, 'u': 144.055939}"
             ]
         ],
         "timeout": 900.0,
@@ -63,13 +135,85 @@
                 "12"
             ],
             [
-                "{'rec': 109.070557, 'u': 151.545837}"
+                "{'rec': 109.070557, 'u': 144.055939}"
             ]
         ],
         "timeout": 900.0,
         "type": "track",
         "unit": "runtime",
         "version": "6d6807cb01e0745af5c121f0d9d641b41d272dc5422a6b3d9cb5d2b03eb65de8"
+    },
+    "acoustic_iso.IsotropicAcousticJacobian.track_gflopss": {
+        "code": "class IsotropicAcousticJacobian:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-isoJ', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic', shape, space_order, self.tn, fn_perf, fn_norms, op=\"jacobian\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_iso.IsotropicAcousticJacobian.track_gflopss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(152, 152, 152)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 4.95217, 'u': 144.055573, 'U': 4.879143}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gflopss",
+        "version": "855de8dbec43e2b8b9264b9011d7579a2df160c5b92095355755a8499e45eef8"
+    },
+    "acoustic_iso.IsotropicAcousticJacobian.track_gpointss": {
+        "code": "class IsotropicAcousticJacobian:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.gpointss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-isoJ', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic', shape, space_order, self.tn, fn_perf, fn_norms, op=\"jacobian\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_iso.IsotropicAcousticJacobian.track_gpointss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(152, 152, 152)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 4.95217, 'u': 144.055573, 'U': 4.879143}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gpointss",
+        "version": "51de79f6948bcaaa368c6e92764c9b2cdf45178dba7c1e10726736f3c5226366"
+    },
+    "acoustic_iso.IsotropicAcousticJacobian.track_runtime": {
+        "code": "class IsotropicAcousticJacobian:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.time\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-isoJ', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic', shape, space_order, self.tn, fn_perf, fn_norms, op=\"jacobian\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_iso.IsotropicAcousticJacobian.track_runtime",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(152, 152, 152)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 4.95217, 'u': 144.055573, 'U': 4.879143}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "runtime",
+        "version": "e383970d7b4a39d11d477e841dfd18e2b910c589cd38e37881730cc6b7620d2e"
     },
     "acoustic_iso.IsotropicAcousticJacobianAdjoint.track_gflopss": {
         "code": "class IsotropicAcousticJacobianAdjoint:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-isoJa', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic', shape, space_order, self.tn, fn_perf, fn_norms, op=\"jacobian_adjoint\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
@@ -142,6 +286,150 @@
         "type": "track",
         "unit": "runtime",
         "version": "a4eecf25945c9d614f93b31e8adf35ddd952ee320154cf0002a0dd61cf16ea5a"
+    },
+    "acoustic_iso_ssa.IsotropicSSAForward.track_gflopss": {
+        "code": "class IsotropicSSAForward:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-ssa-isof', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic_ssa', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_iso_ssa.IsotropicSSAForward.track_gflopss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(152, 152, 152)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 247.9561, 'u': 7438246.5}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gflopss",
+        "version": "e15a83914382ecd62b615313e58dda737f35fc1c34b0550bcd875b05f3190ff3"
+    },
+    "acoustic_iso_ssa.IsotropicSSAForward.track_gpointss": {
+        "code": "class IsotropicSSAForward:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.gpointss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-ssa-isof', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic_ssa', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_iso_ssa.IsotropicSSAForward.track_gpointss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(152, 152, 152)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 247.9561, 'u': 7438246.5}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gpointss",
+        "version": "ef8e7e49b2d3ee74b1e7b2872dca34258c714a8611c145564a33863eccfddec5"
+    },
+    "acoustic_iso_ssa.IsotropicSSAForward.track_runtime": {
+        "code": "class IsotropicSSAForward:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.time\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-ssa-isof', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('acoustic_ssa', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_iso_ssa.IsotropicSSAForward.track_runtime",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(152, 152, 152)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'rec': 247.9561, 'u': 7438246.5}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "runtime",
+        "version": "9de798790985d6ca2c4af626d7513016337da9a34c33208528bc84fa7e91e1bb"
+    },
+    "acoustic_tti.TTIAcousticAdjoint.track_gflopss": {
+        "code": "class TTIAcousticAdjoint:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-ttia', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('tti', shape, space_order, self.tn, fn_perf, fn_norms, op=\"adjoint\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_tti.TTIAcousticAdjoint.track_gflopss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(350, 350, 350)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'srca': 1588.117065, 'p': 568135.6875, 'r': 620591.5}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gflopss",
+        "version": "ad0345d495e9edcb9a2f875431408bb70932683acd94bfa1626ec03fc6a24bf4"
+    },
+    "acoustic_tti.TTIAcousticAdjoint.track_gpointss": {
+        "code": "class TTIAcousticAdjoint:\n    def track_gpointss(self, shape, space_order, norms):\n        return self.summary.gpointss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-ttia', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('tti', shape, space_order, self.tn, fn_perf, fn_norms, op=\"adjoint\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_tti.TTIAcousticAdjoint.track_gpointss",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(350, 350, 350)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'srca': 1588.117065, 'p': 568135.6875, 'r': 620591.5}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "gpointss",
+        "version": "207d169c117bed56426621e070f6d38b14280ff3565485a2aeb88d81eb7e855e"
+    },
+    "acoustic_tti.TTIAcousticAdjoint.track_runtime": {
+        "code": "class TTIAcousticAdjoint:\n    def track_runtime(self, shape, space_order, norms):\n        return self.summary.time\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-ttia', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('tti', shape, space_order, self.tn, fn_perf, fn_norms, op=\"adjoint\")\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
+        "name": "acoustic_tti.TTIAcousticAdjoint.track_runtime",
+        "param_names": [
+            "shape",
+            "space_order",
+            "norms"
+        ],
+        "params": [
+            [
+                "(350, 350, 350)"
+            ],
+            [
+                "12"
+            ],
+            [
+                "{'srca': 1588.117065, 'p': 568135.6875, 'r': 620591.5}"
+            ]
+        ],
+        "timeout": 900.0,
+        "type": "track",
+        "unit": "runtime",
+        "version": "50ac683539c752378824a7e439fa94db1a6953ba35258eb5db4b201094b9c828"
     },
     "acoustic_tti.TTIAcousticForward.track_gflopss": {
         "code": "class TTIAcousticForward:\n    def track_gflopss(self, shape, space_order, norms):\n        return self.summary.gflopss\n\n    def setup(self, shape, space_order, norms):\n        fn_perf, fn_norms = run_prepare('acoustic-tti', shape, space_order)\n        try:\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())\n        except FileNotFoundError:\n            run_benchmark('tti', shape, space_order, self.tn, fn_perf, fn_norms)\n            check_norms(fn_norms, norms)\n            with open(fn_perf, 'r') as f:\n                self.summary = eval(f.read())",
