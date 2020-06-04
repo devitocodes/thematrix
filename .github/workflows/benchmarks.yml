@@ -194,7 +194,7 @@ jobs:
         git config --local user.name "GitHub Action"
         git add results/*
         git status
-        git commit -m "Push results from runner"
+        git commit -a -m "Push results from runner"
 
     - name: Push results
       uses: ad-m/github-push-action@master
