@@ -7,7 +7,7 @@
 Benchmarking Devito solvers across computer architectures, execution models, compilers and anything else we can think of.
 
 [![Run TheMatrix](https://img.shields.io/badge/run-thematrix-brightgreen)](https://www.actionspanel.app/app/devitocodes/thematrix)
-[![asv](http://img.shields.io/badge/benchmarked%20by-asv-blue.svg?style=flat)](https://devitocodes.github.io/devito-performance)
+[![asv](http://img.shields.io/badge/benchmarked%20by-asv-blue.svg?style=flat)](http://www.devitoproject.org/thematrix/)
 [![Slack Status](https://img.shields.io/badge/chat-on%20slack-%2336C5F0)](https://opesci-slackin.now.sh)
 
 The aim of TheMatrix is to:
