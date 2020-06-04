@@ -164,79 +164,79 @@ jobs:
         name: results
         path: results/benchmarks.json
 
-  publish-results:
-    needs: benchmarks
-    runs-on: [self-hosted, MatMul]
+  #publish-results:
+    #needs: benchmarks
+    #runs-on: [self-hosted, MatMul]
 
-    steps:
+    #steps:
 
-    - name: checkout repo
-      uses: actions/checkout@v2
+    #- name: checkout repo
+      #uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: |
-        pip3 install --upgrade pip
-        pip3 install -e .
+    #- name: Install dependencies
+      #run: |
+        #pip3 install --upgrade pip
+        #pip3 install -e .
 
-    # Download and publish results
-    - uses: actions/download-artifact@v2
-      with:
-        path: results
+    ## Download and publish results
+    #- uses: actions/download-artifact@v2
+      #with:
+        #path: results
 
-    # TODO: Find a cleaner solution
-    - name: Commit results
-      run: |
-        mv results/results/benchmarks.json results
-        rm -r results/results
-        asv update --config thematrix/asv.conf.json
-        python scripts/results2readme.py
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add results/*
-        git status
-        git commit -m "Push results from runner"
+    ## TODO: Find a cleaner solution
+    #- name: Commit results
+      #run: |
+        #mv results/results/benchmarks.json results
+        #rm -r results/results
+        #asv update --config thematrix/asv.conf.json
+        #python scripts/results2readme.py
+        #git config --local user.email "action@github.com"
+        #git config --local user.name "GitHub Action"
+        #git add results/*
+        #git status
+        #git commit -m "Push results from runner"
 
-    - name: Push results
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+    #- name: Push results
+      #uses: ad-m/github-push-action@master
+      #with:
+        #github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Publish results (json -> html)
-      run: |
-        asv publish --config thematrix/asv.conf.json
-        python scripts/results2readme.py
+    #- name: Publish results (json -> html)
+      #run: |
+        #asv publish --config thematrix/asv.conf.json
+        #python scripts/results2readme.py
 
-    - name: Deploy results to (html -> thematrix/gh-pages)
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./thematrix/.asv/html
+    #- name: Deploy results to (html -> thematrix/gh-pages)
+      #uses: peaceiris/actions-gh-pages@v3
+      #with:
+        #github_token: ${{ secrets.GITHUB_TOKEN }}
+        #publish_dir: ./thematrix/.asv/html
 
-  # Deallocate the runners
-  stop-runners:
-    name: stop-runners
-    if: ${{ always() }}
-    needs: [set-runners, benchmarks]
-    runs-on: ubuntu-latest
+  ## Deallocate the runners
+  #stop-runners:
+    #name: stop-runners
+    #if: ${{ always() }}
+    #needs: [set-runners, benchmarks]
+    #runs-on: ubuntu-latest
 
-    strategy:
-      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
+    #strategy:
+      #matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
 
-    steps:
-    - name: checkout repo
-      uses: actions/checkout@v2
+    #steps:
+    #- name: checkout repo
+      #uses: actions/checkout@v2
 
-    - name: stop VM
-      env:
-        SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
-        SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
-        TENANT_ID: ${{ secrets.SERVICE_PRINCIPAL_TENANTID }}
-        SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      run: >
-        pwsh -command "& '${{ env.OUTPUT_PATH }}\.github\azure\stopVM.ps1'"
-        -servicePrincipal $SP_APPID
-        -servicePrincipalSecret $SP_SECRET
-        -servicePrincipalTenantId $TENANT_ID
-        -azureSubscriptionName $SUB_ID
-        -resourceGroupName $RESOURCE_GROUP
-        -vmName ${{ matrix.runner }}
+    #- name: stop VM
+      #env:
+        #SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
+        #SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
+        #TENANT_ID: ${{ secrets.SERVICE_PRINCIPAL_TENANTID }}
+        #SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #run: >
+        #pwsh -command "& '${{ env.OUTPUT_PATH }}\.github\azure\stopVM.ps1'"
+        #-servicePrincipal $SP_APPID
+        #-servicePrincipalSecret $SP_SECRET
+        #-servicePrincipalTenantId $TENANT_ID
+        #-azureSubscriptionName $SUB_ID
+        #-resourceGroupName $RESOURCE_GROUP
+        #-vmName ${{ matrix.runner }}
