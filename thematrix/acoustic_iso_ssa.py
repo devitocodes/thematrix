@@ -79,7 +79,7 @@ class IsotropicSSAAdjoint(object):
 class IsotropicSSAJacobian(object):
 
     # Problem setup
-    params = ([(152, 152, 152)], [12], [{'rec': 0.070716, 'u': 7438246.000000, 'du': 18011874.000000}])
+    params = ([(152, 152, 152)], [12], [{'rec': 0.070716, 'u0': 7438246.000000, 'du': 18011874.000000}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 

@@ -43,7 +43,7 @@ class TTIAcousticForward(object):
 class TTIAcousticAdjoint(object):
 
     # Problem setup
-    params = ([(350, 350, 350)], [12], [{'srca': 184.526400, 'v': 151.545837}])
+    params = ([(350, 350, 350)], [12], [{'srca': 1588.117065, 'p': 568135.687500, 'r': 620591.500000}])
     param_names = ['shape', 'space_order', 'norms']
     tn = 100
 
