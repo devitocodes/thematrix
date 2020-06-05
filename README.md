@@ -87,6 +87,12 @@ This table provides a summary of the numerical models benchmarked - [click here 
       <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso_ssa_jac.IsotropicSSAJacobian.track_runtime">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
     </tr>
     <tr>
+      <th>IsotropicSSAJacobianAdjoint</th>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso_ssa_jacadj.IsotropicSSAJacobianAdjoint.track_gflopss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso_ssa_jacadj.IsotropicSSAJacobianAdjoint.track_gpointss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+      <td><a href="https://www.devitoproject.org/thematrix/#acoustic_iso_ssa_jacadj.IsotropicSSAJacobianAdjoint.track_runtime">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
+    </tr>
+    <tr>
       <th>TTIAcousticForward</th>
       <td><a href="https://www.devitoproject.org/thematrix/#acoustic_tti.TTIAcousticForward.track_gflopss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
       <td><a href="https://www.devitoproject.org/thematrix/#acoustic_tti.TTIAcousticForward.track_gpointss">  <figure>    <img src="https://www.devitoproject.org/thematrix/swallow.png"    alt="Airspeed velocity"</img>  </figure></a></td>
