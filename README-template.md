@@ -18,11 +18,12 @@ The aim of TheMatrix is to:
 * Provide performance baseline for performance optimisation; catch performance regression.
 
 Matrix benchmark parameters include:
-* Architecture: Intel® Xeon® Platinum 8168 processor (Azure), Intel Xeon E5 2667 v3 (Azure), NVIDIA Tesla K80 (Azure)
-* Execution models: OpenMP, OpenMP offloading, OpenACC, MPI
+* Architecture: Intel® Xeon® Platinum 8168 processor (Azure), Intel® Xeon® E5 2667 v3 (Azure), NVIDIA® Tesla® K80 (Azure)
+* Execution models: OpenMP, OpenMP offloading, OpenACC, MPI (and mixed)
 * Compilers: GCC, LLVM, PGI
-* Numerical solvers: isotropic acoustic (3D), TTI (3D)
-* Profilers: native performance metrics (runtime, FLOPS, GPt/s), [Air Speed velocity](https://asv.readthedocs.io/en/stable/index.html).
+* Numerical solvers (3D): isotropic acoustic, isotropic skew-self-adjoint acoustic, isotropic elastic, isotropic viscoelastic, TTI acoustic
+* Profilers: native performance metrics computed by Devito (runtime, FLOPS, GPt/s)
+* Visualization: [Air Speed velocity](https://asv.readthedocs.io/en/stable/index.html).
 
 If there is something missing that you would like to see in the matrix then please then let us know...particularly if you can contribute development effort, hardware or funding!
 

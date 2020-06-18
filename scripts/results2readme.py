@@ -138,13 +138,13 @@ def get_benchmarks():
                  'param_names', 'params', 'unit'):
         del df[crud]
 
-    asv_lut = {"IsotropicAcoustic": "Isotropic acoustic (3D)",
-               "track_gflopss": "GFLOPS (3D)",
-               "track_gpointss": "FD-GPts/s (3D)",
+    asv_lut = {"IsotropicAcoustic": "Acoustic isotropic",
+               "track_gflopss": "GFLOPS",
+               "track_gpointss": "FD-GPts/s",
                "track_runtime": "Runtime",
-               "TTIAcoustic": "Acoustic TTI (3D)",
-               "Elastic": "Elastic (3D)",
-               "Viscoelastic": "Viscoelastic (3D)"}
+               "TTIAcoustic": "Acoustic TTI",
+               "Elastic": "Elastic",
+               "Viscoelastic": "Viscoelastic"}
     data = {"track_gflopss": [],
             "track_gpointss": [],
             "track_runtime": []}
