@@ -21,7 +21,7 @@ Matrix benchmark parameters include:
 * Architecture: Intel® Xeon® Platinum 8168 processor (Azure), Intel® Xeon® E5 2667 v3 (Azure), NVIDIA® Tesla® K80 (Azure)
 * Execution models: OpenMP, OpenMP offloading, OpenACC, MPI (and mixed)
 * Compilers: GCC, LLVM, PGI
-* Numerical solvers (3D): isotropic acoustic, isotropic skew-self-adjoint acoustic, isotropic elastic, isotropic viscoelastic, TTI acoustic
+* Numerical solvers: isotropic acoustic, isotropic skew-self-adjoint acoustic, isotropic elastic, isotropic viscoelastic, TTI acoustic
 * Profilers: native performance metrics computed by Devito (runtime, FLOPS, GPt/s)
 * Visualization: [Air Speed velocity](https://asv.readthedocs.io/en/stable/index.html).
 
@@ -33,7 +33,7 @@ The table below provides a summary of the various platforms and configurations i
 ${THEMATRIX_TABLE}
 
 ## Profiling results
-This table provides a summary of the numerical models benchmarked - [click here for verbosity](${BENCHMARKS_HTML}). Click on the links in the table for profiling results.
+This table provides a summary of the numerical models benchmarked - [click here for verbosity](${BENCHMARKS_HTML}). Unless otherwise specified, all models use 3D domains, 2nd order time discretization, 12th order space discretization, and single-precision floating point arithmetic. Click on the links in the table for profiling results and for more information about the individual benchmarks.
 
 ${BENCHMARKS_TABLE}
 
