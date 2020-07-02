@@ -33,7 +33,7 @@ The table below provides a summary of the various platforms and configurations i
 ${THEMATRIX_TABLE}
 
 ## Profiling results
-This table provides a summary of the numerical models benchmarked - [click here for verbosity](${BENCHMARKS_HTML}). Unless otherwise specified, all models use 3D domains, 2nd order time discretization, 12th order space discretization, and single-precision floating point arithmetic. Click on the links in the table for profiling results and for more information about the individual benchmarks.
+This table provides a summary of the numerical models benchmarked - [click here for verbosity](${BENCHMARKS_HTML}). Unless otherwise stated, models are three-dimensional, use 2nd order temporal and 12th order spatial discretizations, and single-precision floating point arithmetic. Click on the links in the table for profiling results and further information regarding the individual benchamrk.
 
 ${BENCHMARKS_TABLE}
 
