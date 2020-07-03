@@ -71,7 +71,7 @@ def nest_table(content):
     df = df.reindex(sorted(df.columns), axis=1)
 
     mapper = {'openmp': 'OpenMP', 'openacc': 'OpenACC'}
-    df = df['language'].map(mapper)
+    df['language'] = df['language'].map(mapper)
 
     def squash_mpi(data):
         if data[0] == "0":
