@@ -18,11 +18,12 @@ The aim of TheMatrix is to:
 * Provide performance baseline for performance optimisation; catch performance regression.
 
 Matrix benchmark parameters include:
-* Architecture: Intel® Xeon® Platinum 8168 processor (Azure), Intel Xeon E5 2667 v3 (Azure), NVIDIA Tesla K80 (Azure)
-* Execution models: OpenMP, OpenMP offloading, OpenACC, MPI
+* Architecture: Intel® Xeon® Platinum 8168 processor (Azure), Intel® Xeon® E5 2667 v3 (Azure), NVIDIA® Tesla® K80 (Azure)
+* Execution models: OpenMP, OpenMP offloading, OpenACC, MPI (and mixed)
 * Compilers: GCC, LLVM, PGI
-* Numerical solvers: isotropic acoustic (3D), TTI (3D)
-* Profilers: native performance metrics (runtime, FLOPS, GPt/s), [Air Speed velocity](https://asv.readthedocs.io/en/stable/index.html).
+* Numerical solvers: isotropic acoustic, isotropic skew-self-adjoint acoustic, isotropic elastic, isotropic viscoelastic, TTI acoustic
+* Profilers: native performance metrics computed by Devito (runtime, FLOPS, GPt/s)
+* Visualization: [Air Speed velocity](https://asv.readthedocs.io/en/stable/index.html).
 
 If there is something missing that you would like to see in the matrix then please then let us know...particularly if you can contribute development effort, hardware or funding!
 
@@ -32,7 +33,7 @@ The table below provides a summary of the various platforms and configurations i
 ${THEMATRIX_TABLE}
 
 ## Profiling results
-This table provides a summary of the numerical models benchmarked - [click here for verbosity](${BENCHMARKS_HTML}). Click on the links in the table for profiling results.
+This table provides a summary of the numerical models benchmarked - [click here for verbosity](${BENCHMARKS_HTML}). Unless otherwise stated, models are three-dimensional, use 2nd order temporal and 12th order spatial discretizations, and single-precision floating point arithmetic. Click on the links in the table for profiling results and further information regarding the individual benchamrk.
 
 ${BENCHMARKS_TABLE}
 
