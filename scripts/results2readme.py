@@ -82,7 +82,7 @@ def nest_table(content):
         else:
             return ""
 
-    mpi_key = "%s,<br>number of ranks" % \
+    mpi_key = "%s,<br>#ranks" % \
               ahref(faq_url+'DEVITO_MPI', 'MPI mode')
     df[mpi_key] = df[['mpi', 'num_procs']].apply(squash_mpi, axis=1)
 
