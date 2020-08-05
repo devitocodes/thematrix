@@ -116,9 +116,9 @@ GitHub Actions provides a wide range of automation tools for configuring and
 running repetitive tasks for a tabled set of parameters. \autoref{fig:wf}
 outlines [TheMatrix]'s *workflow* configuration.
 
-![Outline of [TheMatrix] workflow. The green node indicates an Actions repository dispatch to trigger a benchmarking run, light orange nodes indicate jobs carried out by Github hosted runners, purple nodes indicate benchmarking runs (carried out on the hardware configurations listed on [TheMatrix] webpage), and the pink node indicates jobs carried out by a self-hosted runner.\label{fig:wf}](figures/workflow.pdf)
+![Outline of TheMatrix workflow. The green node indicates an Actions repository dispatch to trigger a benchmarking run, light orange nodes indicate jobs carried out by Github hosted runners, purple nodes indicate benchmarking runs (carried out on the hardware configurations listed on TheMatrix webpage), and the pink node indicates jobs carried out by a self-hosted runner.\label{fig:wf}](figures/workflow.pdf)
 
-## Benchmarking and [ASV]
+## Benchmarking and ASV
 
 Devito provides a benchmarking harness for a range of seismic imaging operators
 (e.g., isotropic/anisotropic acoustic/elastic wave propagators). This framework
@@ -131,9 +131,9 @@ each run with information about the software versions used).
 
 An example result for the 3D isotropic acoustic benchmark is shown in \autoref{fig:isogf}.
 
-![3D Isotropic acoustic GFlops/s example result. Each line represents a specific architecture, the name of which is given in the legend. See [here](https://github.com/devitocodes/thematrix) for further details.\label{fig:isogf}](figures/iso.png)
+![3D Isotropic acoustic GFlops/s example result. Each line represents a specific architecture, the name of which is given in the legend.\label{fig:isogf}](figures/iso.png)
 
-## Hardware (The [Azure] Cloud)
+## Hardware (The Azure Cloud)
 
 Cloud computing services such as Microsoft's [Azure] offer convenient access to
 a range of on-demand hardware configurations. Since [TheMatrix] workflow
