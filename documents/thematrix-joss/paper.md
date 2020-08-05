@@ -13,16 +13,18 @@ authors:
   - name: Mathias Louboutin
     affiliation: 3
   - name: George Bisbas
-    affiliation: 1
+    affiliation: 4
   - name: Gerard Gorman
     affiliation: 1
 affiliations:
- - name: Imperial College London
+ - name: Department of Earth Science and Engineering, Imperial College London, London, SW7 2AZ, UK
    index: 1
  - name: Devito Codes
    index: 2
- - name: Georgia Institute of Technology
+ - name: Georgia Institute of Technology, School of Earth and Atmospheric Sciences, Atlanta, GA
    index: 3
+ - name: Department of Computing, Imperial College London, London, SW7 2AZ, UK
+   index: 4
 date: 5 August 2020
 bibliography: paper.bib
 ---
