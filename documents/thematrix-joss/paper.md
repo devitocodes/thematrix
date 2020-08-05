@@ -113,15 +113,10 @@ suite for a specific combination of:
 
 Originally designed to be a high-level interface for continuous integration,
 GitHub Actions provides a wide range of automation tools for configuring and
-running repetitive tasks for a tabled set of parameters.  \autoref{fig:wf}
+running repetitive tasks for a tabled set of parameters. \autoref{fig:wf}
 outlines [TheMatrix]'s *workflow* configuration.
 
-![Outline of [TheMatrix] workflow. The green node indicates an Actions
-repository dispatch to trigger a benchmarking run, light orange nodes indicate
-jobs carried out by Github hosted runners, purple nodes indicate benchmarking
-runs (carried out on the hardware configurations listed on [TheMatrix]
-webpage), and the pink node indicates jobs carried out by a self-hosted
-runner.\label{fig:wf}](figures/workflow.pdf)
+![Outline of [TheMatrix] workflow. The green node indicates an Actions repository dispatch to trigger a benchmarking run, light orange nodes indicate jobs carried out by Github hosted runners, purple nodes indicate benchmarking runs (carried out on the hardware configurations listed on [TheMatrix] webpage), and the pink node indicates jobs carried out by a self-hosted runner.\label{fig:wf}](figures/workflow.pdf)
 
 ## Benchmarking and [ASV]
 
