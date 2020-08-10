@@ -7,6 +7,7 @@ import pandas as pd
 import json
 import json2html
 from pygit2 import Repository
+from collections import OrderedDict
 
 thematrix_json = "thematrix/thematrix.json"
 benchmarks_json = "results/benchmarks.json"
@@ -109,9 +110,12 @@ def get_thematrix():
 
     unpack(df, 'runners')
 
-    lut = {"Standard-NC": azvm_url + "nc-series",
-           "Standard-H": azvm_url + "h-series",
-           "Standard-F": azvm_url + "fsv2-series"}
+    lut = OrderedDict([("Standard-NC", azvm_url + "nc-series"),
+                       ("Standard-HBv2", azvm_url + "hbv2-series"),
+                       ("Standard-HB", azvm_url + "hb-series"),
+                       ("Standard-HC", azvm_url + "hc-series"),
+                       ("Standard-H", azvm_url + "h-series"),
+                       ("Standard-F", azvm_url + "fsv2-series")])
 
     for label in df.index.values:
         for key in lut:
