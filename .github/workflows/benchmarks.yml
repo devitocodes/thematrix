@@ -7,8 +7,6 @@ env:
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
-        required: true
       tags:
         description: 'Run TheMatrix'
 
