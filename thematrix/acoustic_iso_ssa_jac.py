@@ -22,7 +22,7 @@ class IsotropicSSAJacobian(object):
             with open(fn_perf, 'r') as f:
                 self.summary = eval(f.read())
         except FileNotFoundError:
-            run_benchmark('acoustic_ssa', shape, space_order, self.tn, fn_perf, fn_norms, op="jacobian")
+            run_benchmark('acoustic_sa', shape, space_order, self.tn, fn_perf, fn_norms, op="jacobian")
             check_norms(fn_norms, norms)
             with open(fn_perf, 'r') as f:
                 self.summary = eval(f.read())
