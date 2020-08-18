@@ -125,7 +125,7 @@ jobs:
     - name: set host MS
       if: ${{ matrix.queue }} == ms
       run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP_MS -n $MS_VM --query publicIps -o tsv)
-      id: host
+      id: host_ms
 
     - name: start actions runner app MS
       if: ${{ matrix.queue }} == ms
@@ -134,7 +134,7 @@ jobs:
         command: |
           #!/bin/bash
           nohup actions-runner/run.sh >/dev/null 2>&1 &
-        host: ${{ steps.host.outputs.action_host }}
+        host: ${{ steps.host_ms.outputs.action_host }}
         port: ${{ secrets.MS_VM_PORT }}
         user: ${{ secrets.ADMIN_LOGIN_MS }}
         key: ${{ secrets.MS_PRIVATE_KEY }}
