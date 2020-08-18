@@ -58,8 +58,7 @@ jobs:
         echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/jobs.json)"
 
   # Boot the self-hosted runners and start runner apps
-  start-runners-ic:
-    if: ${{ matrix.queue }} == ic
+  start-runners:
     needs: set-runners
     runs-on: ubuntu-latest
 
@@ -75,6 +74,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: start VM
+      if: ${{ matrix.queue }} == ic
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
@@ -90,10 +90,12 @@ jobs:
         -vmName ${{ matrix.runner }}
 
     - name: set host
+      if: ${{ matrix.queue }} == ic
       run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP -n ${{ matrix.runner }} --query publicIps -o tsv)
       id: host
 
     - name: start actions runner app
+      if: ${{ matrix.queue }} == ic
       uses: fifsky/ssh-action@master
       with:
         command: |
@@ -104,23 +106,8 @@ jobs:
         pass: ${{ secrets.ADMIN_PASSWORD }}
         args: "-tt"
 
-  start-runners-ms:
-    if: ${{ matrix.queue }} == ms
-    needs: set-runners
-    runs-on: ubuntu-latest
-
-    strategy:
-      # Prevent all build to stop if a single one fails
-      fail-fast: false
-
-      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
-
-    steps:
-
-    - name: checkout repo
-      uses: actions/checkout@v2
-
-    - name: start VM
+    - name: start VM MS
+      if: ${{ matrix.queue }} == ms
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID_MS }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET_MS }}
@@ -135,11 +122,13 @@ jobs:
         -resourceGroupName $RESOURCE_GROUP_MS
         -vmName $MS_VM
 
-    - name: set host
+    - name: set host MS
+      if: ${{ matrix.queue }} == ms
       run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP_MS -n $MS_VM --query publicIps -o tsv)
       id: host
 
-    - name: start actions runner app
+    - name: start actions runner app MS
+      if: ${{ matrix.queue }} == ms
       uses: fifsky/ssh-action@master
       with:
         command: |
@@ -151,123 +140,57 @@ jobs:
         key: ${{ secrets.MS_PRIVATE_KEY }}
         args: "-tt"
 
-  benchmarks-ic:
-    name: ${{ matrix.name }}
-    #if: ${{ always() }}
-    if: ${{ matrix.queue }} == ic
-    needs: [set-runners, start-runners-ic]
-    runs-on: ${{ matrix.tags }}
+  #start-runners-ms:
+    #if: ${{ matrix.queue }} == ms
+    #needs: set-runners
+    #runs-on: ubuntu-latest
 
-    strategy:
-      matrix: ${{ fromJson(needs.set-runners.outputs.jobs-matrix) }}
+    #strategy:
+      ## Prevent all build to stop if a single one fails
+      #fail-fast: false
 
-    env:
-
-      # Devito setup
-      DEVITO_BENCHMARKS: "1"
-      DEVITO_LOGGING: "PERF"
-      DEVITO_ARCH: "${{ matrix.jit }}"
-      DEVITO_PLATFORM: "${{ matrix.platform }}"
-      DEVITO_LANGUAGE: "${{ matrix.language }}"
-      DEVITO_MPI: "${{ matrix.mpi }}"
-
-      # OpenMP setup
-      OMP_NUM_THREADS: "${{ matrix.num_threads }}"
-      OMP_PLACES: "${{ matrix.omp_places }}"
-      OMP_PROC_BIND: "${{ matrix.omp_proc_bind }}"
-
-      # MPI setup
-      MPI_NUM_PROCS: "${{ matrix.num_procs }}"
-
-    steps:
-    - name: Checkout TheMatrix
-      uses: actions/checkout@v2
-
-    - name: Install dependencies
-      run: |
-        pip install --upgrade pip
-        pip install -e .
-
-    - name: Create ASV machine file
-      run: |
-        asv machine --config thematrix/asv.conf.json --machine ${{ matrix.runner }}_${{ matrix.name }} --os ${{ matrix.os }} --arch ${{ matrix.arch }} --cpu ${{ matrix.cpu }} --num_cpu ${{ matrix.num_cpu }} --ram ${{ matrix.ram }}
-
-    - name: Run benchmarks
-      run: |
-        asv run --strict --config thematrix/asv.conf.json --machine ${{ matrix.runner }}_${{ matrix.name }} -v --show-stderr
-
-    #- name: Fetch results
-      #run: |
-        #echo ::set-output name=results_file::$(git status --porcelain | sed s/^...// | sed '/benchmarks.json/d;/machine.json/d;/thematrix/d')
-      #id: fetch-results
-
-    #- name: Upload result
-      #uses: actions/upload-artifact@v2
-      #with:
-        #name: ${{ matrix.runner }}_${{ matrix.name }}
-        #path: ${{ steps.fetch-results.outputs.results_file }}
-
-    ## TODO: We need a better way of dealing with this file
-    #- name: Upload benchmarks file
-      #uses: actions/upload-artifact@v2
-      #if: ${{ matrix.runner }} == cpu00-Standard-F64s-v2
-      #with:
-        #name: results
-        #path: results/benchmarks.json
-
-  #publish-results:
-    #needs: benchmarks
-    #runs-on: [self-hosted, MatMul]
+      #matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
 
     #steps:
 
     #- name: checkout repo
       #uses: actions/checkout@v2
 
-    #- name: Install dependencies
-      #run: |
-        #pip3 install --upgrade pip
-        #pip3 install -e .
+    #- name: start VM
+      #env:
+        #SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID_MS }}
+        #SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET_MS }}
+        #TENANT_ID: ${{ secrets.SERVICE_PRINCIPAL_TENANTID_MS }}
+        #SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #run: >
+        #pwsh -command "& '${{ env.OUTPUT_PATH }}\.github\azure\startVM.ps1'"
+        #-servicePrincipal $SP_APPID
+        #-servicePrincipalSecret $SP_SECRET
+        #-servicePrincipalTenantId $TENANT_ID
+        #-azureSubscriptionName $SUB_ID
+        #-resourceGroupName $RESOURCE_GROUP_MS
+        #-vmName $MS_VM
 
-    ## Download and publish results
-    #- uses: actions/download-artifact@v2
+    #- name: set host
+      #run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP_MS -n $MS_VM --query publicIps -o tsv)
+      #id: host
+
+    #- name: start actions runner app
+      #uses: fifsky/ssh-action@master
       #with:
-        #path: results
+        #command: |
+          ##!/bin/bash
+          #nohup actions-runner/run.sh >/dev/null 2>&1 &
+        #host: ${{ steps.host.outputs.action_host }}
+        #port: ${{ secrets.MS_VM_PORT }}
+        #user: ${{ secrets.ADMIN_LOGIN_MS }}
+        #key: ${{ secrets.MS_PRIVATE_KEY }}
+        #args: "-tt"
 
-    ## TODO: Find a cleaner solution
-    #- name: Commit results
-      #run: |
-        #mv results/results/benchmarks.json results
-        #rm -r results/results
-        #asv update --config thematrix/asv.conf.json
-        #python scripts/results2readme.py
-        #git config --local user.email "action@github.com"
-        #git config --local user.name "GitHub Action"
-        #git add results/*
-        #git status
-        #git commit -a -m "Push results from runner"
-
-    #- name: Push results
-      #uses: ad-m/github-push-action@master
-      #with:
-        #github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    #- name: Publish results (json -> html)
-      #run: |
-        #asv publish --config thematrix/asv.conf.json
-        #python scripts/results2readme.py
-
-    #- name: Deploy results to (html -> thematrix/gh-pages)
-      #uses: peaceiris/actions-gh-pages@v3
-      #with:
-        #github_token: ${{ secrets.GITHUB_TOKEN }}
-        #publish_dir: ./thematrix/.asv/html
-
-  benchmarks-ms:
+  benchmarks:
     name: ${{ matrix.name }}
-    #if: ${{ always() }}
-    if: ${{ matrix.queue }} == ms
-    needs: [set-runners, start-runners-ms]
+    if: ${{ always() }}
+    needs: [set-runners, start-runners]
     runs-on: ${{ matrix.tags }}
 
     strategy:
@@ -295,12 +218,91 @@ jobs:
     - name: Checkout TheMatrix
       uses: actions/checkout@v2
 
+    #- name: Install dependencies
+      #run: |
+        #pip install --upgrade pip
+        #pip install -e .
+
+    #- name: Create ASV machine file
+      #run: |
+        #asv machine --config thematrix/asv.conf.json --machine ${{ matrix.runner }}_${{ matrix.name }} --os ${{ matrix.os }} --arch ${{ matrix.arch }} --cpu ${{ matrix.cpu }} --num_cpu ${{ matrix.num_cpu }} --ram ${{ matrix.ram }}
+
+    #- name: Run benchmarks
+      #run: |
+        #asv run --strict --config thematrix/asv.conf.json --machine ${{ matrix.runner }}_${{ matrix.name }} -v --show-stderr
+
+    ##- name: Fetch results
+      ##run: |
+        ##echo ::set-output name=results_file::$(git status --porcelain | sed s/^...// | sed '/benchmarks.json/d;/machine.json/d;/thematrix/d')
+      ##id: fetch-results
+
+    ##- name: Upload result
+      ##uses: actions/upload-artifact@v2
+      ##with:
+        ##name: ${{ matrix.runner }}_${{ matrix.name }}
+        ##path: ${{ steps.fetch-results.outputs.results_file }}
+
+    ### TODO: We need a better way of dealing with this file
+    ##- name: Upload benchmarks file
+      ##uses: actions/upload-artifact@v2
+      ##if: ${{ matrix.runner }} == cpu00-Standard-F64s-v2
+      ##with:
+        ##name: results
+        ##path: results/benchmarks.json
+
+  ##publish-results:
+    ##needs: benchmarks
+    ##runs-on: [self-hosted, MatMul]
+
+    ##steps:
+
+    ##- name: checkout repo
+      ##uses: actions/checkout@v2
+
+    ##- name: Install dependencies
+      ##run: |
+        ##pip3 install --upgrade pip
+        ##pip3 install -e .
+
+    ### Download and publish results
+    ##- uses: actions/download-artifact@v2
+      ##with:
+        ##path: results
+
+    ### TODO: Find a cleaner solution
+    ##- name: Commit results
+      ##run: |
+        ##mv results/results/benchmarks.json results
+        ##rm -r results/results
+        ##asv update --config thematrix/asv.conf.json
+        ##python scripts/results2readme.py
+        ##git config --local user.email "action@github.com"
+        ##git config --local user.name "GitHub Action"
+        ##git add results/*
+        ##git status
+        ##git commit -a -m "Push results from runner"
+
+    ##- name: Push results
+      ##uses: ad-m/github-push-action@master
+      ##with:
+        ##github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    ##- name: Publish results (json -> html)
+      ##run: |
+        ##asv publish --config thematrix/asv.conf.json
+        ##python scripts/results2readme.py
+
+    ##- name: Deploy results to (html -> thematrix/gh-pages)
+      ##uses: peaceiris/actions-gh-pages@v3
+      ##with:
+        ##github_token: ${{ secrets.GITHUB_TOKEN }}
+        ##publish_dir: ./thematrix/.asv/html
+
   # Deallocate the runners
-  stop-runners-ic:
+  stop-runners:
     name: stop-runners
-    #if: ${{ always() }}
-    if: ${{ matrix.queue }} == ic
-    needs: [set-runners, benchmarks-ic]
+    if: ${{ always() }}
+    needs: [set-runners, benchmarks]
     runs-on: ubuntu-latest
 
     strategy:
@@ -311,6 +313,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: stop VM
+      if: ${{ matrix.queue }} == ic
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
@@ -325,21 +328,8 @@ jobs:
         -resourceGroupName $RESOURCE_GROUP
         -vmName ${{ matrix.runner }}
 
-  stop-runners-ic:
-    name: stop-runners-ms
-    #if: ${{ always() }}
-    if: ${{ matrix.queue }} == ms
-    needs: [set-runners, benchmarks-ms]
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
-
-    steps:
-    - name: checkout repo
-      uses: actions/checkout@v2
-
-    - name: stop VM
+    - name: stop VM MS
+      if: ${{ matrix.queue }} == ms
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID_MS }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET_MS }}
