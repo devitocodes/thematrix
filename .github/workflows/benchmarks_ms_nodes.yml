@@ -216,7 +216,13 @@ jobs:
 
     steps:
     - name: Checkout TheMatrix
+      if: matrix.queue == 'ic' || matrix.queue == 'ms'
       uses: actions/checkout@v2
+
+    - name: DUG stuff
+      if: matrix.queue == 'dug'
+      run: |
+        sudo apt update && sudo apt upgrade -y
 
     #- name: Install dependencies
       #run: |

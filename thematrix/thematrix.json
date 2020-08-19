@@ -204,6 +204,27 @@
           "omp_proc_bind": ""
         }
       }
+    },
+    "gpu04-DUG-V100x4":{
+      "os": "ubuntu18.04",
+      "tags": ["self-hosted", "dug"],
+      "arch": "DUG",
+      "cpu": "DUG",
+      "queue": "dug",
+      "jobs":{
+        "1x4-mpi-acc": {
+          "platform": "nvidiaX",
+          "num_cpu": "1",
+          "ram": "14GB",
+          "num_procs": "4",
+          "num_threads": "",
+          "jit": "pgi",
+          "language": "openacc",
+          "mpi": "basic",
+          "omp_places": "",
+          "omp_proc_bind": ""
+        }
+      }
     }
   }
 }
