@@ -74,7 +74,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: start VM
-      if: ${{ matrix.queue }} == "ic"
+      if: matrix.queue == 'ic'
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
@@ -90,12 +90,12 @@ jobs:
         -vmName ${{ matrix.runner }}
 
     - name: set host
-      if: ${{ matrix.queue }} == "ic"
+      if: matrix.queue == 'ic'
       run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP -n ${{ matrix.runner }} --query publicIps -o tsv)
       id: host
 
     - name: start actions runner app
-      if: ${{ matrix.queue }} == "ic"
+      if: matrix.queue == 'ic'
       uses: fifsky/ssh-action@master
       with:
         command: |
@@ -107,7 +107,7 @@ jobs:
         args: "-tt"
 
     - name: start VM MS
-      if: ${{ matrix.queue }} == "ms"
+      if: matrix.queue == 'ms'
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID_MS }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET_MS }}
@@ -123,12 +123,12 @@ jobs:
         -vmName $MS_VM
 
     - name: set host MS
-      if: ${{ matrix.queue }} == "ms"
+      if: matrix.queue == 'ms'
       run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP_MS -n $MS_VM --query publicIps -o tsv)
       id: host_ms
 
     - name: start actions runner app MS
-      if: ${{ matrix.queue }} == "ms"
+      if: matrix.queue == 'ms'
       uses: fifsky/ssh-action@master
       with:
         command: |
@@ -313,7 +313,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: stop VM
-      if: ${{ matrix.queue }} == "ic"
+      if: matrix.queue == 'ic'
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
@@ -329,7 +329,7 @@ jobs:
         -vmName ${{ matrix.runner }}
 
     - name: stop VM MS
-      if: ${{ matrix.queue }} == "ms"
+      if: matrix.queue == 'ms'
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID_MS }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET_MS }}
