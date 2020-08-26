@@ -219,10 +219,17 @@ jobs:
       if: matrix.queue == 'ic' || matrix.queue == 'ms'
       uses: actions/checkout@v2
 
-    - name: DUG stuff
+    - name: Run DUG benchmarks
       if: matrix.queue == 'dug'
-      run: |
-        sudo apt update && sudo apt upgrade -y
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          ssh ${{ secrets.DUG_LOGIN }}@pgpu0001 < run_devito_test.sh
+        host: ${{ secrets.DUG_HNODE }}
+        port: ${{ secrets.DUG_PORT }}
+        user: ${{ secrets.DUG_LOGIN }}
+        pass: ${{ secrets.DUG_PASSWORD }}
+        args: "-tt"
 
     #- name: Install dependencies
       #run: |
