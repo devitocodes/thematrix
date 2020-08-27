@@ -1,4 +1,4 @@
-name: thematrix-run
+name: thematrix-run2
 
 env:
   OUTPUT_PATH: ${{ github.workspace }}
