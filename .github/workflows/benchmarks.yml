@@ -7,8 +7,8 @@ env:
 on:
   workflow_dispatch:
     inputs:
-      tags:
-        description: 'Run TheMatrix'
+    tags:
+      description: 'Run TheMatrix'
   schedule:
     - cron:  '0 3 11,25 * *'
 
