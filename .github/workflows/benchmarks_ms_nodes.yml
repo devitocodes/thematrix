@@ -221,7 +221,6 @@ jobs:
 
     - name: Run DUG benchmarks
       if: matrix.queue == 'dug'
-      continue-on-error: true
       uses: fifsky/ssh-action@master
       with:
         command: |
