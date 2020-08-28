@@ -219,9 +219,17 @@ jobs:
       if: matrix.queue == 'ic' || matrix.queue == 'ms'
       uses: actions/checkout@v2
 
+    - name: Checkout ssh action code
+      if: matrix.queue == 'dug'
+      uses: actions/checkout@v2.3.2
+      with:
+        repository: fifsky/ssh-action@master
+        ref: master
+        path: 'ssh-action'
+
     - name: Run DUG benchmarks
       if: matrix.queue == 'dug'
-      uses: fifsky/ssh-action@master
+      uses: ./ssh-action
       with:
         command: |
           ssh ${{ secrets.DUG_LOGIN }}@pgpu0001 < run_devito_test.sh
