@@ -217,7 +217,7 @@ jobs:
     steps:
     - name: Checkout TheMatrix
       if: matrix.queue == 'ic' || matrix.queue == 'ms'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.2
 
     - name: Checkout ssh action code
       if: matrix.queue == 'dug'
