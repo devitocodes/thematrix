@@ -232,7 +232,7 @@ jobs:
       uses: ./ssh-action
       with:
         command: |
-          ssh ${{ secrets.DUG_LOGIN }}@pgpu0001 < run_devito_test.sh
+          ssh ${{ secrets.DUG_LOGIN }}@pgpu0001 < scripts/run_devito_test.sh
         host: ${{ secrets.DUG_HNODE }}
         port: ${{ secrets.DUG_PORT }}
         user: ${{ secrets.DUG_LOGIN }}
