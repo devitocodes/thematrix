@@ -223,7 +223,7 @@ jobs:
       if: matrix.queue == 'dug'
       uses: actions/checkout@v2.3.2
       with:
-        repository: fifsky/ssh-action@master
+        repository: fifsky/ssh-action
         ref: master
         path: 'ssh-action'
 
