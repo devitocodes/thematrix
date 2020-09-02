@@ -3,6 +3,9 @@
 import json
 import os
 
+public = set(['azure'])
+private = set(['dug'])
+
 root_path = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 
 # Where the generated .json files will be stored
@@ -63,14 +66,25 @@ for i in runners:
         job_dict['mpi'] = mpi
         jobs_list.append(job_dict)
 
-output = {"include": jobs_list}
+jobs_public = []
+jobs_private = []
+for i in jobs_list:
+    if i['queue'] in public:
+        jobs_public.append(i)
+    elif i['queue'] in private:
+        jobs_private.append(i)
 
-with open(os.path.join(root_path, 'generated', 'jobs.json'), 'w') as f:
-    json.dump(output, f, indent=4)
+output_public = {"include": jobs_public}
+output_private = {"include": jobs_private}
+
+with open(os.path.join(root_path, 'generated', 'jobs_public.json'), 'w') as f:
+    json.dump(output_public, f, indent=4)
+with open(os.path.join(root_path, 'generated', 'jobs_private.json'), 'w') as f:
+    json.dump(output_private, f, indent=4)
 
 # Generate results directory structure with machine.json files
 
-for i in output['include']:
+for i in jobs_list:
     machine = {}
     machine['arch'] = i['arch']
     machine['cpu'] = i['cpu']
@@ -84,9 +98,9 @@ for i in output['include']:
     with open(filename, 'w') as f:
         json.dump(machine, f, indent=4)
 
-# Generate runners.json
+# Generate runners_public.json
 
-output = {"include": [{"runner": i, "queue": j} for i, j in zip(runners, queue_list)]}
+output = {"include": [{"runner": i, "queue": j} for i, j in zip(runners, queue_list) if j in public]}
 
-with open(os.path.join(root_path, 'generated', 'runners.json'), 'w') as f:
+with open(os.path.join(root_path, 'generated', 'runners_public.json'), 'w') as f:
     json.dump(output, f, indent=4)

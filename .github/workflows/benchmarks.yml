@@ -53,11 +53,11 @@ jobs:
 
     - id: set-runners-matrix
       run: |
-        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/runners.json)"
+        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/runners_public.json)"
 
     - id: set-jobs-matrix
       run: |
-        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/jobs.json)"
+        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/jobs_public.json)"
 
   # Boot the self-hosted runners and start runner apps
   start-runners:
@@ -76,7 +76,6 @@ jobs:
       uses: actions/checkout@v2
 
     - name: start VM
-      if: matrix.queue == 'azure'
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
@@ -92,12 +91,10 @@ jobs:
         -vmName ${{ matrix.runner }}
 
     - name: set host
-      if: matrix.queue == 'azure'
       run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP -n ${{ matrix.runner }} --query publicIps -o tsv)
       id: host
 
     - name: start actions runner app
-      if: matrix.queue == 'azure'
       uses: fifsky/ssh-action@master
       with:
         command: |
@@ -140,29 +137,24 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install dependencies
-      if: matrix.queue == 'azure'
       run: |
         pip install --upgrade pip
         pip install -e .
 
     - name: Create ASV machine file
-      if: matrix.queue == 'azure'
       run: |
         asv machine --config thematrix/asv.conf.json --machine ${{ matrix.runner }}_${{ matrix.name }} --os ${{ matrix.os }} --arch ${{ matrix.arch }} --cpu ${{ matrix.cpu }} --num_cpu ${{ matrix.num_cpu }} --ram ${{ matrix.ram }}
 
     - name: Run benchmarks
-      if: matrix.queue == 'azure'
       run: |
         asv run --strict --config thematrix/asv.conf.json --machine ${{ matrix.runner }}_${{ matrix.name }} -v --show-stderr
 
     - name: Fetch results
-      if: matrix.queue == 'azure'
       run: |
         echo ::set-output name=results_file::$(git status --porcelain | sed s/^...// | sed '/benchmarks.json/d;/machine.json/d;/thematrix/d')
       id: fetch-results
 
     - name: Upload result
-      if: matrix.queue == 'azure'
       uses: actions/upload-artifact@v2
       with:
         name: ${{ matrix.runner }}_${{ matrix.name }}
@@ -239,7 +231,6 @@ jobs:
       uses: actions/checkout@v2
 
     - name: stop VM
-      if: matrix.queue == 'azure'
       env:
         SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
         SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
