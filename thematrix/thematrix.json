@@ -6,6 +6,7 @@
       "tags": ["self-hosted", "cpu00"],
       "arch": "x86_64",
       "cpu": "nonHPC-IntelXeon8168",
+      "queue": "azure",
       "jobs":{
         "1x1-omp": {
           "platform": "cpu64",
@@ -38,6 +39,7 @@
       "tags": ["self-hosted", "cpu01"],
       "arch": "x86_64",
       "cpu": "nonHPC-IntelXeon8168",
+      "queue": "azure",
       "jobs":{
         "1x1-omp": {
           "platform": "cpu64",
@@ -70,6 +72,7 @@
       "tags": ["self-hosted", "cpu02"],
       "arch": "x86_64",
       "cpu": "HPC-Xeon-Platinum-8168",
+      "queue": "azure",
       "jobs":{
         "1x2-omp": {
           "platform": "cpu64",
@@ -90,6 +93,7 @@
       "tags": ["self-hosted", "cpu03"],
       "arch": "x86_64",
       "cpu": "HPC-IntelXeonE5-2667",
+      "queue": "azure",
       "jobs":{
         "1x1-omp": {
           "platform": "cpu64",
@@ -110,6 +114,7 @@
       "tags": ["self-hosted", "cpu04"],
       "arch": "x86_64",
       "cpu": "AMD-EPYC-7551",
+      "queue": "azure",
       "jobs":{
         "1x2-omp": {
           "platform": "cpu64",
@@ -130,6 +135,7 @@
       "tags": ["self-hosted", "gpu00"],
       "arch": "kepler",
       "cpu": "nonHPC-NVidiaGK210",
+      "queue": "azure",
       "jobs":{
         "1x1-omp": {
           "platform": "nvidiaX",
@@ -162,11 +168,33 @@
       "tags": ["self-hosted", "gpu01"],
       "arch": "kepler",
       "cpu": "nonHPC-NVidia4xGK210",
+      "queue": "azure",
       "jobs":{
         "1x4-mpi-acc": {
           "platform": "nvidiaX",
           "num_cpu": "1",
           "ram": "48GB",
+          "num_procs": "4",
+          "num_threads": "",
+          "jit": "pgi",
+          "language": "openacc",
+          "mpi": "basic",
+          "omp_places": "",
+          "omp_proc_bind": ""
+        }
+      }
+    },
+    "gpu03-DUG-V100x4":{
+      "os": "ubuntu18.04",
+      "tags": ["self-hosted", "TheMatrix-dug"],
+      "arch": "DUG",
+      "cpu": "DUG",
+      "queue": "dug",
+      "jobs":{
+        "1x4-mpi-acc": {
+          "platform": "nvidiaX",
+          "num_cpu": "1",
+          "ram": "14GB",
           "num_procs": "4",
           "num_threads": "",
           "jit": "pgi",

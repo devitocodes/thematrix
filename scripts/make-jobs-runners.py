@@ -19,12 +19,15 @@ runners = data['runners'].keys()
 rdata = data['runners']
 
 jobs_list = []
+queue_list = []
 for i in runners:
     runner = i
     _os = rdata[i]['os']
     tags = rdata[i]['tags']
     arch = rdata[i]['arch']
     cpu = rdata[i]['cpu']
+    queue = rdata[i]['queue']
+    queue_list.append(queue)
     jobs = rdata[i]['jobs'].keys()
     jdat = rdata[i]['jobs']
     for j in jobs:
@@ -47,6 +50,7 @@ for i in runners:
         job_dict['os'] = _os
         job_dict['arch'] = arch
         job_dict['cpu'] = cpu
+        job_dict['queue'] = queue
         job_dict['platform'] = platform
         job_dict['num_cpu'] = num_cpu
         job_dict['ram'] = ram
@@ -82,7 +86,7 @@ for i in output['include']:
 
 # Generate runners.json
 
-output = {"include": [{"runner": i} for i in runners]}
+output = {"include": [{"runner": i, "queue": j} for i, j in zip(runners, queue_list)]}
 
 with open(os.path.join(root_path, 'generated', 'runners.json'), 'w') as f:
     json.dump(output, f, indent=4)
