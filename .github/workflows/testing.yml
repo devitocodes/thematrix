@@ -1,0 +1,24 @@
+name: testing-advisor-script
+
+on:
+  push:
+    branches:
+      - "advisor"
+
+jobs:
+  
+  # Go for a trial run of the script printing all thematrix submodules
+  print-matrix-submodules:
+    
+    runs-on: [self-hosted, testing]
+
+    steps:
+
+    - name: Prepare Advisor environment
+      run: |
+        source /opt/intel/advisor/advixe-vars.sh
+        source /opt/intel/compilers-and-libraries/linux/bin/compilervars.sh intel64
+
+    - name: Print all the submodules
+      run: |
+        python3 ${{ github.workspace }}/scripts/generate_rooflines.py
