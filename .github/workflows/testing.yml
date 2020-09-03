@@ -17,7 +17,7 @@ jobs:
     - name: Prepare Advisor environment
       run: |
         source /opt/intel/advisor/advixe-vars.sh
-        source /opt/intel/compilers-and-libraries/linux/bin/compilervars.sh intel64
+        source /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
 
     - name: Print all the submodules
       run: |
