@@ -8,7 +8,7 @@ from devito import configuration, info, __version__ as devito_version
 from devito.compiler import sniff_mpi_distro
 from devito.types.dense import DiscreteFunction
 from benchmarks.user import benchmark
-# from scripts.advisor import run_with_advisor, roofline, advisor_to_json
+# from benchmarks.user.advisor import run_with_advisor, roofline, advisor_to_json
 
 __all__ = ['check_norms', 'run_prepare', 'run_benchmark', 'run_rooflines']
 

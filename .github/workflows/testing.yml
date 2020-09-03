@@ -22,6 +22,6 @@ jobs:
         source /opt/intel/advisor/advixe-vars.sh
         source /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
 
-    - name: Print all the submodules
+    - name: Execute rooflines
       run: |
         python3 ${{ github.workspace }}/scripts/generate_rooflines.py
