@@ -6,15 +6,36 @@ from pkgutil import iter_modules
 import thematrix
 
 
-def find_all_roofline_methods():
+def generate_rooflines():
     """
-    Testing implementation: discover all rooflining functions
+    Uses the roofline generator methods in the discovered classes to
+    generate all rooflines for all problems
 
     """
 
+    roof_methods = _find_roofline_methods()
+    for method in roof_methods:
+        method()
+
+
+def _find_roofline_methods():
+    """
+    Discovers all methods to generate rooflines in package thematrix,
+    returns a list of all methods that can be called.
+
+    """
+
+    roof_methods = []
+    # Import all submodules
     _import_thematrix_submodules()
     for name, data in inspect.getmembers(thematrix):
-        print(name)
+        # Collect the roofline methods from the classes
+        for c_name, c_data in inspect.getmembers(data, predicate=inspect.isclass):
+            for m_name, m_data in inspect.getmembers(c_data, predicate=inspect.isfunction):
+                if m_name.startswith('roofline'):
+                    roof_methods.append(m_data)
+
+    return roof_methods
 
 
 def _import_thematrix_submodules():
@@ -34,4 +55,4 @@ def _import_thematrix_submodules():
 
 
 if __name__ == '__main__':
-    find_all_roofline_methods()
+    generate_rooflines()
