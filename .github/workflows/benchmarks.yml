@@ -25,7 +25,7 @@ jobs:
     steps:
 
     - name: checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.2
 
     - name: Generate runners.json and jobs.json from thematrix.json
       run: |
@@ -73,7 +73,7 @@ jobs:
     steps:
 
     - name: checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.2
 
     - name: start VM
       env:
@@ -134,7 +134,7 @@ jobs:
 
     steps:
     - name: Checkout TheMatrix
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.2
 
     - name: Install dependencies
       run: |
@@ -175,7 +175,7 @@ jobs:
     steps:
 
     - name: checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.2
 
     - name: Install dependencies
       run: |
@@ -228,7 +228,7 @@ jobs:
 
     steps:
     - name: checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.2
 
     - name: stop VM
       env:
