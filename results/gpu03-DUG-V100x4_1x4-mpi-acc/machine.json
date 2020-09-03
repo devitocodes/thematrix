@@ -1,0 +1,9 @@
+{
+    "arch": "DUG",
+    "cpu": "DUG",
+    "machine": "gpu03-DUG-V100x4_1x4-mpi-acc",
+    "num_cpu": "1",
+    "os": "ubuntu18.04",
+    "ram": "14GB",
+    "version": 1
+}
