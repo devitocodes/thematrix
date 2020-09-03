@@ -7,8 +7,7 @@ on:
 
 jobs:
   
-  # Go for a trial run of the script printing all thematrix submodules
-  print-matrix-submodules:
+  call-roofline-methods:
     
     runs-on: [self-hosted, testing]
 
