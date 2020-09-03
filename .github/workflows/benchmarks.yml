@@ -53,11 +53,11 @@ jobs:
 
     - id: set-runners-matrix
       run: |
-        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/runners.json)"
+        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/runners_public.json)"
 
     - id: set-jobs-matrix
       run: |
-        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/jobs.json)"
+        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/jobs_public.json)"
 
   # Boot the self-hosted runners and start runner apps
   start-runners:
