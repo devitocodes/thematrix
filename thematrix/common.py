@@ -8,7 +8,9 @@ from devito import configuration, info, __version__ as devito_version
 from devito.compiler import sniff_mpi_distro
 from devito.types.dense import DiscreteFunction
 from benchmarks.user import benchmark
-# from benchmarks.user.advisor import run_with_advisor, roofline, advisor_to_json
+import benchmarks.user.advisor.run_advisor as run_advisor
+import benchmarks.user.advisor.roofline as roofline
+import benchmarks.user.advisor.advisor_to_json as advisor_to_json
 
 __all__ = ['check_norms', 'run_prepare', 'run_benchmark', 'run_rooflines']
 
@@ -28,7 +30,8 @@ def check_norms(fn_norms, reference):
 
 
 def run_prepare(problem, shape, space_order):
-    fn = _generate_problem_identifier(problem, shape, space_order)
+    identifier = _generate_problem_identifier(problem, shape, space_order)
+    fn = os.path.join(gettempdir(), identifier)
     # Append suffixes
     fn_perf = "%s.asv" % fn
     fn_norms = "%s.norms" % fn
@@ -94,7 +97,6 @@ def _generate_problem_identifier(problem, shape, space_order):
                      shmmode,
                      mpimode,
                      devito_version.split('.')[1])
-    identifier = os.path.join(gettempdir(), identifier)
     return identifier
 
 
@@ -130,7 +132,7 @@ def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms, op='forwar
     check_call(command)
 
 
-def run_rooflines(problem, shape, space_order, tn, op='forward'):
+def run_rooflines(ident, problem, shape, space_order, tn, op='forward'):
     """
     Generates rooflines using every rooflining tool available.
     Currently available rooflining tools:
@@ -138,10 +140,10 @@ def run_rooflines(problem, shape, space_order, tn, op='forward'):
 
     """
 
-    _run_roofline_advisor(problem, shape, space_order, tn, op)
+    _run_roofline_advisor(ident, problem, shape, space_order, tn, op)
 
 
-def _run_roofline_advisor(problem, shape, space_order, tn, op):
+def _run_roofline_advisor(ident, problem, shape, space_order, tn, op):
     """
     Generates a performance roofline (image + data) using Intel Advisor.
 
@@ -160,41 +162,50 @@ def _run_roofline_advisor(problem, shape, space_order, tn, op):
     if nprocs > 1:
         assert 'DEVITO_MPI' in os.environ
         mpi_distro = sniff_mpi_distro(mpicmd)
+        print('>>>>>>>>>>>' + mpi_distro)
         if mpi_distro == "OpenMPI":
-            command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
+            advisor_command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
         elif mpi_distro == "MPICH":
-            command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
+            advisor_command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
         else:
             raise RuntimeError("Unknown MPI distribution")
 
     # Autogenerate the unique identifier for the program
-    ident = _generate_problem_identifier(problem, shape, space_order)
-    profiling_dir = '%s_advisor_profiling' % ident
+    ident = _generate_problem_identifier(ident, shape, space_order)
+    tmp_results = '/home/giacomo/urop/thematrix/roofline-results/advisor'
+    # profiling_dir = '%s_advisor_profiling' % ident
+    profiling_dir = 'testtesttest'
     roof_image = '%s_advisor_roof_overview' % ident
     roof_data = '%s_advisor_roof_data' % ident
+
+    full_result_path = tmp_results + '/' + profiling_dir
 
     # First, build the command to run profiling on Advisor
     advisor_command.extend([pyversion, run_advisor.__file__])
     advisor_command.extend(['--path', benchmark.__file__])
-    advisor_command.extend(['--exec_args', 'run -P ' + problem + ' -d ' +
+    advisor_command.extend(['--exec-args', 'run -P ' + problem + ' -d ' +
                             ' '.join([str(i) for i in shape]) + ' -so ' +
                             str(space_order) + ' --tn ' + str(tn) +
                             ' --operator ' + op + ' --autotune off'])
-    advisor_command.extend(['--output', ''])
+    advisor_command.extend(['--output', tmp_results])
     advisor_command.extend(['--name', profiling_dir])
 
     # Second, build the command to generate the roofline in png format
     roofline_command.extend([pyversion, roofline.__file__])
     roofline_command.extend(['--mode', 'overview'])
     roofline_command.extend(['--name', roof_image])
-    roofline_command.extend(['--project', profiling_dir])
+    roofline_command.extend(['--project', full_result_path])
 
     # Third, build the command to extract the roofline data in JSON format
     json_command.extend([pyversion, advisor_to_json.__file__])
     json_command.extend(['--name', roof_data])
-    json_command.extend(['--project', profiling_dir])
+    json_command.extend(['--project', full_result_path])
 
+
+    print('Calling ' + ' '.join(advisor_command))
+    check_call(advisor_command, stderr=sys.stderr, stdout=sys.stdout)
+        
     # Run all three commands subsequently
-    if check_call(advisor_command) == 0:
-      check_call(roofline_command)
-      check_call(json_command)
+    # if check_call(advisor_command, shell=True) == 0:
+      # check_call(roofline_command)
+      # check_call(json_command)

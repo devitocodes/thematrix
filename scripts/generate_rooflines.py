@@ -14,8 +14,8 @@ def generate_rooflines():
     """
 
     roof_methods = _find_roofline_methods()
-    for method in roof_methods:
-        method()
+    for (method, cls) in roof_methods:
+        method(cls)
 
 
 def _find_roofline_methods():
@@ -33,7 +33,7 @@ def _find_roofline_methods():
         for c_name, c_data in inspect.getmembers(data, predicate=inspect.isclass):
             for m_name, m_data in inspect.getmembers(c_data, predicate=inspect.isfunction):
                 if m_name.startswith('roofline'):
-                    roof_methods.append(m_data)
+                    roof_methods.append((m_data, c_data))
 
     return roof_methods
 
