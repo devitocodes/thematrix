@@ -90,9 +90,9 @@ def _generate_problem_identifier(problem, shape, space_order):
         mpimode = "nompi"
 
     # Create unique filename
-    template = '%s_shape%s_so%d_%s_%s_devito%s'
+    template = '%s_shape-%s_so%d_%s_%s_devito%s'
     identifier = template % (problem,
-                     str(shape).replace(" ", ""),
+                     '-'.join([str(d) for d in shape]),
                      space_order,
                      shmmode,
                      mpimode,
@@ -171,8 +171,9 @@ def _run_roofline_advisor(ident, problem, shape, space_order, tn, op):
     roof_image = '%s_advisor_roof_overview' % ident
     roof_data = '%s_advisor_roof_data' % ident
 
-    image_path = os.path.join(full_result_path, roof_image)
-    data_path = os.path.join(full_result_path, roof_data)
+    full_results_path = os.path.join(tmp_results, profiling_dir)
+    image_path = os.path.join(tmp_results, roof_image)
+    data_path = os.path.join(tmp_results, roof_data)
 
     # First, build the command to run profiling on Advisor
     advisor_command.extend([pyversion, run_advisor.__file__])
@@ -188,12 +189,12 @@ def _run_roofline_advisor(ident, problem, shape, space_order, tn, op):
     roofline_command.extend([pyversion, roofline.__file__])
     roofline_command.extend(['--mode', 'overview'])
     roofline_command.extend(['--name', image_path])
-    roofline_command.extend(['--project', tmp_results])
+    roofline_command.extend(['--project', full_results_path])
 
     # Third, build the command to extract the roofline data in JSON format
     json_command.extend([pyversion, advisor_to_json.__file__])
     json_command.extend(['--name', data_path])
-    json_command.extend(['--project', tmp_results])
+    json_command.extend(['--project', full_results_path])
 
     # Run all three commands subsequently
     if check_call(advisor_command) == 0:
