@@ -99,14 +99,8 @@ def _generate_problem_identifier(problem, shape, space_order):
                      devito_version.split('.')[1])
     return identifier
 
-
-def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms, op='forward'):
-    pyversion = sys.executable
-    mpicmd = "mpirun"
-
-    command = []
-
-    # Is it with MPI?
+def mpiify_command(command):
+    # Is it with MPI? If so, add mpi arguments to command.
     assert 'MPI_NUM_PROCS' in os.environ
     nprocs = int(os.environ['MPI_NUM_PROCS'])
     if nprocs > 1:
@@ -116,8 +110,19 @@ def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms, op='forwar
             command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
         elif mpi_distro == "MPICH":
             command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
+        elif mpi_distro == "IntelMPI":
+            command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
         else:
             raise RuntimeError("Unknown MPI distribution")
+
+
+def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms, op='forward'):
+    pyversion = sys.executable
+    mpicmd = "mpirun"
+
+    command = []
+
+    mpiify_command(command)
 
     command.extend([pyversion, benchmark.__file__, 'run', '-P', problem])
     command.extend(['-d'] + [str(i) for i in shape])
@@ -156,29 +161,18 @@ def _run_roofline_advisor(ident, problem, shape, space_order, tn, op):
     roofline_command = []
     json_command = []
 
-    # Is it with MPI?
-    assert 'MPI_NUM_PROCS' in os.environ
-    nprocs = int(os.environ['MPI_NUM_PROCS'])
-    if nprocs > 1:
-        assert 'DEVITO_MPI' in os.environ
-        mpi_distro = sniff_mpi_distro(mpicmd)
-        print('>>>>>>>>>>>' + mpi_distro)
-        if mpi_distro == "OpenMPI":
-            advisor_command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
-        elif mpi_distro == "MPICH":
-            advisor_command.extend(['mpirun', '-n', str(nprocs), '--bind-to', 'socket'])
-        else:
-            raise RuntimeError("Unknown MPI distribution")
+    mpiify_command(advisor_command)
 
     # Autogenerate the unique identifier for the program
     ident = _generate_problem_identifier(ident, shape, space_order)
-    tmp_results = '/home/giacomo/urop/thematrix/roofline-results/advisor'
-    # profiling_dir = '%s_advisor_profiling' % ident
-    profiling_dir = 'testtesttest'
+
+    tmp_results = os.path.join(gettempdir(), ident)
+    profiling_dir = '%s_advisor_profiling' % ident
     roof_image = '%s_advisor_roof_overview' % ident
     roof_data = '%s_advisor_roof_data' % ident
 
-    full_result_path = tmp_results + '/' + profiling_dir
+    image_path = os.path.join(full_result_path, roof_image)
+    data_path = os.path.join(full_result_path, roof_data)
 
     # First, build the command to run profiling on Advisor
     advisor_command.extend([pyversion, run_advisor.__file__])
@@ -193,19 +187,15 @@ def _run_roofline_advisor(ident, problem, shape, space_order, tn, op):
     # Second, build the command to generate the roofline in png format
     roofline_command.extend([pyversion, roofline.__file__])
     roofline_command.extend(['--mode', 'overview'])
-    roofline_command.extend(['--name', roof_image])
-    roofline_command.extend(['--project', full_result_path])
+    roofline_command.extend(['--name', image_path])
+    roofline_command.extend(['--project', tmp_results])
 
     # Third, build the command to extract the roofline data in JSON format
     json_command.extend([pyversion, advisor_to_json.__file__])
-    json_command.extend(['--name', roof_data])
-    json_command.extend(['--project', full_result_path])
+    json_command.extend(['--name', data_path])
+    json_command.extend(['--project', tmp_results])
 
-
-    print('Calling ' + ' '.join(advisor_command))
-    check_call(advisor_command, stderr=sys.stderr, stdout=sys.stdout)
-        
     # Run all three commands subsequently
-    # if check_call(advisor_command, shell=True) == 0:
-      # check_call(roofline_command)
-      # check_call(json_command)
+    if check_call(advisor_command) == 0:
+      check_call(roofline_command)
+      check_call(json_command)
