@@ -2,6 +2,7 @@ from importlib import import_module
 import inspect
 from pathlib import Path
 from pkgutil import iter_modules
+from traceback import format_exc
 
 import thematrix
 
@@ -51,7 +52,8 @@ def _import_thematrix_submodules():
             try:
                 import_module(module_name)
             except ImportError:
-                pass
+                print('Error: could not import module ' + module_name)
+                print(format_exc())
 
 
 if __name__ == '__main__':
