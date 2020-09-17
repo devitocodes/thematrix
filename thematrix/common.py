@@ -137,25 +137,30 @@ def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms, op='forwar
     check_call(command)
 
 
-def run_rooflines(ident, problem, shape, space_order, tn, op='forward'):
+def run_rooflines(ident, opts, problem, shape, space_order, tn, op='forward'):
     """
     Generates rooflines using every rooflining tool available.
     Currently available rooflining tools:
     - Intel Advisor
-
     """
 
-    _run_roofline_advisor(ident, problem, shape, space_order, tn, op)
+    # Autogenerate the unique identifier for the problem
+    u_ident = _generate_problem_identifier(ident, shape, space_order)
+    problem_dir = os.path.join(gettempdir(), u_ident)
+
+    if 'advisor' in opts.keys() and opts['advisor']:
+        _run_roofline_advisor(problem_dir, problem, shape, space_order, tn, op)
+
+    return problem_dir
 
 
-def _run_roofline_advisor(ident, problem, shape, space_order, tn, op):
+def _run_roofline_advisor(problem_dir, problem, shape, space_order, tn, op):
     """
     Generates a performance roofline (image + data) using Intel Advisor.
 
     """
 
     pyversion = sys.executable
-    mpicmd = "mpirun"
 
     advisor_command = []
     roofline_command = []
@@ -163,17 +168,13 @@ def _run_roofline_advisor(ident, problem, shape, space_order, tn, op):
 
     mpiify_command(advisor_command)
 
-    # Autogenerate the unique identifier for the program
-    ident = _generate_problem_identifier(ident, shape, space_order)
+    profiling_dir = 'advisor_profiling'
+    roof_image = 'advisor_roof_overview'
+    roof_data = 'advisor_roof_data'
 
-    tmp_results = os.path.join(gettempdir(), ident)
-    profiling_dir = '%s_advisor_profiling' % ident
-    roof_image = '%s_advisor_roof_overview' % ident
-    roof_data = '%s_advisor_roof_data' % ident
-
-    full_results_path = os.path.join(tmp_results, profiling_dir)
-    image_path = os.path.join(tmp_results, roof_image)
-    data_path = os.path.join(tmp_results, roof_data)
+    full_results_path = os.path.join(problem_dir, profiling_dir)
+    image_path = os.path.join(problem_dir, roof_image)
+    data_path = os.path.join(problem_dir, roof_data)
 
     # First, build the command to run profiling on Advisor
     advisor_command.extend([pyversion, run_advisor.__file__])
@@ -182,7 +183,7 @@ def _run_roofline_advisor(ident, problem, shape, space_order, tn, op):
                             ' '.join([str(i) for i in shape]) + ' -so ' +
                             str(space_order) + ' --tn ' + str(tn) +
                             ' --operator ' + op + ' --autotune off'])
-    advisor_command.extend(['--output', tmp_results])
+    advisor_command.extend(['--output', problem_dir])
     advisor_command.extend(['--name', profiling_dir])
 
     # Second, build the command to generate the roofline in png format
