@@ -20,6 +20,10 @@ def generate_rooflines():
     generated_dirs = []
 
     roof_methods = _find_roofline_methods()
+    if roof_methods == []:
+        print('No roofline methods detected in %s.' % thematrix.__path__[0])
+        return
+
     for (method, cls) in roof_methods:
         # Run the method and retrieve the results directory
         generated_dir = method(cls, opts)

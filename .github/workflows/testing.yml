@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "advisor"
+      - "roofline-collection"
 
 jobs:
   
@@ -11,16 +12,20 @@ jobs:
     
     runs-on: [self-hosted, testing]
 
+    env:
+      DEVITO_PLATFORM: "intel64"
+      DEVITO_LANGUAGE: "openmp"
+      OMP_NUM_THREADS: "6"
+      DEVITO_MPI: "0"
+      MPI_NUM_PROCS: "1"
+
     steps:
 
     - name: Checkout repo
       uses: actions/checkout@v2
 
-    - name: Prepare Advisor environment
+    - name: Generate rooflines
       run: |
         source /opt/intel/advisor/advixe-vars.sh
         source /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
-
-    - name: Execute rooflines
-      run: |
         python3 ${{ github.workspace }}/scripts/generate_rooflines.py
