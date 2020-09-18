@@ -1,7 +1,7 @@
 from devito.operator.profiling import PerfEntry
 from examples.seismic.acoustic.acoustic_example import acoustic_setup
 
-from thematrix.common import check_norms, run_prepare, run_benchmark
+from thematrix.common import check_norms, run_prepare, run_benchmark, run_rooflines
 
 
 class IsotropicAcousticForward(object):
@@ -38,3 +38,6 @@ class IsotropicAcousticForward(object):
     def track_gpointss(self, shape, space_order, norms):
         return self.summary.gpointss
     track_gpointss.unit = "gpointss"
+
+    def roofline_create(self, opts):
+        return run_rooflines('acoustic-isof', opts, 'acoustic', (51, 51, 51), 4, 50)
