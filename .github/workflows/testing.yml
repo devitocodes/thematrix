@@ -29,3 +29,19 @@ jobs:
         source /opt/intel/advisor/advixe-vars.sh
         source /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
         python3 ${{ github.workspace }}/scripts/generate_rooflines.py
+
+    - name: Collect rooflines
+      run: |
+        python3 ${{ github.workspace }}/scripts/collect_rooflines.py onlyrunner
+
+    - name: Fetch rooflines
+      id: fetch-rooflines
+      run: |
+        echo ::set-output name=results_files::$(git status --porcelain | sed s/^...//)
+
+    - name: Upload rooflines
+      uses: actions/upload-artifact@v2
+      with:
+        name: onlyrunner
+        path: |
+          ${{ steps.fetch-rooflines.outputs.results_files }}
