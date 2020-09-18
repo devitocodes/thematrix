@@ -24,6 +24,10 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v2
 
+    - name: Install dependencies
+      run: |
+        pip3 install -e .
+
     - name: Generate rooflines
       run: |
         source /opt/intel/advisor/advixe-vars.sh
@@ -37,6 +41,7 @@ jobs:
     - name: Fetch rooflines
       id: fetch-rooflines
       run: |
+        cd ${{ github.workspace }}
         echo ::set-output name=results_files::$(git status --porcelain | sed s/^...//)
 
     - name: Upload rooflines
