@@ -20,7 +20,7 @@ def collect_rooflines(subdir=None):
 
     if not os.path.isdir(thematrix_roof_res):
         # Create the roofline results directory if it does not exist
-        os.mkdir(thematrix_roof_res)
+        os.makedirs(thematrix_roof_res)
     
     # Navigate to the file storing the paths of the generated rooflines
     generated_dir = os.path.join(gettempdir(), 'generate_rooflines_tmp')
