@@ -28,8 +28,11 @@ def collect_rooflines(subdir=None):
 
     if os.path.isfile(generated_file):
         with open(generated_file, 'r') as f:
+            # Remove newlines from directory names
+            prob_dirs = [line.replace('\n', '') for line in f.readlines()]
+
             # Move all png and json files in each generated directory
-            for prob_dir in f.readlines():
+            for prob_dir in prob_dirs:
                 prob_ident = os.path.basename(prob_dir)
 
                 dst_dir = os.path.join(thematrix_roof_res, prob_ident)
