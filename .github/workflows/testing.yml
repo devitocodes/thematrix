@@ -13,6 +13,7 @@ jobs:
     runs-on: [self-hosted, testing]
 
     env:
+      OUTPUT_PATH: ${{ github.workspace }}
       DEVITO_PLATFORM: "intel64"
       DEVITO_LANGUAGE: "openmp"
       OMP_NUM_THREADS: "6"
@@ -41,7 +42,6 @@ jobs:
     - name: Fetch rooflines
       id: fetch-rooflines
       run: |
-        cd ${{ github.workspace }}
         echo ::set-output name=results_files::$(git status --porcelain | sed s/^...//)
 
     - name: Upload rooflines
