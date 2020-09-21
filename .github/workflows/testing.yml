@@ -23,10 +23,15 @@ jobs:
     steps:
 
     - name: Checkout repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.2
+
+    - name: Print runner location
+      run: |
+        pwd
 
     - name: Install dependencies
       run: |
+        pip3 install --upgrade pip
         pip3 install -e .
 
     - name: Generate rooflines
@@ -43,6 +48,11 @@ jobs:
       id: fetch-rooflines
       run: |
         echo ::set-output name=results_files::$(git status --porcelain | sed s/^...//)
+
+    - name: Print results files
+      run: |
+        echo ${{ steps.fetch-rooflines.outputs.results_files }}
+        ls
 
     - name: Upload rooflines
       uses: actions/upload-artifact@v2
