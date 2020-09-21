@@ -40,10 +40,10 @@ jobs:
       run: |
         python3 ${{ github.workspace }}/scripts/collect_rooflines.py onlyrunner
 
-    - name: Fetch rooflines
-      id: fetch-rooflines
-      run: |
-        echo ::set-output name=results_files::$(git status --porcelain | sed s/^...//)
+    # - name: Fetch rooflines
+    #   id: fetch-rooflines
+    #   run: |
+    #     echo ::set-output name=results_files::$(git status --porcelain | sed s/^...//)
 
     - name: Print results files
       run: |
@@ -53,8 +53,9 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: onlyrunner
-        path: |
-          ${{ steps.fetch-rooflines.outputs.results_files }}
+        path: results-roofline/onlyrunner
+          # ${{ steps.fetch-rooflines.outputs.results_files }}
+        if-no-files-found: error
 
     - name: Setup git configurations
       run: |
