@@ -45,10 +45,6 @@ jobs:
     #   run: |
     #     echo ::set-output name=results_files::$(git status --porcelain | sed s/^...//)
 
-    - name: Print results files
-      run: |
-        echo ${{ steps.fetch-rooflines.outputs.results_files }}
-
     - name: Upload rooflines
       uses: actions/upload-artifact@v2
       with:
