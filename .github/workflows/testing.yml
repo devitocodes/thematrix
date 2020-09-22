@@ -40,33 +40,45 @@ jobs:
       run: |
         python3 ${{ github.workspace }}/scripts/collect_rooflines.py onlyrunner
 
-    # - name: Fetch rooflines
-    #   id: fetch-rooflines
-    #   run: |
-    #     echo ::set-output name=results_files::$(git status --porcelain | sed s/^...//)
-
     - name: Upload rooflines
       uses: actions/upload-artifact@v2
       with:
         name: onlyrunner
         path: results-roofline/onlyrunner
-          # ${{ steps.fetch-rooflines.outputs.results_files }}
         if-no-files-found: error
 
-    - name: Setup git configurations
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
 
-    # - name: Commit to repository
-    #   run: |
-    #     git status
-    #     git add results-roofline
-    #     git status
-    #     git commit -a -m "Push results from runner"
+  publish-rooflines:
+    needs: rooflines
+    runs-on: [self-hosted, testing]
 
-    # - name: Push rooflines
-    #   uses: ad-m/github-push-action@master
-    #   with:
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     branch: "roofline-collection"
+    env:
+      OUTPUT_PATH: ${{ github.workspace }}
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: Download from other runners
+      uses: actions/download-artifact@v2
+      with:
+        path: results-roofline
+
+    #- name: Setup git configurations
+    #  run: |
+    #    git config --local user.email "action@github.com"
+    #    git config --local user.name "GitHub Action"
+
+    #- name: Commit to repository
+    #  run: |
+    #    git status
+    #    git add results-roofline
+    #    git status
+    #    git commit -a -m "Push results from runner"
+
+    #- name: Push rooflines
+    #  uses: ad-m/github-push-action@master
+    #  with:
+    #    github_token: ${{ secrets.GITHUB_TOKEN }}
+    #    branch: "roofline-collection"
