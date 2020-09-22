@@ -65,20 +65,20 @@ jobs:
       with:
         path: results-roofline
 
-    #- name: Setup git configurations
-    #  run: |
-    #    git config --local user.email "action@github.com"
-    #    git config --local user.name "GitHub Action"
+    - name: Setup git configurations
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
 
-    #- name: Commit to repository
-    #  run: |
-    #    git status
-    #    git add results-roofline
-    #    git status
-    #    git commit -a -m "Push results from runner"
+    - name: Commit to repository
+      run: |
+        git status
+        git add results-roofline
+        git status
+        git commit -a -m "Push results from runner"
 
-    #- name: Push rooflines
-    #  uses: ad-m/github-push-action@master
-    #  with:
-    #    github_token: ${{ secrets.GITHUB_TOKEN }}
-    #    branch: "roofline-collection"
+    - name: Push rooflines
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: "roofline-collection"
