@@ -5,3 +5,4 @@ mpi4py
 pygit2
 json2html
 pandas
+GitPython

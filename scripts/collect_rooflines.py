@@ -1,3 +1,4 @@
+from git import Repo
 from tempfile import gettempdir
 import os
 from shutil import move
@@ -57,21 +58,26 @@ def _move_all_files(filetype, src_dir, dst_dir):
     Moves all files of a specific filetype inside src_dir into dst_dir
     """
 
+    # Collect all files of the given type
     filetype_files = [f_name for f_name in os.listdir(src_dir)
                       if f_name.endswith('.%s' % filetype)]
+
+    # Collect the most recent commit hash to append to the start of the file name
+    thematrix_repo = Repo(os.path.dirname(thematrix.__path__[0]))
+    commit_hash = thematrix_repo.head.commit.hexsha
 
     if not filetype_files:
         print('Warning: no files of type %s present in %s.' % (filetype, src_dir))
 
     for f_name in filetype_files:
         src_f_path = os.path.join(src_dir, f_name)
-        dst_f_path = os.path.join(dst_dir, f_name)
+        dst_f_path = os.path.join(dst_dir, commit_hash + '_' + f_name)
 
         if os.path.isfile(dst_f_path):
             # Remove pre-existing file at the destination
             os.remove(dst_f_path)
 
-        move(src_f_path, dst_dir)
+        move(src_f_path, dst_f_path)
 
 
 if __name__ == '__main__':
