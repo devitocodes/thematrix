@@ -1,0 +1,83 @@
+name: thematrix-run-rooflines
+
+on:
+  push:
+    branches:
+      - "advisor"
+
+jobs:
+  
+  rooflines:
+    
+    runs-on: [self-hosted, testing]
+
+    env:
+      OUTPUT_PATH: ${{ github.workspace }}
+      DEVITO_PLATFORM: "intel64"
+      DEVITO_LANGUAGE: "openmp"
+      OMP_NUM_THREADS: "6"
+      DEVITO_MPI: "0"
+      MPI_NUM_PROCS: "1"
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: Install dependencies
+      run: |
+        pip3 install --upgrade pip
+        pip3 install -e .
+
+    - name: Generate rooflines
+      run: |
+        source /opt/intel/advisor/advixe-vars.sh
+        source /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+        python3 ${{ github.workspace }}/scripts/generate_rooflines.py
+
+    - name: Collect rooflines
+      run: |
+        python3 ${{ github.workspace }}/scripts/collect_rooflines.py onlyrunner
+
+    - name: Upload rooflines
+      uses: actions/upload-artifact@v2
+      with:
+        name: onlyrunner
+        path: results-roofline/onlyrunner
+        if-no-files-found: error
+
+
+  publish-rooflines:
+    needs: rooflines
+    runs-on: [self-hosted, testing]
+
+    env:
+      OUTPUT_PATH: ${{ github.workspace }}
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: Download from other runners
+      uses: actions/download-artifact@v2
+      with:
+        path: results-roofline
+
+    - name: Setup git configurations
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Commit to repository
+      run: |
+        git status
+        git add results-roofline
+        git status
+        git commit -a -m "Push results from runner"
+
+    - name: Push rooflines
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: "advisor"

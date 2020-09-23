@@ -20,7 +20,7 @@ def collect_rooflines(subdir=None):
 
     if not os.path.isdir(thematrix_roof_res):
         # Create the roofline results directory if it does not exist
-        os.mkdir(thematrix_roof_res)
+        os.makedirs(thematrix_roof_res)
     
     # Navigate to the file storing the paths of the generated rooflines
     generated_dir = os.path.join(gettempdir(), 'generate_rooflines_tmp')
@@ -28,8 +28,11 @@ def collect_rooflines(subdir=None):
 
     if os.path.isfile(generated_file):
         with open(generated_file, 'r') as f:
+            # Remove newlines from directory names
+            prob_dirs = [line.replace('\n', '') for line in f.readlines()]
+
             # Move all png and json files in each generated directory
-            for prob_dir in f.readlines():
+            for prob_dir in prob_dirs:
                 prob_ident = os.path.basename(prob_dir)
 
                 dst_dir = os.path.join(thematrix_roof_res, prob_ident)

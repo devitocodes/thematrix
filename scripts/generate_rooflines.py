@@ -72,13 +72,16 @@ def _import_thematrix_submodules():
 
 
 def _write_generated_dirs(generated_dirs):
+    # Add line separators to the directories
+    separated_dirs = [d + '\n' for d in generated_dirs]
+
     gen_file_dir = os.path.join(gettempdir(), 'generate_rooflines_tmp')
     if not os.path.isdir(gen_file_dir):
         os.mkdir(gen_file_dir)
 
     gen_file_path = os.path.join(gen_file_dir, 'generated.txt')
     with open(gen_file_path, 'w+') as f:
-        f.writelines(generated_dirs)
+        f.writelines(separated_dirs)
     print('Rooflines successfully generated, directories listed in: ' + gen_file_path)
 
 
