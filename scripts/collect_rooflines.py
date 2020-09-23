@@ -38,7 +38,6 @@ def collect_rooflines(subdir=None):
                 if not os.path.isdir(dst_dir):
                     os.mkdir(dst_dir)
 
-                _collect_all_roofline_files('png', prob_dir, dst_dir)
                 _collect_all_roofline_files('json', prob_dir, dst_dir)
 
         # Remove file containing generated roofline data
