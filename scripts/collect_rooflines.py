@@ -34,14 +34,12 @@ def collect_rooflines(subdir=None):
 
             # Move all png and json files in each generated directory
             for prob_dir in prob_dirs:
-                prob_ident = os.path.basename(prob_dir)
-
-                dst_dir = os.path.join(thematrix_roof_res, prob_ident)
+                dst_dir = thematrix_roof_res
                 if not os.path.isdir(dst_dir):
                     os.mkdir(dst_dir)
 
-                _move_all_files('png', prob_dir, dst_dir)
-                _move_all_files('json', prob_dir, dst_dir)
+                _collect_all_roofline_files('png', prob_dir, dst_dir)
+                _collect_all_roofline_files('json', prob_dir, dst_dir)
 
         # Remove file containing generated roofline data
         os.remove(generated_file)
@@ -53,25 +51,29 @@ def collect_rooflines(subdir=None):
               'the data has not already been collected.' % generated_file)
 
 
-def _move_all_files(filetype, src_dir, dst_dir):
+def _collect_all_roofline_files(filetype, prob_dir, dst_dir):
     """
-    Moves all files of a specific filetype inside src_dir into dst_dir
+    Moves all files of a specific filetype inside prob_dir into dst_dir
     """
 
     # Collect all files of the given type
-    filetype_files = [f_name for f_name in os.listdir(src_dir)
+    filetype_files = [f_name for f_name in os.listdir(prob_dir)
                       if f_name.endswith('.%s' % filetype)]
 
     # Collect the most recent commit hash to append to the start of the file name
     thematrix_repo = Repo(os.path.dirname(thematrix.__path__[0]))
     commit_hash = thematrix_repo.head.commit.hexsha
 
+    # Obtain the problem identifier to append to the filename
+    prob_ident = os.path.basename(prob_dir)
+
     if not filetype_files:
-        print('Warning: no files of type %s present in %s.' % (filetype, src_dir))
+        print('Warning: no files of type %s present in %s.' % (filetype, prob_dir))
 
     for f_name in filetype_files:
-        src_f_path = os.path.join(src_dir, f_name)
-        dst_f_path = os.path.join(dst_dir, commit_hash + '_' + f_name)
+        src_f_path = os.path.join(prob_dir, f_name)
+        dst_f_name = '%s_%s_%s' % (commit_hash, prob_ident, f_name)
+        dst_f_path = os.path.join(dst_dir, dst_f_name)
 
         if os.path.isfile(dst_f_path):
             # Remove pre-existing file at the destination
