@@ -9,12 +9,12 @@ import thematrix
 def collect_rooflines(subdir=None):
     """
     Reads the file created from generate_rooflines.py and moves all generated
-    artifacts to the results-roofline folder in the repository
+    artifacts to the results folder in the repository
     """
 
     # Set the roofline results directory
     thematrix_roof_res = os.path.join(os.path.dirname(thematrix.__path__[0]),
-                                      'results-roofline')
+                                      'results')
     if subdir:
         thematrix_roof_res = os.path.join(thematrix_roof_res, subdir)
 
