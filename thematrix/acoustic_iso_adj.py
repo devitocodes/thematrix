@@ -29,7 +29,7 @@ class IsotropicAcousticAdjoint(object):
 
     def track_runtime(self, shape, space_order, norms):
         return self.summary.time
-    track_runtime.unit = "runtime"
+    track_runtime.unit = "runtime (s)"
 
     def track_gflopss(self, shape, space_order, norms):
         return self.summary.gflopss
