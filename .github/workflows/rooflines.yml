@@ -43,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: onlyrunner
-        path: results-roofline/onlyrunner
+        path: results/onlyrunner
         if-no-files-found: error
 
 
