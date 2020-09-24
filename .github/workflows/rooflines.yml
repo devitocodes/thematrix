@@ -42,7 +42,7 @@ jobs:
     - name: Fetch new roofline jsons
       id: fetch-rooflines
       run: |
-        echo ::set-output file-name=results_files::(git status --porcelain | sed s/^...//)
+        echo ::set-output file-name=results_files::$(git status --porcelain | sed s/^...//)
 
     - name: Upload rooflines
       uses: actions/upload-artifact@v2
@@ -68,7 +68,7 @@ jobs:
     - name: Download from other runners
       uses: actions/download-artifact@v2
       with:
-        path: results/roof-tmp
+        path: results/
 
     - name: Setup git configurations
       run: |
@@ -78,7 +78,7 @@ jobs:
     - name: Commit to repository
       run: |
         git status
-        git add results-roofline
+        git add results/*
         git status
         git commit -a -m "Push results from runner"
 
