@@ -39,11 +39,17 @@ jobs:
       run: |
         python3 ${{ github.workspace }}/scripts/collect_rooflines.py onlyrunner
 
+    - name: Fetch new roofline jsons
+      id: fetch-rooflines
+      run: |
+        echo ::set-output file-name=results_files::(git status --porcelain | sed s/^...//)
+
     - name: Upload rooflines
       uses: actions/upload-artifact@v2
       with:
         name: onlyrunner
-        path: results/onlyrunner
+        path: |
+          ${{ steps.fetch-rooflines.outputs.results_files }}
         if-no-files-found: error
 
 
