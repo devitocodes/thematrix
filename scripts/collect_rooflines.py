@@ -1,4 +1,5 @@
 from git import Repo
+import json
 from tempfile import gettempdir
 import os
 from shutil import move
@@ -28,22 +29,31 @@ def collect_rooflines(subdir=None):
     generated_file = os.path.join(generated_dir, 'generated.txt')
 
     if os.path.isfile(generated_file):
+        # Prepare the filename for the collected data
+        thematrix_repo = Repo(os.path.dirname(thematrix.__path__[0]))
+        commit_hash = thematrix_repo.head.commit.hexsha
+        json_f_name = os.path.join(thematrix_roof_res,
+                                   '%s_rooflines_data.json' % commit_hash)
+
+        # Setup the dictionary for all roofline data
+        all_roofs_data = {}
+
         with open(generated_file, 'r') as f:
             # Remove newlines from directory names
             prob_dirs = [line.replace('\n', '') for line in f.readlines()]
 
-            # Move all png and json files in each generated directory
+            # Traverse each directory to extract roofline data
             for prob_dir in prob_dirs:
-                dst_dir = thematrix_roof_res
-                if not os.path.isdir(dst_dir):
-                    os.mkdir(dst_dir)
-
-                _collect_all_roofline_files('json', prob_dir, dst_dir)
+                prob_ident = os.path.basename(prob_dir)
+                all_roofs_data[prob_ident] = _collect_all_roofline_data(prob_dir)
 
         # Remove file containing generated roofline data
         os.remove(generated_file)
 
-        print('Rooflines and data successfully moved to %s.' % thematrix_roof_res)
+        # Write to json file
+        with open(os.path.join(thematrix_roof_res, json_f_name), 'w+') as json_f:
+            json_f.write(json.dumps(all_roofs_data))
+        print('Roofline data successfully collected into %s.' % json_f_name)
 
     else:
         print('%s file containing generated data could not be found. Make sure that '
@@ -56,8 +66,7 @@ def _collect_all_roofline_files(filetype, prob_dir, dst_dir):
     """
 
     # Collect all files of the given type
-    filetype_files = [f_name for f_name in os.listdir(prob_dir)
-                      if f_name.endswith('.%s' % filetype)]
+    filetype_files = _get_files_by_type(filetype, prob_dir)
 
     # Collect the most recent commit hash to append to the start of the file name
     thematrix_repo = Repo(os.path.dirname(thematrix.__path__[0]))
@@ -68,7 +77,7 @@ def _collect_all_roofline_files(filetype, prob_dir, dst_dir):
 
     if not filetype_files:
         print('Warning: no files of type %s present in %s.' % (filetype, prob_dir))
-
+    
     for f_name in filetype_files:
         src_f_path = os.path.join(prob_dir, f_name)
         dst_f_name = '%s_%s_%s' % (commit_hash, prob_ident, f_name)
@@ -79,6 +88,24 @@ def _collect_all_roofline_files(filetype, prob_dir, dst_dir):
             os.remove(dst_f_path)
 
         move(src_f_path, dst_f_path)
+
+
+def _collect_all_roofline_data(prob_dir):
+    json_files = _get_files_by_type('json', prob_dir)
+    if not json_files:
+        print('Warning: no json files present in %s.' % prob_dir)
+
+    rooflines = []
+    for json_file in json_files:
+        with open(json_file, 'r') as f:
+            rooflines.append(json.load(f))
+
+    return rooflines
+
+
+def _get_files_by_type(filetype, src_dir):
+    return [os.path.join(src_dir, f_name) for f_name in os.listdir(src_dir)
+            if f_name.endswith('.%s' % filetype)]
 
 
 if __name__ == '__main__':
