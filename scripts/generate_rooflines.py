@@ -25,6 +25,7 @@ def generate_rooflines():
         return
 
     for (method, cls) in roof_methods:
+        print('Running roofline method for class %s.' % cls.__name__)
         # Run the method and retrieve the results directory
         generated_dir = method(cls, opts)
         if generated_dir:
