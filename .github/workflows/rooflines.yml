@@ -1,23 +1,126 @@
 name: thematrix-run-rooflines
 
+env:
+  OUTPUT_PATH: ${{ github.workspace }}
+  RESOURCE_GROUP: thematrix
+
 on:
   push:
     branches:
-      - "advisor"
+      - "advisor-single-runner"
 
 jobs:
+
+  set-runners:
+    runs-on: ubuntu-latest
+    outputs:
+      runners-matrix: ${{ steps.set-runners-matrix.outputs.runners-matrix }}
+
+    steps:
+
+    - name: checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: Generate runners.json and jobs.json from thematrix.json
+      run: |
+        # This will populate thematrix/generated
+        python3 scripts/make-jobs-runners.py
+
+    - name: Commit any new configurations
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        if [[ `git status --porcelain` ]]; then
+            echo ::set-output name=new_configurations::true
+            git add results/*
+            git commit -m "Add new benchmark configurations"
+        else
+            echo ::set-output name=new_configurations::false
+        fi
+      id: new-configs
+
+    - name: Push new configurations
+      uses: ad-m/github-push-action@master
+      if: ${{ steps.new-configs.outputs.new_configurations }} == true
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: "advisor-single-runner"
+
+    - id: set-runners-matrix
+      run: |
+        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/runners_public.json)"
   
+
+  # Boot the self-hosted runners and start runner apps
+  start-runners:
+    needs: set-runners
+    runs-on: ubuntu-latest
+
+    strategy:
+      # Prevent all build to stop if a single one fails
+      fail-fast: false
+
+      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
+
+    steps:
+
+    - name: checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: start VM
+      env:
+        SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
+        SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
+        TENANT_ID: ${{ secrets.SERVICE_PRINCIPAL_TENANTID }}
+        SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      run: >
+        pwsh -command "& '${{ env.OUTPUT_PATH }}\.github\azure\startVM.ps1'"
+        -servicePrincipal $SP_APPID
+        -servicePrincipalSecret $SP_SECRET
+        -servicePrincipalTenantId $TENANT_ID
+        -azureSubscriptionName $SUB_ID
+        -resourceGroupName $RESOURCE_GROUP
+        -vmName ${{ matrix.runner }}
+
+    - name: set host
+      run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP -n ${{ matrix.runner }} --query publicIps -o tsv)
+      id: host
+
+    - name: start actions runner app
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          #!/bin/bash
+          nohup actions-runner/run.sh >/dev/null 2>&1 &
+        host: ${{ steps.host.outputs.action_host }}
+        user: ${{ secrets.ADMIN_LOGIN }}
+        pass: ${{ secrets.ADMIN_PASSWORD }}
+        args: "-tt"
+
+
   rooflines:
-    
-    runs-on: [self-hosted, testing]
+    name: ${{ matrix.name }}
+    if: ${{ always() }}
+    needs: [set-runners, start-runners]
+    runs-on: ${{ matrix.tags }}
+
+    strategy:
+      matrix: ${{ fromJson(needs.set-runners.outputs.jobs-matrix) }}
 
     env:
-      OUTPUT_PATH: ${{ github.workspace }}
-      DEVITO_PLATFORM: "intel64"
-      DEVITO_LANGUAGE: "openmp"
-      OMP_NUM_THREADS: "6"
-      DEVITO_MPI: "0"
-      MPI_NUM_PROCS: "1"
+
+      # Devito setup
+      DEVITO_PLATFORM: "${{ matrix.platform }}"
+      DEVITO_LANGUAGE: "${{ matrix.language }}"
+      DEVITO_MPI: "${{ matrix.mpi }}"
+
+      # OpenMP setup
+      OMP_NUM_THREADS: "${{ matrix.num_threads }}"
+      OMP_PLACES: "${{ matrix.omp_places }}"
+      OMP_PROC_BIND: "${{ matrix.omp_proc_bind }}"
+
+      # MPI setup
+      MPI_NUM_PROCS: "${{ matrix.num_procs }}"
 
     steps:
 
@@ -31,8 +134,8 @@ jobs:
 
     - name: Generate rooflines
       run: |
-        source /opt/intel/advisor/advixe-vars.sh
-        source /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+        source /opt/intel/oneapi/advisor/advixe-vars.sh
+        source /opt/intel/oneapi/compiler/latest/env/vars.sh intel64
         python3 ${{ github.workspace }}/scripts/generate_rooflines.py
 
     - name: Collect rooflines
@@ -86,4 +189,33 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: "advisor"
+        branch: "advisor-single-runner"
+
+  # Deallocate the runners
+  stop-runners:
+    name: stop-runners
+    if: ${{ always() }}
+    needs: [set-runners, rooflines]
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
+
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: stop VM
+      env:
+        SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
+        SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
+        TENANT_ID: ${{ secrets.SERVICE_PRINCIPAL_TENANTID }}
+        SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      run: >
+        pwsh -command "& '${{ env.OUTPUT_PATH }}\.github\azure\stopVM.ps1'"
+        -servicePrincipal $SP_APPID
+        -servicePrincipalSecret $SP_SECRET
+        -servicePrincipalTenantId $TENANT_ID
+        -azureSubscriptionName $SUB_ID
+        -resourceGroupName $RESOURCE_GROUP
+        -vmName ${{ matrix.runner }}
