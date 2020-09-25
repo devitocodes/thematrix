@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       runners-matrix: ${{ steps.set-runners-matrix.outputs.runners-matrix }}
+      jobs-matrix: ${{ steps.set-jobs-matrix.outputs.jobs-matrix }}
 
     steps:
 
@@ -50,6 +51,9 @@ jobs:
       run: |
         echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/runners_public.json)"
   
+    - id: set-jobs-matrix
+      run: |
+        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/jobs_public.json)"
 
   # Boot the self-hosted runners and start runner apps
   start-runners:
@@ -159,9 +163,6 @@ jobs:
   publish-rooflines:
     needs: rooflines
     runs-on: [self-hosted, testing]
-
-    env:
-      OUTPUT_PATH: ${{ github.workspace }}
 
     steps:
 
