@@ -19,7 +19,9 @@ def generate_rooflines():
     opts = {'advisor': True}
     generated_dirs = []
 
+    print('About to search for methods...')
     roof_methods = _find_roofline_methods()
+    print('Done searching for methods.')
     if roof_methods == []:
         print('No roofline methods detected in %s.' % thematrix.__path__[0])
         return
@@ -43,13 +45,17 @@ def _find_roofline_methods():
     """
 
     roof_methods = []
+    print('About to import submodules...')
     # Import all submodules
     _import_thematrix_submodules()
+    print('Done importing submodules.')
     for name, data in inspect.getmembers(thematrix):
+        print('Inspecting member %s...' % name)
         # Collect the roofline methods from the classes
         for c_name, c_data in inspect.getmembers(data, predicate=inspect.isclass):
             for m_name, m_data in inspect.getmembers(c_data, predicate=inspect.isfunction):
                 if m_name == 'roofline_create':
+                    print('Found roofline method, appending.')
                     roof_methods.append((m_data, c_data))
 
     return roof_methods
@@ -66,7 +72,9 @@ def _import_thematrix_submodules():
         if not ispkg:
             module_name = thematrix.__name__ + '.' + name
             try:
+                print('About to import module %s...' % module_name)
                 import_module(module_name)
+                print('Done importing module %s.' % module_name)
             except ImportError:
                 print('Error: could not import module ' + module_name)
                 print(format_exc())
