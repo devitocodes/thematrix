@@ -1,0 +1,85 @@
+name: start-vm
+
+env:
+  OUTPUT_PATH: ${{ github.workspace }}
+  RESOURCE_GROUP: thematrix
+  RUNNER_START_TOGGLE: ${{ true }}
+
+on:
+  push:
+    branches:
+      - "start-vm-dummy"
+
+jobs:
+
+  set-runners:
+    if: ${{ env.RUNNER_START_TOGGLE }}
+    runs-on: ubuntu-latest
+    outputs:
+      runners-matrix: ${{ steps.set-runners-matrix.outputs.runners-matrix }}
+      jobs-matrix: ${{ steps.set-jobs-matrix.outputs.jobs-matrix }}
+
+    steps:
+
+    - name: checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: Generate runners.json and jobs.json from thematrix.json
+      run: |
+        # This will populate thematrix/generated
+        python3 scripts/make-jobs-runners.py
+
+    - id: set-runners-matrix
+      run: |
+        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/runners_public.json)"
+  
+    - id: set-jobs-matrix
+      run: |
+        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/jobs_public.json)"
+
+  # Boot the self-hosted runners and start runner apps
+  start-runners:
+    if: ${{ env.RUNNER_START_TOGGLE }}
+    needs: set-runners
+    runs-on: ubuntu-latest
+
+    strategy:
+      # Prevent all build to stop if a single one fails
+      fail-fast: false
+
+      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
+
+    steps:
+
+    - name: checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: start VM
+      env:
+        SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
+        SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
+        TENANT_ID: ${{ secrets.SERVICE_PRINCIPAL_TENANTID }}
+        SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      run: >
+        pwsh -command "& '${{ env.OUTPUT_PATH }}\.github\azure\startVM.ps1'"
+        -servicePrincipal $SP_APPID
+        -servicePrincipalSecret $SP_SECRET
+        -servicePrincipalTenantId $TENANT_ID
+        -azureSubscriptionName $SUB_ID
+        -resourceGroupName $RESOURCE_GROUP
+        -vmName ${{ matrix.runner }}
+
+    - name: set host
+      run: echo ::set-output name=action_host::$(az vm show -d -g $RESOURCE_GROUP -n ${{ matrix.runner }} --query publicIps -o tsv)
+      id: host
+
+    - name: start actions runner app
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          #!/bin/bash
+          nohup actions-runner/run.sh >/dev/null 2>&1 &
+        host: ${{ steps.host.outputs.action_host }}
+        user: ${{ secrets.ADMIN_LOGIN }}
+        pass: ${{ secrets.ADMIN_PASSWORD }}
+        args: "-tt"

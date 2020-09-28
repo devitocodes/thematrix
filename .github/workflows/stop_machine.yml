@@ -1,0 +1,41 @@
+name: stop-vm
+
+env:
+  OUTPUT_PATH: ${{ github.workspace }}
+  RESOURCE_GROUP: thematrix
+  RUNNER_STOP_TOGGLE: ${{ false }}
+
+on:
+  push:
+    branches:
+      - "start-vm-dummy"
+
+jobs:
+  # Deallocate the runners
+  stop-runners:
+    name: stop-runners
+    if: ${{ env.RUNNER_STOP_TOGGLE }}
+    needs: [set-runners, rooflines]
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
+
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: stop VM
+      env:
+        SP_APPID: ${{ secrets.SERVICE_PRINCIPAL_APPID }}
+        SP_SECRET: ${{ secrets.SERVICE_PRINCIPAL_SECRET }}
+        TENANT_ID: ${{ secrets.SERVICE_PRINCIPAL_TENANTID }}
+        SUB_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      run: >
+        pwsh -command "& '${{ env.OUTPUT_PATH }}\.github\azure\stopVM.ps1'"
+        -servicePrincipal $SP_APPID
+        -servicePrincipalSecret $SP_SECRET
+        -servicePrincipalTenantId $TENANT_ID
+        -azureSubscriptionName $SUB_ID
+        -resourceGroupName $RESOURCE_GROUP
+        -vmName ${{ matrix.runner }}
