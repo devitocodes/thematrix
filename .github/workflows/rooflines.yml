@@ -134,7 +134,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip3 install --upgrade pip
-        pip3 install -e .
+        pip3 install --upgrade -e .
 
     - name: Generate rooflines
       run: |
