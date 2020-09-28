@@ -102,6 +102,7 @@ def _generate_problem_identifier(problem, shape, space_order):
 def mpiify_command(command):
     # Is it with MPI? If so, add mpi arguments to command.
     assert 'MPI_NUM_PROCS' in os.environ
+    mpicmd = "mpirun"
     nprocs = int(os.environ['MPI_NUM_PROCS'])
     if nprocs > 1:
         assert 'DEVITO_MPI' in os.environ
@@ -118,7 +119,6 @@ def mpiify_command(command):
 
 def run_benchmark(problem, shape, space_order, tn, fn_perf, fn_norms, op='forward'):
     pyversion = sys.executable
-    mpicmd = "mpirun"
 
     command = []
 

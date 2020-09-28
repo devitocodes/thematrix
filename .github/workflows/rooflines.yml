@@ -57,6 +57,7 @@ jobs:
 
   # Boot the self-hosted runners and start runner apps
   start-runners:
+    if: ${{ false }}
     needs: set-runners
     runs-on: ubuntu-latest
 
@@ -194,8 +195,8 @@ jobs:
 
   # Deallocate the runners
   stop-runners:
+    if: ${{ false }}
     name: stop-runners
-    if: ${{ always() }}
     needs: [set-runners, rooflines]
     runs-on: ubuntu-latest
 
