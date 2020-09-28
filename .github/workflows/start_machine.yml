@@ -1,9 +1,8 @@
-name: start-vm
+name: vm-start
 
 env:
   OUTPUT_PATH: ${{ github.workspace }}
   RESOURCE_GROUP: thematrix
-  RUNNER_START_TOGGLE: ${{ true }}
 
 on:
   push:
@@ -13,7 +12,7 @@ on:
 jobs:
 
   set-runners:
-    if: ${{ env.RUNNER_START_TOGGLE }}
+    if: ${{ true }}
     runs-on: ubuntu-latest
     outputs:
       runners-matrix: ${{ steps.set-runners-matrix.outputs.runners-matrix }}
@@ -39,7 +38,7 @@ jobs:
 
   # Boot the self-hosted runners and start runner apps
   start-runners:
-    if: ${{ env.RUNNER_START_TOGGLE }}
+    if: ${{ true }}
     needs: set-runners
     runs-on: ubuntu-latest
 

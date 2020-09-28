@@ -1,9 +1,8 @@
-name: stop-vm
+name: vm-stop
 
 env:
   OUTPUT_PATH: ${{ github.workspace }}
   RESOURCE_GROUP: thematrix
-  RUNNER_STOP_TOGGLE: ${{ false }}
 
 on:
   push:
@@ -14,7 +13,7 @@ jobs:
   # Deallocate the runners
   stop-runners:
     name: stop-runners
-    if: ${{ env.RUNNER_STOP_TOGGLE }}
+    if: ${{ false }}
     needs: [set-runners, rooflines]
     runs-on: ubuntu-latest
 
