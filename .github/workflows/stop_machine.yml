@@ -13,7 +13,7 @@ jobs:
   # Deallocate the runners
   stop-runners:
     name: stop-runners
-    if: ${{ false }}
+    if: ${{ true }}
     needs: [set-runners, rooflines]
     runs-on: ubuntu-latest
 

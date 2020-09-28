@@ -12,7 +12,7 @@ on:
 jobs:
 
   set-runners:
-    if: ${{ true }}
+    if: ${{ false }}
     runs-on: ubuntu-latest
     outputs:
       runners-matrix: ${{ steps.set-runners-matrix.outputs.runners-matrix }}
@@ -38,7 +38,7 @@ jobs:
 
   # Boot the self-hosted runners and start runner apps
   start-runners:
-    if: ${{ true }}
+    if: ${{ false }}
     needs: set-runners
     runs-on: ubuntu-latest
 
