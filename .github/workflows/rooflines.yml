@@ -117,6 +117,7 @@ jobs:
       # Devito setup
       DEVITO_PLATFORM: "${{ matrix.platform }}"
       DEVITO_LANGUAGE: "${{ matrix.language }}"
+      DEVITO_ARCH: "${{ matrix.jit }}"
       DEVITO_MPI: "${{ matrix.mpi }}"
 
       # OpenMP setup

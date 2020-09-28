@@ -14,7 +14,7 @@
           "ram": "64GB",
           "num_procs": "1",
           "num_threads": "16",
-          "jit": "gcc-9",
+          "jit": "icc",
           "language": "openmp",
           "mpi": "0",
           "omp_places": "cores",
