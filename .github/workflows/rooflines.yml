@@ -115,6 +115,8 @@ jobs:
     env:
 
       # Devito setup
+      DEVITO_BENCHMARKS: "1"
+      DEVITO_LOGGING: "PERF"
       DEVITO_PLATFORM: "${{ matrix.platform }}"
       DEVITO_LANGUAGE: "${{ matrix.language }}"
       DEVITO_ARCH: "${{ matrix.jit }}"
