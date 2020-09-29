@@ -144,6 +144,7 @@ jobs:
       run: |
         source /opt/intel/oneapi/advisor/latest/advixe-vars.sh
         source /opt/intel/oneapi/compiler/latest/env/vars.sh intel64 || exit 0
+        source /opt/intel/oneapi/mpi/latest/env/vars.sh
         python3 ${{ github.workspace }}/scripts/generate_rooflines.py
 
     - name: Collect rooflines
