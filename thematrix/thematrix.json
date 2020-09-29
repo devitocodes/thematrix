@@ -26,7 +26,7 @@
           "ram": "128GB",
           "num_procs": "2",
           "num_threads": "16",
-          "jit": "gcc-9",
+          "jit": "icc",
           "language": "openmp",
           "mpi": "basic",
           "omp_places": "cores",
