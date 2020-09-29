@@ -10,12 +10,35 @@ on:
       - "start-vm-dummy"
 
 jobs:
+  set-runners:
+    runs-on: ubuntu-latest
+    outputs:
+      runners-matrix: ${{ steps.set-runners-matrix.outputs.runners-matrix }}
+      jobs-matrix: ${{ steps.set-jobs-matrix.outputs.jobs-matrix }}
+
+    steps:
+
+    - name: checkout repo
+      uses: actions/checkout@v2.3.2
+
+    - name: Generate runners.json and jobs.json from thematrix.json
+      run: |
+        # This will populate thematrix/generated
+        python3 scripts/make-jobs-runners.py
+
+    - id: set-runners-matrix
+      run: |
+        echo "::set-output name=runners-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/runners_public.json)"
+  
+    - id: set-jobs-matrix
+      run: |
+        echo "::set-output name=jobs-matrix::$(jq -c '.' ${{ env.OUTPUT_PATH }}/generated/jobs_public.json)"
+
   # Deallocate the runners
   stop-runners:
     name: stop-runners
-    if: ${{ true }}
-    needs: [set-runners, rooflines]
     runs-on: ubuntu-latest
+    needs: set-runners
 
     strategy:
       matrix: ${{ fromJson(needs.set-runners.outputs.runners-matrix) }}
