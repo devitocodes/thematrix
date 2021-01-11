@@ -9,8 +9,8 @@ on:
     inputs:
       tags:
         description: 'Run TheMatrix'
-  schedule:
-    - cron:  '0 3 11,25 * *'
+        #  schedule:
+        #    - cron:  '0 3 11,25 * *'
 
 jobs:
 
